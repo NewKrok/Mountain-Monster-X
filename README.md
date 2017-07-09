@@ -1,5 +1,5 @@
 # Mountain-Monster-X
-Haxe port of mountain monster mobile game
+Haxe port of the Mountain Monster mobile game
 
 ## Dependencies:
 
