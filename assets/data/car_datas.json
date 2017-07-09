@@ -5,10 +5,9 @@
 			"id": 0, 
 			"graphicId": 0, 
 			"starRequired": 0, 
-			"speed": 10, 
+			"speed": 300, 
 			"rotation": 6, 
-			"damping": 0.8, 
-			"carBodyYOffset": -1
+			"damping": 0.8
 		},
 		{ 
 			"name": "Santa Rock", 

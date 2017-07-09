@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -11,6 +12,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.scaleModes.RatioScaleMode;
@@ -18,10 +20,13 @@ import flixel.tile.FlxTileblock;
 import hpp.flixel.display.FPPMovieClip;
 import mmx.assets.CarDatas;
 import mmx.datatype.BackgroundData;
+import mmx.datatype.CarData;
 import mmx.datatype.LevelData;
+import mmx.game.Car;
 import mmx.game.constant.CPhysicsValues;
 import mmx.util.LevelUtil;
 import hpp.flixel.util.AssetManager;
+import nape.dynamics.InteractionFilter;
 import nape.phys.Body;
 import nape.phys.BodyType;
 import nape.phys.Material;
@@ -31,15 +36,12 @@ import openfl.Assets;
 
 class PlayState extends FlxState
 {
-	var CAMERA_EASE:FlxPoint = new FlxPoint( 100, 100 );
-	var cameraOffset:FlxPoint = new FlxPoint();
-	var cameraPoint:FlxPoint = new FlxPoint();
-	var lastCameraStepOffset:FlxPoint = new FlxPoint();
-
 	var container:FlxSpriteGroup;
 	var terrainContainer:FlxSpriteGroup;
 	var coinContainer:FlxSpriteGroup;
 	var libraryElementContainer:FlxSpriteGroup;
+	
+	var lastCameraStepOffset:FlxPoint;
 	
 	var groundBodies:Array<Body>;
 	var groundBlocks:Array<FlxSprite>;
@@ -48,11 +50,9 @@ class PlayState extends FlxState
 	/*var controlLeft:Image;
 	var controlRight:Image;
 	var controlUp:Image;
-	var controlDown:Image;
-	var carBody:Image;
-	var wheelRight:Image;
-	var wheelLeft:Image;
-
+	var controlDown:Image;*/
+	var car:Car;
+/*
 	var snowModule:SnowModule;
 
 	var startCounter:StartCounter;
@@ -71,8 +71,8 @@ class PlayState extends FlxState
 	var backgroundDatas:Array<BackgroundData> = [];
 
 	var levelData:LevelData;
-	var levelID:UInt;
-	var worldID:UInt;
+	var levelId:UInt;
+	var worldId:UInt;
 
 	// controllers
 	var left:Bool;
@@ -102,9 +102,12 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
+		worldId = 0;
+		levelId = 1;
+		
 		FlxG.scaleMode = new RatioScaleMode();
 		
-		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level_0_0.json" ) );
+		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level_" + worldId + "_" + levelId + ".json" ) );
 		
 		CarDatas.loadData( Assets.getText( "assets/data/car_datas.json" ) );
 		
@@ -112,31 +115,29 @@ class PlayState extends FlxState
 		AssetManager.loadAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
 		AssetManager.loadAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
 		
-		worldID = 0;
-		levelID = 0;
 		build();
-		
-		trace(CarDatas.getData( 0 ) );
 	}
 	
 	function build():Void
 	{
-		cameraOffset = new FlxPoint( -1 * ( 1136 / 2 - 100 ), -1 * ( 640 / 2 + 25 ) );
-
-		addBackground( 'back_world_' + worldID + '_a00', 50, new FlxPoint( .1, .1 ), -.5 );
-		addBackground( 'back_world_' + worldID + '_b00', 100, new FlxPoint( .35, .35 ), -.5 );
+		lastCameraStepOffset = new FlxPoint();
 		
 		add( container = new FlxSpriteGroup() );
 		
+		addBackground( 'back_world_' + worldId + '_a00', 50, new FlxPoint( .1, .1 ), -.5 );
+		addBackground( 'back_world_' + worldId + '_b00', 100, new FlxPoint( .35, .35 ), -.5 );
+		
 		FlxNapeSpace.init();
 		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValues.GRAVITY );
+		FlxNapeSpace.drawDebug = true;
 		
 		createGroundPhysics();
 		
-		createBricks();
-
+		car = new Car( levelData.startPoint.x + 200, levelData.startPoint.y - 150, CarDatas.getData( 0 ), CPhysicsValues.CAR_FILTER_CATEGORY, CPhysicsValues.CAR_FILTER_MASK );
+		container.add( car );
+		
+		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
 /*
-		createGroundPhysics( _levelData.groundPoints );
 
 		// generate small rocks
 		for( i = 0; i < 30; i++ )
@@ -256,41 +257,14 @@ class PlayState extends FlxState
 		reset();*/
 	}
 	
-	private function createBricks() 
-	{
-		var brick:FlxNapeSprite;
-		
-		var brickHeight:Int = 107;
-		var brickWidth:Int = 178;
-		
-		brick = new FlxNapeSprite();
-		brick.makeGraphic(brickWidth, brickHeight, 0x0);
-		
-		brick.createRectangularBody();
-		brick.loadGraphic(AssetManager.getGraphic( "car_info_car_0" ));
-		brick.antialiasing = true;
-		brick.setBodyMaterial(.5, .5, .5, 2);
-		brick.body.position.y = 200;
-		brick.body.position.x = 150;
-		add(brick);
-		
-		brick = new FlxNapeSprite();
-		brick.makeGraphic(brickWidth, brickHeight, 0x0);
-		brick.createRectangularBody();
-		brick.loadGraphic(AssetManager.getGraphic( "car_info_car_0" ));
-		brick.antialiasing = true;
-		brick.setBodyMaterial(.5, .5, .5, 2);
-		brick.body.position.y = 100;
-		brick.body.position.x = 250;
-		add(brick);
-	}
-	
 	function createGroundPhysics():Void
 	{
-		FlxNapeSpace.drawDebug = true;
-		
 		groundBodies = [];
 		groundBlocks = [];
+
+		var filter:InteractionFilter = new InteractionFilter();
+		filter.collisionGroup = CPhysicsValues.GROUND_FILTER_CATEGORY;
+		filter.collisionMask = CPhysicsValues.GROUND_FILTER_MASK;
 		
 		for( i in 0...levelData.groundPoints.length - 1 )
 		{
@@ -318,11 +292,11 @@ class PlayState extends FlxState
 			block.y = body.position.y - block.origin.y;
 			block.angle = body.rotation * FlxAngle.TO_DEG;
 			container.add( block );
-			groundBlocks.push(block);
+			groundBlocks.push( block );
 		}
 	}
 	
-	private function addBackground( assetId:String, baseYOffset:Float, easing:FlxPoint, xOverlap:Float ):Void
+	function addBackground( assetId:String, baseYOffset:Float, easing:FlxPoint, xOverlap:Float ):Void
 	{
 		var backgroundData:BackgroundData = {
 			easing: easing,
@@ -331,7 +305,7 @@ class PlayState extends FlxState
 		};
 		backgroundDatas.push( backgroundData );
 		
-		add( backgroundData.container );
+		container.add( backgroundData.container );
 		
 		for( i in 0...5 )
 		{
@@ -344,72 +318,44 @@ class PlayState extends FlxState
 			backgroundPiece.y = baseYOffset;
 		}
 	}
-
+	
 	override public function update( elapsed:Float ):Void
 	{
 		super.update( elapsed );
 		
-		updateCamera();
+		car.accelerateToRight();
 		
-		var blockXMove:Bool = false;
-		container.x = -cameraPoint.x;
-		container.x = Math.min( container.x, -10 );
-		container.x = Math.max( container.x, -levelData.maxWidth + 1136 + 10 );
-		if( isLost || container.x == -10 || container.x == -levelData.maxWidth + 1136 + 10 )
-		{
-			blockXMove = true;
-		}
-		container.y = -cameraPoint.y;
-		container.y = Math.max( container.y, -levelData.maxCameraY );
-
-		updateBackgrounds( blockXMove );
+		camera.zoom = .8 + Math.max( 700 - car.carBodyPhysics.velocity.x, 0 ) / 700 * .2;
+		
+		/*lastCameraStepOffset.set( camera.scroll.x - lastCameraStepOffset.x, camera.scroll.y - lastCameraStepOffset.y );
+		updateBackgrounds();
+		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );*/
 	}
 	
-	function updateCamera( useCameraEase:Bool = true ):Void
-	{
-		if( isLost )
-		{
-			return;
-		}
-		
-		lastCameraStepOffset.set(
-			//( ( _car.carBody.GetPosition().x * CBox2D.PIXELS_TO_METRE + _cameraOffset.x ) - cameraPoint.x ) / ( useCameraEase ? CAMERA_EASE.x : 1 ),
-			//( ( _car.carBody.GetPosition().y * CBox2D.PIXELS_TO_METRE + _cameraOffset.y ) - cameraPoint.y ) / ( useCameraEase ? CAMERA_EASE.y : 1 )
-			( ( groundBlocks[0].x + cameraOffset.x ) - cameraPoint.x ) / ( useCameraEase ? CAMERA_EASE.x : 1 ),
-			( ( groundBlocks[0].y + cameraOffset.y ) - cameraPoint.y ) / ( useCameraEase ? CAMERA_EASE.y : 1 )
-		);
-
-		cameraPoint.x += lastCameraStepOffset.x;
-		cameraPoint.y += lastCameraStepOffset.y;
-	}
-	
-	function updateBackgrounds( blockXMove:Bool ):Void
+	function updateBackgrounds():Void
 	{
 		for( i in 0...backgroundDatas.length )
 		{
 			var backgroundData:BackgroundData = backgroundDatas[i];
 
-			if( !blockXMove )
+			backgroundData.container.x -= lastCameraStepOffset.x * backgroundData.easing.x;
+
+			while( backgroundData.container.x > 0 )
 			{
-				backgroundData.container.x -= lastCameraStepOffset.x * backgroundData.easing.x;
-
-				while( backgroundData.container.x > 0 )
+				for( j in 0...backgroundData.elements.length )
 				{
-					for( j in 0...backgroundData.elements.length )
-					{
-						backgroundData.elements[j].currentFrame = backgroundData.elements[j].currentFrame == 0 ? backgroundData.elements[j].numFrames - 1 : backgroundData.elements[j].currentFrame - 1;
-					}
-					backgroundData.container.x -= backgroundData.elements[ 0 ].width;
+					backgroundData.elements[j].currentFrame = backgroundData.elements[j].currentFrame == 0 ? backgroundData.elements[j].numFrames - 1 : backgroundData.elements[j].currentFrame - 1;
 				}
+				backgroundData.container.x -= backgroundData.elements[ 0 ].width;
+			}
 
-				while( backgroundData.container.x < -backgroundData.elements[ 0 ].width )
+			while( backgroundData.container.x < -backgroundData.elements[ 0 ].width )
+			{
+				for( j in 0...backgroundData.elements.length )
 				{
-					for( j in 0...backgroundData.elements.length )
-					{
-						backgroundData.elements[j].currentFrame = backgroundData.elements[j] .currentFrame == backgroundData.elements[j].numFrames - 1 ? 0 : backgroundData.elements[j].currentFrame + 1;
-					}
-					backgroundData.container.x += backgroundData.elements[ 0 ].width;
+					backgroundData.elements[j].currentFrame = backgroundData.elements[j] .currentFrame == backgroundData.elements[j].numFrames - 1 ? 0 : backgroundData.elements[j].currentFrame + 1;
 				}
+				backgroundData.container.x += backgroundData.elements[ 0 ].width;
 			}
 
 			backgroundData.container.y = 640 - backgroundData.container.height + container.y * backgroundData.easing.y;

@@ -2,18 +2,18 @@
 <TextureAtlas imagePath="atlas3.png">
 	<!-- Created with Adobe Flash Professional version 13.0.1.808 -->
 	<!-- http://www.adobe.com/products/flash.html -->
-	<SubTexture name="back_world_0_a0000" x="2" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
-	<SubTexture name="back_world_0_a0001" x="289" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_0_a0002" x="576" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_0_a0003" x="863" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_1_a0000" x="2" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
+	<SubTexture name="back_world_1_a0001" x="289" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_1_a0002" x="576" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_1_a0003" x="863" y="2" width="284" height="900"/>
 	<SubTexture name="back_world_0_b0000" x="289" y="905" width="284" height="479" pivotX="0" pivotY="-179.5"/>
 	<SubTexture name="back_world_0_b0001" x="576" y="905" width="284" height="479"/>
 	<SubTexture name="back_world_0_b0002" x="863" y="905" width="284" height="479"/>
 	<SubTexture name="back_world_0_b0003" x="1150" y="905" width="284" height="479"/>
-	<SubTexture name="back_world_1_a0000" x="1150" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
-	<SubTexture name="back_world_1_a0001" x="1437" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_1_a0002" x="1724" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_1_a0003" x="2" y="905" width="284" height="900"/>
+	<SubTexture name="back_world_0_a0000" x="1150" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
+	<SubTexture name="back_world_0_a0001" x="1437" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_0_a0002" x="1724" y="2" width="284" height="900"/>
+	<SubTexture name="back_world_0_a0003" x="2" y="905" width="284" height="900"/>
 	<SubTexture name="back_world_1_b0000" x="1437" y="905" width="284" height="467" pivotX="0" pivotY="-191.35"/>
 	<SubTexture name="back_world_1_b0001" x="1724" y="905" width="284" height="467"/>
 	<SubTexture name="back_world_1_b0002" x="1437" y="1375" width="284" height="467"/>

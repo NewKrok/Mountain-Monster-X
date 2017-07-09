@@ -16,9 +16,9 @@ typedef CarData =
 	var damping( default, default ):Float;
 	
 	@:optional var starRequired( default, default ):UInt;
-	@:optional var carBodyXOffset( default, default ):Float;
-	@:optional var carBodyYOffset( default, default ):Float;
-	@:optional var carBodyGraphicXOffset( default, default ):Float;
-	@:optional var carBodyGraphicYOffset( default, default ):Float;
+	@:optional var carBodyXOffset( default, default ):UInt;
+	@:optional var carBodyYOffset( default, default ):UInt;
+	@:optional var carBodyGraphicXOffset( default, default ):UInt;
+	@:optional var carBodyGraphicYOffset( default, default ):UInt;
 	@:optional var unlockInformation( default, default ):String;
 }
