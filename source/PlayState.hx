@@ -10,11 +10,13 @@ import flixel.graphics.atlas.FlxAtlas;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxSpriteGroup;
+import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.scaleModes.RatioScaleMode;
 import flixel.tile.FlxTileblock;
 import hpp.flixel.display.FPPMovieClip;
+import mmx.assets.CarDatas;
 import mmx.datatype.BackgroundData;
 import mmx.datatype.LevelData;
 import mmx.game.constant.CPhysicsValues;
@@ -29,7 +31,7 @@ import openfl.Assets;
 
 class PlayState extends FlxState
 {
-	var CAMERA_EASE:FlxPoint = new FlxPoint( 200, 200 );
+	var CAMERA_EASE:FlxPoint = new FlxPoint( 100, 100 );
 	var cameraOffset:FlxPoint = new FlxPoint();
 	var cameraPoint:FlxPoint = new FlxPoint();
 	var lastCameraStepOffset:FlxPoint = new FlxPoint();
@@ -104,20 +106,17 @@ class PlayState extends FlxState
 		
 		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level_0_0.json" ) );
 		
+		CarDatas.loadData( Assets.getText( "assets/data/car_datas.json" ) );
+		
 		AssetManager.loadAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
 		AssetManager.loadAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
 		AssetManager.loadAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
 		
-		/*
-		var x6 = new FlxSprite(300, 200);
-		x6.frames = tex6;
-		x6.animation.addByPrefix("backworld2a00", "backworld2a00", 1, false);
-		x6.animation.frameIndex = 1;
-		add( x6 );*/
-		
 		worldID = 0;
 		levelID = 0;
 		build();
+		
+		trace(CarDatas.getData( 0 ) );
 	}
 	
 	function build():Void
@@ -134,7 +133,7 @@ class PlayState extends FlxState
 		
 		createGroundPhysics();
 		
-		//createBricks();
+		createBricks();
 
 /*
 		createGroundPhysics( _levelData.groundPoints );
@@ -267,11 +266,11 @@ class PlayState extends FlxState
 		brick = new FlxNapeSprite();
 		brick.makeGraphic(brickWidth, brickHeight, 0x0);
 		
-		brick.createRectangularBody(0,0,BodyType.STATIC);
+		brick.createRectangularBody();
 		brick.loadGraphic(AssetManager.getGraphic( "car_info_car_0" ));
 		brick.antialiasing = true;
 		brick.setBodyMaterial(.5, .5, .5, 2);
-		brick.body.position.y = 400;
+		brick.body.position.y = 200;
 		brick.body.position.x = 150;
 		add(brick);
 		
@@ -281,13 +280,15 @@ class PlayState extends FlxState
 		brick.loadGraphic(AssetManager.getGraphic( "car_info_car_0" ));
 		brick.antialiasing = true;
 		brick.setBodyMaterial(.5, .5, .5, 2);
-		brick.body.position.y = 200;
-		brick.body.position.x = 200;
+		brick.body.position.y = 100;
+		brick.body.position.x = 250;
 		add(brick);
 	}
 	
 	function createGroundPhysics():Void
 	{
+		FlxNapeSpace.drawDebug = true;
+		
 		groundBodies = [];
 		groundBlocks = [];
 		
@@ -300,18 +301,22 @@ class PlayState extends FlxState
 			);
 
 			var body:Body = new Body( BodyType.STATIC );
+			
 			body.shapes.add( new Polygon( Polygon.box( distance, 1 ) ) );
 			body.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
+			
 			body.position.x = levelData.groundPoints[ i ].x + ( levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x ) / 2;
 			body.position.y = levelData.groundPoints[ i ].y + ( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y ) / 2;
 			body.rotation = angle;
+			
+			body.space = FlxNapeSpace.space;
 			
 			groundBodies.push( body );
 			
 			var block = AssetManager.getSprite( "car_info_car_0" );
 			block.x = body.position.x - block.origin.x;
 			block.y = body.position.y - block.origin.y;
-			block.angle = ( 180 / Math.PI ) * body.rotation;
+			block.angle = body.rotation * FlxAngle.TO_DEG;
 			container.add( block );
 			groundBlocks.push(block);
 		}
@@ -370,8 +375,8 @@ class PlayState extends FlxState
 		lastCameraStepOffset.set(
 			//( ( _car.carBody.GetPosition().x * CBox2D.PIXELS_TO_METRE + _cameraOffset.x ) - cameraPoint.x ) / ( useCameraEase ? CAMERA_EASE.x : 1 ),
 			//( ( _car.carBody.GetPosition().y * CBox2D.PIXELS_TO_METRE + _cameraOffset.y ) - cameraPoint.y ) / ( useCameraEase ? CAMERA_EASE.y : 1 )
-			( ( groundBlocks[101].x + cameraOffset.x ) - cameraPoint.x ) / ( useCameraEase ? CAMERA_EASE.x : 1 ),
-			( ( groundBlocks[101].y + cameraOffset.y ) - cameraPoint.y ) / ( useCameraEase ? CAMERA_EASE.y : 1 )
+			( ( groundBlocks[0].x + cameraOffset.x ) - cameraPoint.x ) / ( useCameraEase ? CAMERA_EASE.x : 1 ),
+			( ( groundBlocks[0].y + cameraOffset.y ) - cameraPoint.y ) / ( useCameraEase ? CAMERA_EASE.y : 1 )
 		);
 
 		cameraPoint.x += lastCameraStepOffset.x;

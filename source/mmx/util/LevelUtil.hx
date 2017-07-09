@@ -1,8 +1,6 @@
 package mmx.util;
 
 import haxe.Json;
-import haxe.macro.Expr.Error;
-
 import haxe.Log;
 
 import mmx.datatype.LevelData;
@@ -13,15 +11,15 @@ import mmx.datatype.LevelData;
  */
 class LevelUtil 
 {
-	public static function LevelDataFromJson( jsonLevelData:String ):LevelData
+	public static function LevelDataFromJson( jsonData:String ):LevelData
 	{
 		var level:LevelData;
 		
 		try
 		{
-			level = Json.parse( jsonLevelData );
+			level = Json.parse( jsonData );
 		}
-		catch( e:Error )
+		catch( e:String )
 		{
 			Log.trace( "[LevelUtil] parsing error" );
 			level = null;
