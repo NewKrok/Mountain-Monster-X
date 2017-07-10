@@ -26,15 +26,15 @@ class Car extends FlxSpriteGroup
 {	
 	var graphicJoinHertz:Float = 20;
 	
-	var firstWheelXOffset:Int = 55;
-	var firstWheelYOffset:Int = 35;
-	var firstWheelRadius:UInt = 20;
-	var backWheelXOffset:Int = -52;
-	var backWheelYOffset:Int = 35;
-	var backWheelRadius:UInt = 20;
-	var bodyWidth:UInt = 150;
-	var bodyHeight:UInt = 30;
-	var hitAreaHeight:UInt = 10;
+	var firstWheelXOffset:Float = 55;
+	var firstWheelYOffset:Float = 35;
+	var firstWheelRadius:Float = 20;
+	var backWheelXOffset:Float = -52;
+	var backWheelYOffset:Float = 35;
+	var backWheelRadius:Float = 20;
+	var bodyWidth:Float = 150;
+	var bodyHeight:Float = 30;
+	var hitAreaHeight:Float = 10;
 	
 	var carData:CarData;
 	
@@ -49,7 +49,7 @@ class Car extends FlxSpriteGroup
 	
 	var direction:Int = 1;
 	
-	public function new( x:Float, y:Float, carData:CarData, filterCategory:UInt = 0, filterMask:UInt = 0 )
+	public function new( x:Float, y:Float, carData:CarData, scale:Float = 1, filterCategory:UInt = 0, filterMask:UInt = 0 )
 	{
 		super();
 		
@@ -60,8 +60,22 @@ class Car extends FlxSpriteGroup
 		backWheelXOffset += Math.isNaN( carData.carBodyXOffset ) ? 0 : carData.carBodyXOffset;
 		backWheelYOffset += Math.isNaN( carData.carBodyYOffset ) ? 0 : carData.carBodyYOffset;
 		
+		firstWheelXOffset *= scale;
+		firstWheelYOffset *= scale;
+		firstWheelRadius *= scale;
+		backWheelXOffset *= scale;
+		backWheelYOffset *= scale;
+		backWheelRadius *= scale;
+		bodyWidth *= scale;
+		bodyHeight *= scale;
+		hitAreaHeight *= scale;
+		
 		buildGraphics();
 		buildPhysics( x, y, filterCategory, filterMask );
+		
+		carBodyGraphics.scale = new FlxPoint( scale, scale );
+		wheelRightGraphics.scale = new FlxPoint( scale, scale );
+		wheelLeftGraphics.scale = new FlxPoint( scale, scale );
 	}
 	
 	function buildGraphics():Void

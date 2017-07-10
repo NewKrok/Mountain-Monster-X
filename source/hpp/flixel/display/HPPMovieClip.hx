@@ -9,7 +9,7 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
  * ...
  * @author Krisztian Somoracz
  */
-class FPPMovieClip extends FlxSprite
+class HPPMovieClip extends FlxSprite
 {
 	inline static var defaultAnimName:String = "anim";
 	public var animationPrefix( default, default ):String = "";

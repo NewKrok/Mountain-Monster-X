@@ -5,7 +5,8 @@ import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxFramesCollection;
-import hpp.flixel.display.FPPMovieClip;
+import haxe.Log;
+import hpp.flixel.display.HPPMovieClip;
 
 /**
  * ...
@@ -33,18 +34,19 @@ class AssetManager
 		return getFlxAtlasFramesByAssetId( assetId ).getByName( assetId );
 	}
 	
-	public static function getSprite( assetId:String ):FlxSprite
+	public static function getSprite( assetId:String, antialiasing:Bool = true ):FlxSprite
 	{
 		var sprite:FlxSprite = new FlxSprite();
 		
 		sprite.loadGraphic( getGraphic( assetId ) );
+		sprite.antialiasing = antialiasing;
 		
 		return sprite;
 	}
 	
-	public static function getMovieClip( assetId:String ):FPPMovieClip
+	public static function getMovieClip( assetId:String, antialiasing:Bool = true ):HPPMovieClip
 	{
-		var movieClip:FPPMovieClip = new FPPMovieClip();
+		var movieClip:HPPMovieClip = new HPPMovieClip();
 		movieClip.animationPrefix = assetId;
 		
 		var atlas:FlxAtlasFrames = getFlxAtlasFramesByAssetId( movieClip.animationPrefix + "00" );
@@ -59,6 +61,7 @@ class AssetManager
 		}
 		
 		movieClip.frames = frames;
+		movieClip.antialiasing = antialiasing;
 		
 		return movieClip;
 	}
@@ -90,6 +93,11 @@ class AssetManager
 				selectedAtlas = element;
 				break;
 			}
+		}
+		
+		if ( selectedAtlas == null )
+		{
+			Log.trace( "[AssetManager] missing graphic - " + assetId );
 		}
 		
 		return selectedAtlas;
