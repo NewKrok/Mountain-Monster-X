@@ -23,6 +23,7 @@ import mmx.datatype.BackgroundData;
 import mmx.datatype.CarData;
 import mmx.datatype.LevelData;
 import mmx.game.Car;
+import mmx.game.Coin;
 import mmx.game.constant.CPhysicsValues;
 import mmx.util.LevelUtil;
 import hpp.flixel.util.AssetManager;
@@ -53,6 +54,8 @@ class PlayState extends FlxState
 	
 	var bridgeBodies:Array<Array<Body>>;
 	var bridgeBlocks:Array<Array<FlxSprite>>;
+	
+	var coins:Array<Coin>;
 
 	//var gameGui:GameGui;
 	/*var controlLeft:Image;
@@ -181,6 +184,9 @@ class PlayState extends FlxState
 		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
 		camera.targetOffset.set( 200 );
 		camera.setScrollBoundsRect( levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height );
+		
+		createCoins();
+		
 /*
 
 		// generate small rocks
@@ -252,13 +258,6 @@ class PlayState extends FlxState
 
 		generatedTerrain.dispose();
 		generatedTerrain = null;
-
-		// Add coins
-		_container.addChild( _coinContainer = new Sprite );
-		for( i = 0; i < _levelData.coinPoints.length; i++ )
-		{
-			addCoinToWorld( _levelData.coinPoints[ i ].x, _levelData.coinPoints[ i ].y );
-		}
 
 		// add control buttons
 		addChild( _controlLeft = new Image( StaticAssetManager.instance.getTexture( "control_left" ) ) );
@@ -430,6 +429,18 @@ class PlayState extends FlxState
 			backgroundPiece.gotoAndStop( i == 4 ? 0 : i );
 			backgroundPiece.x = i * ( backgroundPiece.width + xOverlap );
 			backgroundPiece.y = baseYOffset;
+		}
+	}
+	
+	function createCoins():Void
+	{
+		coins = [];
+		
+		container.add( coinContainer = new FlxSpriteGroup() );
+		
+		for( i in 0...levelData.starPoints.length )
+		{
+			coins.push( cast coinContainer.add( new Coin( levelData.starPoints[ i ].x, levelData.starPoints[ i ].y ) ) );
 		}
 	}
 	
