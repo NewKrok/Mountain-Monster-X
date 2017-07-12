@@ -295,8 +295,18 @@ class PlayState extends FlxState
 			stage.addEventListener( KeyboardEvent.KEY_UP, onKeyup );
 		}
 		addEventListener( TouchEvent.TOUCH, onTouch );
-
-		reset();*/
+*/
+		reset();
+	}
+	
+	function reset():Void
+	{
+		for( i in 0...coins.length )
+		{
+			coins[ i ].resetToStart();
+			coins[ i ].x = levelData.starPoints[ i ].x;
+			coins[ i ].y = levelData.starPoints[ i ].y;
+		}
 	}
 	
 	function createGroundPhysics():Void
@@ -457,6 +467,7 @@ class PlayState extends FlxState
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 		
 		updateBridges();
+		checkCoinPickUp();
 	}
 	
 	function updateBackgrounds():Void
@@ -501,6 +512,19 @@ class PlayState extends FlxState
 				block.x = body.position.x - block.origin.x;
 				block.y = body.position.y - block.origin.y;
 				block.angle = body.rotation * FlxAngle.TO_DEG;
+			}
+		}
+	}
+	
+	function checkCoinPickUp():Void
+	{
+		for( i in 0...coins.length )
+		{
+			var coin:Coin = coins[ i ];
+			
+			if( !coin.isCollected && coin.overlaps( car.carBodyGraphics ) )
+			{
+				coin.collect();
 			}
 		}
 	}

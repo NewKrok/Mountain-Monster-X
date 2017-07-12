@@ -2,8 +2,10 @@ package mmx.game;
 
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxTween.TweenOptions;
+import flixel.tweens.misc.VarTween;
 import hpp.flixel.util.AssetManager;
 
 /**
@@ -14,32 +16,36 @@ class Coin extends FlxSprite
 {
 	public var isCollected( default, null ):Bool;
 	
+	var tween:VarTween;
+	
 	public function new( x:Float, y:Float )
 	{
 		super( x, y );
 		
 		loadGraphic( AssetManager.getGraphic( "coin" ) );
+		
+		scale.set( .8, .8 );
 	}
 	
 	public function collect():Void
 	{
 		isCollected = true;
-		/*
-		Tweener.removeTweens( this );
-		Tweener.addTween( this, {
-			time: .5,
-			x: x - 100,
-			y: y - 50,
-			rotation: Math.PI * 6,
-			alpha: 0,
-			transition: 'linear',
-			onComplete: hide
-		} );*/
+		
+		disposeTween();
+		
+		tween = FlxTween.tween( 
+			this,
+			{ x: x - 100, y: y-50, alpha: 0, angle: Math.PI * 6 },
+			.5,
+			{ type: FlxTween.ONESHOT, onComplete: tweenCompleted }
+		);
 	}
 
-	private function hide():Void
+	function tweenCompleted( tween:FlxTween ):Void
 	{
 		visible = false;
+		
+		disposeTween();
 	}
 
 	public function resetToStart():Void
@@ -47,17 +53,28 @@ class Coin extends FlxSprite
 		isCollected = false;
 		visible = true;
 		alpha = 1;
+		
+		disposeTween();
 		startAnimation();
 	}
 
 	function startAnimation():Void
 	{
-		FlxTween.tween( this, { scale: .9 }, .2 );
-		
-		/*Tweener.removeTweens( this );
-		Tweener.addTween( this, {time: .2, scaleX: .9, scaleY: .9, transition: 'linear'} );
-		Tweener.addTween( this, {time: .4, delay: .2, scaleX: 1.1, scaleY: 1.1, transition: 'linear'} );
-		Tweener.addTween( this, {time: .2, delay: .6, scaleX: 1, scaleY: 1, transition: 'linear'} );
-		Tweener.addTween( this, {time: 1 + Math.random() * 3, onComplete: startAnimation, transition: 'linear'} );*/
+		tween = FlxTween.tween( 
+			scale,
+			{ x: 1, y: 1 },
+			.4,
+			{ type: FlxTween.PINGPONG, ease: FlxEase.sineIn, loopDelay: Math.random() }
+		);
+	}
+	
+	function disposeTween():Void
+	{
+		if ( tween != null )
+		{
+			tween.cancel();
+			tween.destroy();
+			tween = null;
+		}
 	}
 }
