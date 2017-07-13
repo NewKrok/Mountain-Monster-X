@@ -53,6 +53,7 @@ class Coin extends FlxSprite
 		isCollected = false;
 		visible = true;
 		alpha = 1;
+		angle = 0;
 		
 		disposeTween();
 		startAnimation();

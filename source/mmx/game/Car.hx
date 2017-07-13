@@ -98,7 +98,7 @@ class Car extends FlxSpriteGroup
 		
 		wheelRightPhysics = new Body();
 		wheelRightPhysics.shapes.add( new Circle( firstWheelRadius ) );
-		wheelRightPhysics.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
+		wheelRightPhysics.setShapeMaterials( new Material( .5, .7, .7, 2, 0.001 ) );
 		wheelRightPhysics.setShapeFilters( filter );
 		wheelRightPhysics.position.x = x + firstWheelXOffset;
 		wheelRightPhysics.position.y = y + firstWheelYOffset;
@@ -106,7 +106,7 @@ class Car extends FlxSpriteGroup
 		
 		wheelLeftPhysics = new Body();
 		wheelLeftPhysics.shapes.add( new Circle( firstWheelRadius ) );
-		wheelLeftPhysics.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
+		wheelLeftPhysics.setShapeMaterials( new Material( .5, .7, .7, 2, 0.001 ) );
 		wheelLeftPhysics.setShapeFilters( filter );
 		wheelLeftPhysics.position.x = x + backWheelXOffset;
 		wheelLeftPhysics.position.y = y + backWheelYOffset;
@@ -125,8 +125,7 @@ class Car extends FlxSpriteGroup
 		hitArea.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
 		hitArea.space = FlxNapeSpace.space;
 		
-		var hitAreaAnchor:Vec2 = hitArea.localCOM.copy();
-		hitAreaAnchor.y += hitAreaHeight;
+		var hitAreaAnchor:Vec2 = new Vec2( 0, bodyHeight / 2 + hitAreaHeight / 2 );
 		var hitJoin:WeldJoint = new WeldJoint( carBodyPhysics, hitArea, carBodyPhysics.localCOM, hitAreaAnchor );
 		hitJoin.space = FlxNapeSpace.space;
 		
@@ -194,5 +193,32 @@ class Car extends FlxSpriteGroup
 	public function rotateRight():Void
 	{
 		carBodyPhysics.applyAngularImpulse( carData.rotation );
+	}
+	
+	public function teleportTo( x:Float, y:Float ):Void
+	{
+		carBodyPhysics.position.x = x;
+		carBodyPhysics.position.y = y;
+		carBodyPhysics.rotation = 0;
+		carBodyPhysics.velocity.setxy( 0, 0 );
+		carBodyPhysics.angularVel = 0;
+		
+		wheelRightPhysics.position.x = x + firstWheelXOffset;
+		wheelRightPhysics.position.y = y + firstWheelYOffset;
+		wheelRightPhysics.rotation = 0;
+		wheelRightPhysics.velocity.setxy( 0, 0 );
+		wheelRightPhysics.angularVel = 0;
+		
+		wheelLeftPhysics.position.x = x + backWheelXOffset;
+		wheelLeftPhysics.position.y = y + backWheelYOffset;
+		wheelLeftPhysics.rotation = 0;
+		wheelLeftPhysics.velocity.setxy( 0, 0 );
+		wheelLeftPhysics.angularVel = 0;
+		
+		hitArea.position.x = x;
+		hitArea.position.y = y + bodyHeight / 2 + hitAreaHeight / 2;
+		hitArea.rotation = 0;
+		hitArea.velocity.setxy( 0, 0 );
+		hitArea.angularVel = 0;
 	}
 }

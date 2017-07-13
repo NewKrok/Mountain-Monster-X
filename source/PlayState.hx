@@ -17,6 +17,7 @@ import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.scaleModes.RatioScaleMode;
 import flixel.tile.FlxTileblock;
+import flixel.util.FlxColor;
 import hpp.flixel.display.HPPMovieClip;
 import mmx.assets.CarDatas;
 import mmx.datatype.BackgroundData;
@@ -301,12 +302,84 @@ class PlayState extends FlxState
 	
 	function reset():Void
 	{
+		isLost = false;
+		isWon = false;
+		canControll = true;
+		left = false;
+		right = false;
+		up = false;
+		down = false;
+		isGameStarted = false;
+		collectedCoin = 0;
+		collectedExtraCoins = 0;
+		countOfFrontFlip = 0;
+		countOfBackFlip = 0;
+		countOfNiceAirTime = 0;
+		countOfNiceWheelie = 0;
+		
 		for( i in 0...coins.length )
 		{
 			coins[ i ].resetToStart();
 			coins[ i ].x = levelData.starPoints[ i ].x;
 			coins[ i ].y = levelData.starPoints[ i ].y;
 		}
+		
+		car.teleportTo( levelData.startPoint.x, levelData.startPoint.y );
+		
+		camera.bgColor = FlxColor.BLACK;
+		camera.focusOn( levelData.startPoint );
+		
+		/*
+
+		// Clear last car
+		disposeCar();
+
+		// Create car
+		
+		switch( _worldID )
+		{
+			case 1:
+				_car.wheelLeft.SetLinearDamping( _car.damping + .3 );
+				_car.wheelRight.SetLinearDamping( _car.damping + .3 );
+				break;
+		}
+
+		// Reset camera
+		_lastCameraStepOffset.setTo( 0, 0 );
+		updateCamera( false );
+
+		this.resetCrates();
+
+		// Reset game object positions
+		for( var i:int = 0; i < _levelData.gameObjects.length; i++ )
+		{
+			_gameObjects[ _gameObjects.length - 1 ].x = _levelData.gameObjects[ i ].x;
+			_gameObjects[ _gameObjects.length - 1 ].y = _levelData.gameObjects[ i ].y;
+			_gameObjects[ _gameObjects.length - 1 ].rotation = _levelData.gameObjects[ i ].rotation;
+		}
+
+		// Reset small rocks
+		for( i = 0; i < _smallRocks.length; i++ )
+		{
+			Tweener.removeTweens( _smallRocks[ i ] );
+			_smallRocks[ i ].alpha = 0;
+			_smallRocks[ i ].visible = false;
+		}
+
+		// Reset coins
+		for( i = 0; i < _coins.length; i++ )
+		{
+			Tweener.removeTweens( _coins[ i ] );
+			_coins[ i ].reset();
+			_coins[ i ].x = _levelData.coinPoints[ i ].x;
+			_coins[ i ].y = _levelData.coinPoints[ i ].y;
+		}
+
+		// Start level
+		onUpdate( new Event( Event.ENTER_FRAME ) );
+
+		this._gameGui.showStartGamePanel( exit );
+		this._gameGui.enable();*/
 	}
 	
 	function createGroundPhysics():Void
@@ -468,6 +541,7 @@ class PlayState extends FlxState
 		
 		updateBridges();
 		checkCoinPickUp();
+		checkWin();
 	}
 	
 	function updateBackgrounds():Void
@@ -527,5 +601,18 @@ class PlayState extends FlxState
 				coin.collect();
 			}
 		}
+	}
+	
+	function checkWin():Void
+	{
+		if( !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x )
+		{
+			reset();
+		}
+	}
+	
+	function restartRutin():Void
+	{
+		reset();
 	}
 }
