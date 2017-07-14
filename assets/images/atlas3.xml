@@ -2,81 +2,84 @@
 <TextureAtlas imagePath="atlas3.png">
 	<!-- Created with Adobe Flash Professional version 13.0.1.808 -->
 	<!-- http://www.adobe.com/products/flash.html -->
-	<SubTexture name="back_world_1_a0000" x="2" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
-	<SubTexture name="back_world_1_a0001" x="289" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_1_a0002" x="576" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_1_a0003" x="863" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_0_b0000" x="289" y="905" width="284" height="479" pivotX="0" pivotY="-179.5"/>
-	<SubTexture name="back_world_0_b0001" x="576" y="905" width="284" height="479"/>
-	<SubTexture name="back_world_0_b0002" x="863" y="905" width="284" height="479"/>
-	<SubTexture name="back_world_0_b0003" x="1150" y="905" width="284" height="479"/>
-	<SubTexture name="back_world_0_a0000" x="1150" y="2" width="284" height="900" pivotX="0" pivotY="0"/>
-	<SubTexture name="back_world_0_a0001" x="1437" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_0_a0002" x="1724" y="2" width="284" height="900"/>
-	<SubTexture name="back_world_0_a0003" x="2" y="905" width="284" height="900"/>
-	<SubTexture name="back_world_1_b0000" x="1437" y="905" width="284" height="467" pivotX="0" pivotY="-191.35"/>
-	<SubTexture name="back_world_1_b0001" x="1724" y="905" width="284" height="467"/>
-	<SubTexture name="back_world_1_b0002" x="1437" y="1375" width="284" height="467"/>
-	<SubTexture name="back_world_1_b0003" x="1724" y="1375" width="284" height="467"/>
-	<SubTexture name="bridge" x="668" y="1729" width="69" height="22" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_0" x="1043" y="1782" width="167" height="65" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_1" x="464" y="1782" width="171" height="66" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_10" x="668" y="1764" width="197" height="64" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_11" x="1056" y="1711" width="189" height="68" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_12" x="410" y="1646" width="204" height="76" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_13" x="1134" y="1482" width="182" height="91" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_2" x="2" y="1808" width="175" height="60" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_3" x="1396" y="1845" width="169" height="61" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_4" x="1248" y="1711" width="175" height="72" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_5" x="289" y="1782" width="172" height="67" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_6" x="617" y="1646" width="172" height="80" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_7" x="868" y="1764" width="172" height="71" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_8" x="846" y="1838" width="174" height="60" pivotX="0" pivotY="0"/>
-	<SubTexture name="car_body_9" x="1213" y="1786" width="180" height="59" pivotX="0" pivotY="0"/>
-	<SubTexture name="coin" x="1385" y="1666" width="40" height="38" pivotX="0" pivotY="0"/>
-	<SubTexture name="control_down" x="748" y="1482" width="150" height="161" pivotX="0" pivotY="0"/>
-	<SubTexture name="control_left" x="442" y="1482" width="150" height="161" pivotX="0" pivotY="0"/>
-	<SubTexture name="control_right" x="595" y="1482" width="150" height="161" pivotX="0" pivotY="0"/>
-	<SubTexture name="control_up" x="289" y="1482" width="150" height="161" pivotX="0" pivotY="0"/>
-	<SubTexture name="effect_crushed" x="1023" y="1850" width="183" height="51" pivotX="0" pivotY="0"/>
-	<SubTexture name="effect_level_completed" x="901" y="1482" width="230" height="83" pivotX="0" pivotY="0"/>
-	<SubTexture name="effect_time_out" x="1568" y="1845" width="200" height="51" pivotX="0" pivotY="0"/>
-	<SubTexture name="gui_coin_back" x="464" y="1851" width="139" height="64" pivotX="0" pivotY="0"/>
-	<SubTexture name="gui_time_back" x="1771" y="1845" width="149" height="64" pivotX="0" pivotY="0"/>
-	<SubTexture name="large_exit_button" x="901" y="1568" width="118" height="132" pivotX="0" pivotY="0"/>
-	<SubTexture name="large_restart_button" x="289" y="1646" width="118" height="132" pivotX="0" pivotY="0"/>
-	<SubTexture name="large_resume_button" x="1264" y="1576" width="118" height="132" pivotX="0" pivotY="0"/>
-	<SubTexture name="large_sound_off_button" x="1022" y="1576" width="118" height="132" pivotX="0" pivotY="0"/>
-	<SubTexture name="large_sound_on_button" x="1143" y="1576" width="118" height="132" pivotX="0" pivotY="0"/>
-	<SubTexture name="notification_back_flip" x="1209" y="1850" width="181" height="50" pivotX="0" pivotY="0"/>
-	<SubTexture name="notification_front_flip" x="638" y="1831" width="205" height="51" pivotX="0" pivotY="0"/>
-	<SubTexture name="notification_nice_airtime" x="410" y="1729" width="255" height="50" pivotX="0" pivotY="0"/>
-	<SubTexture name="notification_nice_wheelie" x="792" y="1711" width="261" height="50" pivotX="0" pivotY="0"/>
-	<SubTexture name="pause_button" x="1319" y="1482" width="64" height="77" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_0_1" x="2036" y="29" width="6" height="6" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_0_2" x="2011" y="30" width="8" height="9" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_0_3" x="2033" y="41" width="8" height="7" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_1_1" x="2022" y="41" width="8" height="8" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_1_2" x="2011" y="2" width="12" height="13" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_1_3" x="2026" y="2" width="12" height="10" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_2_1" x="2024" y="29" width="9" height="9" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_2_2" x="2026" y="15" width="10" height="11" pivotX="0" pivotY="0"/>
-	<SubTexture name="small_rock_2_3" x="2011" y="18" width="10" height="9" pivotX="0" pivotY="0"/>
-	<SubTexture name="snowflake" x="606" y="1885" width="44" height="44" pivotX="0" pivotY="0"/>
-	<SubTexture name="table_world_0_b" x="180" y="1808" width="57" height="137" pivotX="0" pivotY="0"/>
-	<SubTexture name="title_text_back" x="289" y="1387" width="1136" height="92" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_0" x="107" y="1871" width="49" height="49" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_1" x="1385" y="1562" width="49" height="49" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_10" x="792" y="1646" width="52" height="52" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_11" x="1923" y="1845" width="52" height="52" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_12" x="1978" y="1845" width="52" height="52" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_13" x="55" y="1871" width="49" height="49" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_2" x="847" y="1646" width="51" height="51" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_3" x="403" y="1852" width="50" height="50" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_4" x="2" y="1871" width="50" height="50" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_5" x="295" y="1852" width="51" height="51" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_6" x="349" y="1852" width="51" height="51" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_7" x="1385" y="1614" width="49" height="49" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_8" x="1386" y="1482" width="48" height="48" pivotX="0" pivotY="0"/>
-	<SubTexture name="wheel_9" x="240" y="1852" width="52" height="52" pivotX="0" pivotY="0"/>
+	<SubTexture name="back_world_0_a0000" x="4" y="4" width="284" height="900"/>
+	<SubTexture name="back_world_0_a0001" x="292" y="4" width="284" height="900"/>
+	<SubTexture name="back_world_0_a0002" x="580" y="4" width="284" height="900"/>
+	<SubTexture name="back_world_0_a0003" x="868" y="4" width="284" height="900"/>
+	<SubTexture name="back_world_0_b0000" x="292" y="908" width="284" height="479"/>
+	<SubTexture name="back_world_0_b0001" x="580" y="908" width="284" height="479"/>
+	<SubTexture name="back_world_0_b0002" x="868" y="908" width="284" height="479"/>
+	<SubTexture name="back_world_0_b0003" x="1156" y="908" width="284" height="479"/>
+	<SubTexture name="back_world_1_a0000" x="1156" y="4" width="284" height="900"/>
+	<SubTexture name="back_world_1_a0001" x="1444" y="4" width="284" height="900"/>
+	<SubTexture name="back_world_1_a0002" x="1732" y="4" width="284" height="900"/>
+	<SubTexture name="back_world_1_a0003" x="4" y="908" width="284" height="900"/>
+	<SubTexture name="back_world_1_b0000" x="1444" y="908" width="284" height="467"/>
+	<SubTexture name="back_world_1_b0001" x="1732" y="908" width="284" height="467"/>
+	<SubTexture name="back_world_1_b0002" x="1444" y="1379" width="284" height="467"/>
+	<SubTexture name="back_world_1_b0003" x="1732" y="1379" width="284" height="467"/>
+	<SubTexture name="bridge" x="673" y="1736" width="69" height="22"/>
+	<SubTexture name="car_body_0" x="1050" y="1790" width="167" height="65"/>
+	<SubTexture name="car_body_1" x="468" y="1790" width="171" height="66"/>
+	<SubTexture name="car_body_10" x="673" y="1772" width="197" height="64"/>
+	<SubTexture name="car_body_11" x="1063" y="1718" width="189" height="68"/>
+	<SubTexture name="car_body_12" x="414" y="1652" width="204" height="76"/>
+	<SubTexture name="car_body_13" x="1142" y="1487" width="182" height="91"/>
+	<SubTexture name="car_body_2" x="4" y="1812" width="175" height="60"/>
+	<SubTexture name="car_body_3" x="1405" y="1850" width="169" height="61"/>
+	<SubTexture name="car_body_4" x="1256" y="1718" width="175" height="72"/>
+	<SubTexture name="car_body_5" x="292" y="1790" width="172" height="67"/>
+	<SubTexture name="car_body_6" x="622" y="1652" width="172" height="80"/>
+	<SubTexture name="car_body_7" x="874" y="1772" width="172" height="71"/>
+	<SubTexture name="car_body_8" x="852" y="1847" width="174" height="60"/>
+	<SubTexture name="car_body_9" x="1221" y="1794" width="180" height="59"/>
+	<SubTexture name="coin" x="1396" y="1535" width="40" height="38"/>
+	<SubTexture name="control_down" x="292" y="1487" width="150" height="161"/>
+	<SubTexture name="control_left" x="754" y="1487" width="150" height="161"/>
+	<SubTexture name="control_right" x="446" y="1487" width="150" height="161"/>
+	<SubTexture name="control_up" x="600" y="1487" width="150" height="161"/>
+	<SubTexture name="effect_crushed" x="1030" y="1859" width="183" height="51"/>
+	<SubTexture name="effect_level_completed" x="908" y="1487" width="230" height="83"/>
+	<SubTexture name="effect_time_out" x="1578" y="1850" width="200" height="51"/>
+	<SubTexture name="gui_coin_back" x="468" y="1860" width="139" height="64"/>
+	<SubTexture name="gui_time_back" x="1782" y="1850" width="149" height="64"/>
+	<SubTexture name="large_exit_button" x="1030" y="1582" width="118" height="132"/>
+	<SubTexture name="large_restart_button" x="292" y="1652" width="118" height="132"/>
+	<SubTexture name="large_resume_button" x="1152" y="1582" width="118" height="132"/>
+	<SubTexture name="large_sound_off_button" x="908" y="1574" width="118" height="132"/>
+	<SubTexture name="large_sound_on_button" x="1274" y="1582" width="118" height="132"/>
+	<SubTexture name="notification_back_flip" x="1217" y="1859" width="181" height="50"/>
+	<SubTexture name="notification_front_flip" x="643" y="1840" width="205" height="51"/>
+	<SubTexture name="notification_nice_airtime" x="414" y="1736" width="255" height="50"/>
+	<SubTexture name="notification_nice_wheelie" x="798" y="1718" width="261" height="50"/>
+	<SubTexture name="pause_button" x="1328" y="1487" width="64" height="77"/>
+	<SubTexture name="small_rock_0_1" x="2033" y="63" width="6" height="6"/>
+	<SubTexture name="small_rock_0_2" x="2036" y="4" width="4" height="9" frameX="0" frameY="0" frameWidth="8" frameHeight="9"/>
+	<SubTexture name="small_rock_0_3" x="2020" y="89" width="12" height="7" frameX="0" frameY="0" frameWidth="8" frameHeight="7"/>
+	<SubTexture name="small_rock_1_1" x="2036" y="17" width="8" height="8"/>
+	<SubTexture name="small_rock_1_2" x="2020" y="4" width="12" height="13"/>
+	<SubTexture name="small_rock_1_3" x="2020" y="21" width="12" height="10"/>
+	<SubTexture name="small_rock_2_1" x="2020" y="63" width="9" height="9"/>
+	<SubTexture name="small_rock_2_2" x="2020" y="35" width="10" height="11"/>
+	<SubTexture name="small_rock_2_3" x="2020" y="50" width="10" height="9"/>
+	<SubTexture name="small_rock_3_1" x="2020" y="76" width="9" height="9"/>
+	<SubTexture name="small_rock_3_2" x="2034" y="35" width="10" height="11"/>
+	<SubTexture name="small_rock_3_3" x="2034" y="50" width="10" height="9"/>
+	<SubTexture name="snowflake" x="1396" y="1487" width="44" height="44"/>
+	<SubTexture name="table_world_0_b" x="183" y="1812" width="57" height="137"/>
+	<SubTexture name="title_text_back" x="292" y="1391" width="1136" height="92"/>
+	<SubTexture name="wheel_0" x="1991" y="1850" width="49" height="49"/>
+	<SubTexture name="wheel_1" x="113" y="1876" width="49" height="49"/>
+	<SubTexture name="wheel_10" x="798" y="1652" width="52" height="52"/>
+	<SubTexture name="wheel_11" x="1935" y="1850" width="52" height="52"/>
+	<SubTexture name="wheel_12" x="244" y="1861" width="52" height="52"/>
+	<SubTexture name="wheel_13" x="611" y="1895" width="49" height="49"/>
+	<SubTexture name="wheel_2" x="356" y="1861" width="51" height="51"/>
+	<SubTexture name="wheel_3" x="59" y="1876" width="50" height="50"/>
+	<SubTexture name="wheel_4" x="854" y="1652" width="50" height="50"/>
+	<SubTexture name="wheel_5" x="411" y="1861" width="51" height="51"/>
+	<SubTexture name="wheel_6" x="4" y="1876" width="51" height="51"/>
+	<SubTexture name="wheel_7" x="664" y="1895" width="49" height="49"/>
+	<SubTexture name="wheel_8" x="717" y="1895" width="48" height="48"/>
+	<SubTexture name="wheel_9" x="300" y="1861" width="52" height="52"/>
 </TextureAtlas>

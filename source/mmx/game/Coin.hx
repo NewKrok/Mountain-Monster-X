@@ -48,8 +48,10 @@ class Coin extends FlxSprite
 		disposeTween();
 	}
 
-	public function resetToStart():Void
+	override public function reset( x:Float, y:Float ):Void
 	{
+		super.reset( x, y );
+		
 		isCollected = false;
 		visible = true;
 		alpha = 1;

@@ -12,6 +12,7 @@ import nape.constraint.WeldJoint;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
 import nape.phys.Body;
+import nape.phys.BodyList;
 import nape.phys.Material;
 import nape.shape.Circle;
 import nape.shape.Polygon;
@@ -46,6 +47,9 @@ class Car extends FlxSpriteGroup
 	public var carBodyPhysics:Body;
 	public var wheelRightPhysics:Body;
 	public var wheelLeftPhysics:Body;
+	
+	public var leftWheelOnAir( default, null ):Bool;
+	public var rightWheelOnAir( default, null ):Bool;
 	
 	var direction:Int = 1;
 	
@@ -167,6 +171,37 @@ class Car extends FlxSpriteGroup
 		wheelLeftGraphics.x = wheelLeftPhysics.position.x - wheelLeftGraphics.origin.x;
 		wheelLeftGraphics.y = wheelLeftPhysics.position.y - wheelLeftGraphics.origin.y;
 		wheelLeftGraphics.angle = wheelLeftPhysics.rotation * FlxAngle.TO_DEG;
+		
+		calculateCollision();
+	}
+	
+	function calculateCollision():Void
+	{
+		var contactList:BodyList = wheelLeftPhysics.interactingBodies();
+		leftWheelOnAir = true;
+		
+		while ( !contactList.empty() )
+		{
+			var obj:Body = contactList.pop();
+			if ( obj != carBodyPhysics )
+			{
+				leftWheelOnAir = false;
+				break;
+			}
+		}
+		
+		contactList = wheelRightPhysics.interactingBodies();
+		rightWheelOnAir = true;
+		
+		while ( !contactList.empty() )
+		{
+			var obj:Body = contactList.pop();
+			if ( obj != carBodyPhysics )
+			{
+				rightWheelOnAir = false;
+				break;
+			}
+		}
 	}
 	
 	public function accelerateToLeft():Void
