@@ -5,29 +5,21 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.nape.FlxNapeSpace;
-import flixel.addons.nape.FlxNapeSprite;
-import flixel.graphics.FlxGraphic;
-import flixel.graphics.atlas.FlxAtlas;
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
-import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
-import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.system.scaleModes.RatioScaleMode;
-import flixel.tile.FlxTileblock;
 import flixel.util.FlxColor;
 import hpp.flixel.display.HPPMovieClip;
+import hpp.flixel.util.AssetManager;
 import mmx.assets.CarDatas;
 import mmx.datatype.BackgroundData;
-import mmx.datatype.CarData;
 import mmx.datatype.LevelData;
 import mmx.game.Car;
 import mmx.game.Coin;
+import mmx.game.SmallRock;
 import mmx.game.constant.CPhysicsValues;
 import mmx.util.LevelUtil;
-import hpp.flixel.util.AssetManager;
 import nape.constraint.PivotJoint;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
@@ -35,9 +27,9 @@ import nape.phys.Body;
 import nape.phys.BodyType;
 import nape.phys.Material;
 import nape.shape.Polygon;
+import openfl.Assets;
 import openfl.geom.Rectangle;
 
-import openfl.Assets;
 
 class PlayState extends FlxState
 {
@@ -56,6 +48,9 @@ class PlayState extends FlxState
 	var bridgeBodies:Array<Array<Body>>;
 	var bridgeBlocks:Array<Array<FlxSprite>>;
 	
+	var smallRocks:Array<SmallRock>;
+	var usedSmallRocks:Array<SmallRock>;
+	
 	var coins:Array<Coin>;
 
 	//var gameGui:GameGui;
@@ -71,13 +66,10 @@ class PlayState extends FlxState
 
 	var achievementManager:AchievementManager;
 
-	var smallRocks:Vector.<Image> = new Vector.<Image>;
-	var usedSmallRocks:Vector.<Image> = new Vector.<Image>;
 	var gameObjects:Vector.<Image> = new Vector.<Image>;
 	var terrains:Vector.<Image> = new Vector.<Image>;
 	var effects:Vector.<Image> = new Vector.<Image>;
 
-	var coins:Vector.<Coin> = new Vector.<Coin>;
 	var crates:Vector.<BaseCrate> = new Vector.<BaseCrate>;
 */
 	var backgroundDatas:Array<BackgroundData> = [];
@@ -175,7 +167,7 @@ class PlayState extends FlxState
 		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValues.GRAVITY );
 		FlxNapeSpace.createWalls( 0, 0, levelData.cameraBounds.width, levelData.cameraBounds.height );
 		FlxNapeSpace.drawDebug = true;
-		
+
 		createGroundPhysics();
 		createBridges();
 		
@@ -187,18 +179,9 @@ class PlayState extends FlxState
 		camera.setScrollBoundsRect( levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height );
 		
 		createCoins();
+		createSmallRocks();
 		
 /*
-
-		// generate small rocks
-		for( i = 0; i < 30; i++ )
-		{
-			_smallRocks.push( _container.addChild( new Image( StaticAssetManager.instance.getTexture( "small_rock_" + _worldID + '_' + Math.floor( Math.random() * 3 + 1 ) ) ) as Image ) );
-			_smallRocks[ _smallRocks.length - 1 ].visible = false;
-			_smallRocks[ _smallRocks.length - 1 ].pivotX = _smallRocks[ _smallRocks.length - 1 ].width / 2;
-			_smallRocks[ _smallRocks.length - 1 ].pivotY = _smallRocks[ _smallRocks.length - 1 ].height / 2;
-			_smallRocks[ _smallRocks.length - 1 ].touchable = false;
-		}
 		// create game objects
 		for( i = 0; i < _levelData.gameObjects.length; i++ )
 		{
@@ -319,9 +302,12 @@ class PlayState extends FlxState
 		
 		for( i in 0...coins.length )
 		{
-			coins[ i ].resetToStart();
-			coins[ i ].x = levelData.starPoints[ i ].x;
-			coins[ i ].y = levelData.starPoints[ i ].y;
+			coins[ i ].reset( levelData.starPoints[ i ].x, levelData.starPoints[ i ].y );
+		}
+		
+		for( i in 0...smallRocks.length )
+		{
+			smallRocks[ i ].reset( 0, 0 );
 		}
 		
 		car.teleportTo( levelData.startPoint.x, levelData.startPoint.y );
@@ -356,23 +342,6 @@ class PlayState extends FlxState
 			_gameObjects[ _gameObjects.length - 1 ].x = _levelData.gameObjects[ i ].x;
 			_gameObjects[ _gameObjects.length - 1 ].y = _levelData.gameObjects[ i ].y;
 			_gameObjects[ _gameObjects.length - 1 ].rotation = _levelData.gameObjects[ i ].rotation;
-		}
-
-		// Reset small rocks
-		for( i = 0; i < _smallRocks.length; i++ )
-		{
-			Tweener.removeTweens( _smallRocks[ i ] );
-			_smallRocks[ i ].alpha = 0;
-			_smallRocks[ i ].visible = false;
-		}
-
-		// Reset coins
-		for( i = 0; i < _coins.length; i++ )
-		{
-			Tweener.removeTweens( _coins[ i ] );
-			_coins[ i ].reset();
-			_coins[ i ].x = _levelData.coinPoints[ i ].x;
-			_coins[ i ].y = _levelData.coinPoints[ i ].y;
 		}
 
 		// Start level
@@ -527,6 +496,19 @@ class PlayState extends FlxState
 		}
 	}
 	
+	function createSmallRocks():Void
+	{
+		smallRocks = [];
+		usedSmallRocks = [];
+		
+		for( i in 0...30 )
+		{
+			var smallRock:SmallRock = new SmallRock( "small_rock_" + worldId + "_" + Math.floor( Math.random() * 3 + 1 ), releaseSmallRock );
+			container.add( smallRock );
+			smallRocks.push( smallRock );
+		}
+	}
+	
 	override public function update( elapsed:Float ):Void
 	{
 		super.update( elapsed );
@@ -540,6 +522,7 @@ class PlayState extends FlxState
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 		
 		updateBridges();
+		updateSmallRocks();
 		checkCoinPickUp();
 		checkWin();
 	}
@@ -588,6 +571,45 @@ class PlayState extends FlxState
 				block.angle = body.rotation * FlxAngle.TO_DEG;
 			}
 		}
+	}
+	
+	function updateSmallRocks():Void
+	{
+		var leftAngularVelocity:Float = Math.abs( car.wheelRightPhysics.angularVel );
+		var rightAngularVelocity:Float = Math.abs( car.wheelLeftPhysics.angularVel );
+		var carDirection:Int = car.wheelLeftPhysics.velocity.x >= 0 ? 1 : -1;
+		
+		if( !car.leftWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .9 )
+		{
+			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
+			smallRocks.pop();
+			
+			var selectedSmallRock:SmallRock = usedSmallRocks[ usedSmallRocks.length - 1 ];
+			selectedSmallRock.visible = true;
+			selectedSmallRock.alpha = 1;
+			selectedSmallRock.x = car.wheelLeftGraphics.x + car.wheelLeftGraphics.width / 2 + -carDirection * car.wheelLeftGraphics.width / 4;
+			selectedSmallRock.y = car.wheelLeftGraphics.y + car.wheelLeftGraphics.height - selectedSmallRock.height;
+			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
+		}
+		
+		if( !car.rightWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .9 )
+		{
+			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
+			smallRocks.pop();
+			
+			var selectedSmallRock:SmallRock = usedSmallRocks[ usedSmallRocks.length - 1 ];
+			selectedSmallRock.visible = true;
+			selectedSmallRock.alpha = 1;
+			selectedSmallRock.x = car.wheelRightGraphics.x + car.wheelRightGraphics.width / 2 + -carDirection * car.wheelRightGraphics.width / 4;
+			selectedSmallRock.y = car.wheelRightGraphics.y + car.wheelRightGraphics.height - selectedSmallRock.height;
+			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
+		}
+	}
+	
+	function releaseSmallRock( target:SmallRock ):Void
+	{
+		smallRocks.push( target );
+		usedSmallRocks.remove( target );
 	}
 	
 	function checkCoinPickUp():Void
