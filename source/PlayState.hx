@@ -52,6 +52,8 @@ class PlayState extends FlxState
 	var usedSmallRocks:Array<SmallRock>;
 	
 	var coins:Array<Coin>;
+	
+	var gameObjects:Array<FlxSprite>;
 
 	//var gameGui:GameGui;
 	/*var controlLeft:Image;
@@ -66,7 +68,6 @@ class PlayState extends FlxState
 
 	var achievementManager:AchievementManager;
 
-	var gameObjects:Vector.<Image> = new Vector.<Image>;
 	var terrains:Vector.<Image> = new Vector.<Image>;
 	var effects:Vector.<Image> = new Vector.<Image>;
 
@@ -78,7 +79,6 @@ class PlayState extends FlxState
 	var levelId:UInt;
 	var worldId:UInt;
 
-	// controllers
 	var left:Bool;
 	var right:Bool;
 	var up:Bool;
@@ -116,9 +116,10 @@ class PlayState extends FlxState
 		
 		CarDatas.loadData( Assets.getText( "assets/data/car_datas.json" ) );
 		
-		AssetManager.loadAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
-		AssetManager.loadAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
-		AssetManager.loadAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
+		AssetManager.loadXMLAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
+		AssetManager.loadXMLAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
+		AssetManager.loadXMLAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
+		AssetManager.loadJsonAtlas( "assets/images/terrain_textures.png", "assets/images/terrain_textures.json" );
 		
 		build();
 	}
@@ -180,24 +181,9 @@ class PlayState extends FlxState
 		
 		createCoins();
 		createSmallRocks();
+		createGameObjects();
 		
 /*
-		// create game objects
-		for( i = 0; i < _levelData.gameObjects.length; i++ )
-		{
-			_gameObjects.push( _container.addChild( new Image( StaticAssetManager.instance.getTexture( _levelData.gameObjects[ i ].texture ) ) as Image ) );
-			_gameObjects[ _gameObjects.length - 1 ].pivotX = _levelData.gameObjects[ i ].pivotX;
-			_gameObjects[ _gameObjects.length - 1 ].pivotY = _levelData.gameObjects[ i ].pivotY;
-			_gameObjects[ _gameObjects.length - 1 ].x = _levelData.gameObjects[ i ].x;
-			_gameObjects[ _gameObjects.length - 1 ].y = _levelData.gameObjects[ i ].y;
-			_gameObjects[ _gameObjects.length - 1 ].rotation = _levelData.gameObjects[ i ].rotation;
-			_gameObjects[ _gameObjects.length - 1 ].touchable = false;
-		}
-
-		// process map terrain
-		_mapElements.push( createBox( "WALL", 0, 0, 10, 1200, false, true, 1, 1, 0 ) );
-		_mapElements.push( createBox( "WALL", _levelData.maxWidth, 0, 10, 1200, false, true, 1, 1, 0 ) );
-
 		this.addLibraryElements();
 
 		var terrainGroundTexture:BitmapData = TerrainTextures.getLevelPackTerrainGroundTexture( _worldID );
@@ -316,11 +302,6 @@ class PlayState extends FlxState
 		camera.focusOn( levelData.startPoint );
 		
 		/*
-
-		// Clear last car
-		disposeCar();
-
-		// Create car
 		
 		switch( _worldID )
 		{
@@ -335,14 +316,6 @@ class PlayState extends FlxState
 		updateCamera( false );
 
 		this.resetCrates();
-
-		// Reset game object positions
-		for( var i:int = 0; i < _levelData.gameObjects.length; i++ )
-		{
-			_gameObjects[ _gameObjects.length - 1 ].x = _levelData.gameObjects[ i ].x;
-			_gameObjects[ _gameObjects.length - 1 ].y = _levelData.gameObjects[ i ].y;
-			_gameObjects[ _gameObjects.length - 1 ].rotation = _levelData.gameObjects[ i ].rotation;
-		}
 
 		// Start level
 		onUpdate( new Event( Event.ENTER_FRAME ) );
@@ -380,8 +353,15 @@ class PlayState extends FlxState
 			body.space = FlxNapeSpace.space;
 			
 			groundBodies.push( body );
+		
+			var block = AssetManager.getSprite( "terrain_fill_texture_00000" );
+			block.x = body.position.x - block.origin.x;
+			block.y = body.position.y - block.origin.y;
+			block.angle = body.rotation * FlxAngle.TO_DEG;
+			container.add( block );
+			groundBlocks.push( block );
 			
-			var block = AssetManager.getSprite( "car_info_car_0" );
+			block = AssetManager.getSprite( "terrain_ground_texture_00000" );
 			block.x = body.position.x - block.origin.x;
 			block.y = body.position.y - block.origin.y;
 			block.angle = body.rotation * FlxAngle.TO_DEG;
@@ -509,6 +489,24 @@ class PlayState extends FlxState
 		}
 	}
 	
+	function createGameObjects():Void
+	{
+		if ( levelData.gameObjects != null )
+		{
+			for( i in 0...levelData.gameObjects.length )
+			{
+				var selectedObject:FlxSprite = AssetManager.getSprite( levelData.gameObjects[ i ].texture );
+				container.add( selectedObject );
+				
+				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
+				selectedObject.setPosition( levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y );
+				selectedObject.angle = levelData.gameObjects[ i ].rotation;
+				
+				gameObjects.push( selectedObject );
+			}
+		}
+	}
+	
 	override public function update( elapsed:Float ):Void
 	{
 		super.update( elapsed );
@@ -524,6 +522,7 @@ class PlayState extends FlxState
 		updateBridges();
 		updateSmallRocks();
 		checkCoinPickUp();
+		checkLoose();
 		checkWin();
 	}
 	
@@ -625,9 +624,18 @@ class PlayState extends FlxState
 		}
 	}
 	
+	function checkLoose():Void
+	{
+		if( !isLost && !isWon && car.isCarCrashed )
+		{
+			camera.shake( .02, .2 );
+			reset();
+		}
+	}
+	
 	function checkWin():Void
 	{
-		if( !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x )
+		if( !isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x )
 		{
 			reset();
 		}
