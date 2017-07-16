@@ -15,6 +15,7 @@ import hpp.flixel.util.AssetManager;
 import mmx.assets.CarDatas;
 import mmx.datatype.BackgroundData;
 import mmx.datatype.LevelData;
+import mmx.game.BrushTerrain;
 import mmx.game.Car;
 import mmx.game.Coin;
 import mmx.game.SmallRock;
@@ -170,10 +171,9 @@ class PlayState extends FlxState
 		FlxNapeSpace.drawDebug = true;
 
 		createGroundPhysics();
+		createCar();
 		createBridges();
-		
-		car = new Car( levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValues.CAR_FILTER_CATEGORY, CPhysicsValues.CAR_FILTER_MASK );
-		container.add( car );
+		createGroundGraphics();
 		
 		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
 		camera.targetOffset.set( 200 );
@@ -185,49 +185,6 @@ class PlayState extends FlxState
 		
 /*
 		this.addLibraryElements();
-
-		var terrainGroundTexture:BitmapData = TerrainTextures.getLevelPackTerrainGroundTexture( _worldID );
-		var terrainFillTexture:BitmapData = TerrainTextures.getLevelPackTerrainFillTexture( _worldID );
-
-		try
-		{
-			// Create world pieces
-			_container.addChild( _terrainContainer = new Sprite );
-			_terrainContainer.touchable = false;
-			var generatedTerrain:BrushPattern = new BrushPattern( _levelData.groundPoints, terrainGroundTexture, terrainFillTexture, 64, 24 );
-			var maxBlockSize:uint = 2048;
-			var pieces:uint = Math.ceil( generatedTerrain.width / maxBlockSize );
-			for( var i:uint = 0; i < pieces; i++ )
-			{
-				var tmpBitmapData:BitmapData = new BitmapData( maxBlockSize, maxBlockSize, true, 0x60 );
-				var offsetMatrix:Matrix = new Matrix;
-				offsetMatrix.tx = -i * maxBlockSize;
-				tmpBitmapData.draw( generatedTerrain, offsetMatrix );
-				_terrains.push( new Image( Texture.fromBitmap( new Bitmap( tmpBitmapData ), false, false, 2 ) ) );
-				_terrains[ i ].x = i * maxBlockSize / 2;
-				_terrains[ i ].touchable = false;
-				_terrainContainer.addChild( _terrains[ i ] );
-				tmpBitmapData.dispose();
-				tmpBitmapData = null;
-			}
-		}catch( e:Error )
-		{
-			if( MountainMonsterIOSMain.LOG_ENABLED )
-			{
-				LogModule.add( 'Terrain generation error: ' + e.getStackTrace() );
-			}
-
-			this.dispatchEvent( new GameEvent( GameEvent.RESOURCE_LIMIT_ERROR ) );
-			return;
-		}
-
-		terrainGroundTexture.dispose();
-		terrainGroundTexture = null;
-		terrainFillTexture.dispose();
-		terrainFillTexture = null;
-
-		generatedTerrain.dispose();
-		generatedTerrain = null;
 
 		// add control buttons
 		addChild( _controlLeft = new Image( StaticAssetManager.instance.getTexture( "control_left" ) ) );
@@ -324,6 +281,25 @@ class PlayState extends FlxState
 		this._gameGui.enable();*/
 	}
 	
+	function createGroundGraphics():Void
+	{
+		container.add( terrainContainer = new FlxSpriteGroup() );
+		
+		var generatedTerrain:BrushTerrain = new BrushTerrain(
+			levelData.cameraBounds,
+			levelData.groundPoints,
+			AssetManager.getGraphic( "terrain_ground_texture_00000" ),
+			AssetManager.getGraphic( "terrain_fill_texture_00000" ),
+			64,
+			24,
+			.5
+		);
+		generatedTerrain.origin.set( 0, 0 );
+		generatedTerrain.scale.set( 2, 2 );
+		
+		terrainContainer.add( generatedTerrain );
+	}
+	
 	function createGroundPhysics():Void
 	{
 		groundBodies = [];
@@ -354,14 +330,7 @@ class PlayState extends FlxState
 			
 			groundBodies.push( body );
 		
-			var block = AssetManager.getSprite( "terrain_fill_texture_00000" );
-			block.x = body.position.x - block.origin.x;
-			block.y = body.position.y - block.origin.y;
-			block.angle = body.rotation * FlxAngle.TO_DEG;
-			container.add( block );
-			groundBlocks.push( block );
-			
-			block = AssetManager.getSprite( "terrain_ground_texture_00000" );
+			var block = AssetManager.getSprite( "terrain_ground_texture_00000" );
 			block.x = body.position.x - block.origin.x;
 			block.y = body.position.y - block.origin.y;
 			block.angle = body.rotation * FlxAngle.TO_DEG;
@@ -425,7 +394,7 @@ class PlayState extends FlxState
 			bridgeBodies[bridgeBodies.length - 1].push( body );
 			
 			var bridgeBlock:FlxSprite = AssetManager.getSprite( "bridge" );
-			add( bridgeBlock );
+			container.add( bridgeBlock );
 			bridgeBlocks[bridgeBlocks.length - 1].push( bridgeBlock );
 			
 			if ( i > 0 )
@@ -439,6 +408,12 @@ class PlayState extends FlxState
 				pivotJointLeftLeftWheel.space = FlxNapeSpace.space;
 			}
 		}
+	}
+	
+	function createCar():Void
+	{
+		car = new Car( levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValues.CAR_FILTER_CATEGORY, CPhysicsValues.CAR_FILTER_MASK );
+		container.add( car );
 	}
 	
 	function addBackground( assetId:String, baseYOffset:Float, easing:FlxPoint, xOverlap:Float ):Void
