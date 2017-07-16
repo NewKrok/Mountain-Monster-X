@@ -16,8 +16,10 @@ typedef LevelData =
 	var startPoint( default, default ):FlxPoint;
 	var finishPoint( default, default ):FlxPoint;
 	var groundPoints( default, default ):Array<FlxPoint>;
-	var bridgePoints( default, default ):Array<BridgeData>;
 	var starPoints( default, default ):Array<FlxPoint>;
+	
+	@:optional var bridgePoints( default, default ):Array<BridgeData>;
+	@:optional var gameObjects( default, default ):Array<GameObject>;
 }
 
 typedef BridgeData =
@@ -26,4 +28,14 @@ typedef BridgeData =
 	var bridgeAY:Float;
 	var bridgeBX:Float;
 	var bridgeBY:Float;
+}
+
+typedef GameObject =
+{
+	var x:Float;
+	var y:Float;
+	var pivotX:Float;
+	var pivotY:Float;
+	var rotation:Float;
+	var texture:String;
 }

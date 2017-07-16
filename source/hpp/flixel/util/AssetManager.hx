@@ -16,9 +16,14 @@ class AssetManager
 {
 	static var loadedAtlas:Array<FlxAtlasFrames> = [];
 	
-	public static function loadAtlas( atlasUrl:String, descriptionUrl:String ):Void
+	public static function loadXMLAtlas( atlasUrl:String, descriptionUrl:String ):Void
 	{
 		loadedAtlas.push( FlxAtlasFrames.fromSparrow( atlasUrl, descriptionUrl ) );
+	}
+	
+	public static function loadJsonAtlas( atlasUrl:String, descriptionUrl:String ):Void
+	{
+		loadedAtlas.push( FlxAtlasFrames.fromTexturePackerJson( atlasUrl, descriptionUrl ) );
 	}
 	
 	public static function getGraphic( assetId:String ):FlxGraphic

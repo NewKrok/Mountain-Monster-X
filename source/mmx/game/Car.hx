@@ -6,6 +6,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import hpp.flixel.util.AssetManager;
+import nape.callbacks.InteractionType;
 import nape.constraint.DistanceJoint;
 import nape.constraint.PivotJoint;
 import nape.constraint.WeldJoint;
@@ -50,6 +51,7 @@ class Car extends FlxSpriteGroup
 	
 	public var leftWheelOnAir( default, null ):Bool;
 	public var rightWheelOnAir( default, null ):Bool;
+	public var isCarCrashed( default, null ):Bool;
 	
 	var direction:Int = 1;
 	
@@ -199,6 +201,19 @@ class Car extends FlxSpriteGroup
 			if ( obj != carBodyPhysics )
 			{
 				rightWheelOnAir = false;
+				break;
+			}
+		}
+		
+		contactList = hitArea.interactingBodies( InteractionType.COLLISION, 1 );
+		isCarCrashed = false;
+		
+		while ( !contactList.empty() )
+		{
+			var obj:Body = contactList.pop();
+			if ( obj != carBodyPhysics && obj != wheelLeftPhysics && obj != wheelRightPhysics )
+			{
+				isCarCrashed = true;
 				break;
 			}
 		}
