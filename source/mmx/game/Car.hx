@@ -96,7 +96,7 @@ class Car extends FlxSpriteGroup
 		wheelLeftGraphics.antialiasing = true;
 	}
 	
-	function buildPhysics( x:Float, y:Float, filterCategory:UInt = 0, filterMask:UInt = 0 ):Void
+	function buildPhysics( x:Float, y:Float, filterCategory:Int = 0, filterMask:Int = 0 ):Void
 	{
 		var filter:InteractionFilter = new InteractionFilter();
 		filter.collisionGroup = filterCategory;

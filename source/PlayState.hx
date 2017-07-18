@@ -15,7 +15,7 @@ import hpp.flixel.util.AssetManager;
 import mmx.assets.CarDatas;
 import mmx.datatype.BackgroundData;
 import mmx.datatype.LevelData;
-import mmx.game.BrushTerrain;
+import mmx.game.terrain.BrushTerrain;
 import mmx.game.Car;
 import mmx.game.Coin;
 import mmx.game.SmallRock;
@@ -44,7 +44,6 @@ class PlayState extends FlxState
 	var lastCameraStepOffset:FlxPoint;
 	
 	var groundBodies:Array<Body>;
-	var groundBlocks:Array<FlxSprite>;
 	
 	var bridgeBodies:Array<Array<Body>>;
 	var bridgeBlocks:Array<Array<FlxSprite>>;
@@ -303,7 +302,6 @@ class PlayState extends FlxState
 	function createGroundPhysics():Void
 	{
 		groundBodies = [];
-		groundBlocks = [];
 
 		var filter:InteractionFilter = new InteractionFilter();
 		filter.collisionGroup = CPhysicsValues.GROUND_FILTER_CATEGORY;
@@ -329,13 +327,6 @@ class PlayState extends FlxState
 			body.space = FlxNapeSpace.space;
 			
 			groundBodies.push( body );
-		
-			var block = AssetManager.getSprite( "terrain_ground_texture_00000" );
-			block.x = body.position.x - block.origin.x;
-			block.y = body.position.y - block.origin.y;
-			block.angle = body.rotation * FlxAngle.TO_DEG;
-			container.add( block );
-			groundBlocks.push( block );
 		}
 	}
 	
@@ -377,7 +368,7 @@ class PlayState extends FlxState
 		for( i in 0...pieces )
 		{
 			var isLockedBridgeElement:Bool = false;
-			if( i == 0 || i == pieces - 1 )
+			if( i == 0 || i == cast( pieces - 1 ) )
 			{
 				isLockedBridgeElement = true;
 			}
@@ -522,7 +513,7 @@ class PlayState extends FlxState
 			{
 				for( j in 0...backgroundData.elements.length )
 				{
-					backgroundData.elements[j].currentFrame = backgroundData.elements[j] .currentFrame == backgroundData.elements[j].numFrames - 1 ? 0 : backgroundData.elements[j].currentFrame + 1;
+					backgroundData.elements[j].currentFrame = ( backgroundData.elements[j] .currentFrame == cast( backgroundData.elements[j].numFrames - 1 ) ) ? 0 : backgroundData.elements[j].currentFrame + 1;
 				}
 				backgroundData.container.x += backgroundData.elements[ 0 ].width;
 			}
@@ -553,7 +544,7 @@ class PlayState extends FlxState
 		var rightAngularVelocity:Float = Math.abs( car.wheelLeftPhysics.angularVel );
 		var carDirection:Int = car.wheelLeftPhysics.velocity.x >= 0 ? 1 : -1;
 		
-		if( !car.leftWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .9 )
+		if( !car.leftWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8 )
 		{
 			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
 			smallRocks.pop();
@@ -566,7 +557,7 @@ class PlayState extends FlxState
 			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
 		}
 		
-		if( !car.rightWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .9 )
+		if( !car.rightWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .8 )
 		{
 			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
 			smallRocks.pop();
