@@ -18,7 +18,6 @@ class BrushArea extends Point
 	public var xR:Float;
 	public var yR:Float;
 	public var angle:Float = 0;
-	public var angleT:Float = 0;
 	public var prevPoint:BrushArea;
 	
 	public function new( xPos:Float, yPos:Float, prevPoint:BrushArea = null )
@@ -31,8 +30,7 @@ class BrushArea extends Point
 			l = Point.distance( this, prevPoint );
 			fullLength += l;
 			currentLength = fullLength;
-			angleT = Math.atan2( this.y - prevPoint.y, this.x - prevPoint.x );
-			angle = angleT;
+			angle = Math.atan2( this.y - prevPoint.y, this.x - prevPoint.x );
 			var pR:Point = Point.polar( lw, angle + Math.PI / 2 );
 			xR = pR.x + x;
 			yR = pR.y + y;

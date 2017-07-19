@@ -23,8 +23,6 @@ class Coin extends FlxSprite
 		super( x, y );
 		
 		loadGraphic( AssetManager.getGraphic( "coin" ) );
-		
-		scale.set( .8, .8 );
 	}
 	
 	public function collect():Void
@@ -56,6 +54,7 @@ class Coin extends FlxSprite
 		visible = true;
 		alpha = 1;
 		angle = 0;
+		scale.set( 1, 1 );
 		
 		disposeTween();
 		startAnimation();
@@ -65,7 +64,7 @@ class Coin extends FlxSprite
 	{
 		tween = FlxTween.tween( 
 			scale,
-			{ x: 1, y: 1 },
+			{ x: .8, y: .8 },
 			.4,
 			{ type: FlxTween.PINGPONG, ease: FlxEase.sineIn, loopDelay: Math.random() }
 		);
