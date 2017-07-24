@@ -144,6 +144,14 @@ class PlayState extends FlxState
 			levelData.bridgePoints[i].bridgeBY *= LEVEL_DATA_SCALE;
 		}
 		
+		for ( i in 0...levelData.gameObjects.length )
+		{
+			levelData.gameObjects[i].x *= LEVEL_DATA_SCALE;
+			levelData.gameObjects[i].y *= LEVEL_DATA_SCALE;
+			levelData.gameObjects[i].pivotX *= LEVEL_DATA_SCALE;
+			levelData.gameObjects[i].pivotY *= LEVEL_DATA_SCALE;
+		}
+		
 		levelData.startPoint = new FlxPoint( levelData.startPoint.x * LEVEL_DATA_SCALE, levelData.startPoint.y * LEVEL_DATA_SCALE );
 		levelData.finishPoint = new FlxPoint( levelData.finishPoint.x * LEVEL_DATA_SCALE, levelData.finishPoint.y * LEVEL_DATA_SCALE );
 		
@@ -171,6 +179,7 @@ class PlayState extends FlxState
 
 		createGroundPhysics();
 		createCar();
+		createGameObjects();
 		createBridges();
 		createGroundGraphics();
 		
@@ -180,7 +189,6 @@ class PlayState extends FlxState
 		
 		createCoins();
 		createSmallRocks();
-		createGameObjects();
 		
 /*
 		this.addLibraryElements();
@@ -457,17 +465,20 @@ class PlayState extends FlxState
 	
 	function createGameObjects():Void
 	{
+		gameObjects = [];
+		
 		if ( levelData.gameObjects != null )
 		{
 			for( i in 0...levelData.gameObjects.length )
 			{
 				var selectedObject:FlxSprite = AssetManager.getSprite( levelData.gameObjects[ i ].texture );
-				container.add( selectedObject );
 				
-				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
 				selectedObject.setPosition( levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y );
+				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
+				selectedObject.scale.set( levelData.gameObjects[ i ].scaleX, levelData.gameObjects[ i ].scaleY );
 				selectedObject.angle = levelData.gameObjects[ i ].rotation;
 				
+				container.add( selectedObject );
 				gameObjects.push( selectedObject );
 			}
 		}

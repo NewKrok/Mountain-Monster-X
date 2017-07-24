@@ -36,6 +36,8 @@ typedef GameObject =
 	var y:Float;
 	var pivotX:Float;
 	var pivotY:Float;
+	var scaleX:Float;
+	var scaleY:Float;
 	var rotation:Float;
 	var texture:String;
 }
