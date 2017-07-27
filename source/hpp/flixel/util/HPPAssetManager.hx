@@ -3,6 +3,7 @@ package hpp.flixel.util;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.graphics.frames.FlxBitmapFont;
 import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxFramesCollection;
 import haxe.Log;
@@ -12,9 +13,10 @@ import hpp.flixel.display.HPPMovieClip;
  * ...
  * @author Krisztian Somoracz
  */
-class AssetManager 
+class HPPAssetManager 
 {
 	static var loadedAtlas:Array<FlxAtlasFrames> = [];
+	static var loadedFonts:Array<FlxBitmapFont> = [];
 	
 	public static function loadXMLAtlas( atlasUrl:String, descriptionUrl:String ):Void
 	{
@@ -24,6 +26,11 @@ class AssetManager
 	public static function loadJsonAtlas( atlasUrl:String, descriptionUrl:String ):Void
 	{
 		loadedAtlas.push( FlxAtlasFrames.fromTexturePackerJson( atlasUrl, descriptionUrl ) );
+	}
+	
+	public static function loadXMLBitmapFont( atlasUrl:String, descriptionUrl:String ):Void
+	{
+		loadedFonts.push( FlxBitmapFont.fromAngelCode( atlasUrl, descriptionUrl ) );
 	}
 	
 	public static function getGraphic( assetId:String ):FlxGraphic
@@ -106,5 +113,10 @@ class AssetManager
 		}
 		
 		return selectedAtlas;
+	}
+	
+	public static function getBitmapFont( fontName:String ):FlxBitmapFont
+	{
+		return loadedFonts.filter( function( font:FlxBitmapFont ){ return font.fontName == fontName; } )[0];
 	}
 }

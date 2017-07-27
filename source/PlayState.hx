@@ -5,21 +5,24 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.nape.FlxNapeSpace;
+import flixel.graphics.frames.FlxBitmapFont;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.system.scaleModes.RatioScaleMode;
 import flixel.util.FlxColor;
 import hpp.flixel.display.HPPMovieClip;
-import hpp.flixel.util.AssetManager;
+import hpp.flixel.util.HPPAssetManager;
 import mmx.assets.CarDatas;
 import mmx.datatype.BackgroundData;
 import mmx.datatype.LevelData;
-import mmx.game.terrain.BrushTerrain;
 import mmx.game.Car;
 import mmx.game.Coin;
+import mmx.game.GameGui;
 import mmx.game.SmallRock;
+import mmx.game.constant.CGameTimeValue;
 import mmx.game.constant.CPhysicsValues;
+import mmx.game.terrain.BrushTerrain;
 import mmx.util.LevelUtil;
 import nape.constraint.PivotJoint;
 import nape.dynamics.InteractionFilter;
@@ -35,6 +38,8 @@ import openfl.geom.Rectangle;
 class PlayState extends FlxState
 {
 	inline static var LEVEL_DATA_SCALE:Float = 2;
+	
+	var gameGui:GameGui;
 	
 	var container:FlxSpriteGroup;
 	var terrainContainer:FlxSpriteGroup;
@@ -55,7 +60,6 @@ class PlayState extends FlxState
 	
 	var gameObjects:Array<FlxSprite>;
 
-	//var gameGui:GameGui;
 	/*var controlLeft:Image;
 	var controlRight:Image;
 	var controlUp:Image;
@@ -68,7 +72,6 @@ class PlayState extends FlxState
 
 	var achievementManager:AchievementManager;
 
-	var terrains:Vector.<Image> = new Vector.<Image>;
 	var effects:Vector.<Image> = new Vector.<Image>;
 
 	var crates:Vector.<BaseCrate> = new Vector.<BaseCrate>;
@@ -116,10 +119,11 @@ class PlayState extends FlxState
 		
 		CarDatas.loadData( Assets.getText( "assets/data/car_datas.json" ) );
 		
-		AssetManager.loadXMLAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
-		AssetManager.loadXMLAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
-		AssetManager.loadXMLAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
-		AssetManager.loadJsonAtlas( "assets/images/terrain_textures.png", "assets/images/terrain_textures.json" );
+		HPPAssetManager.loadXMLAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
+		HPPAssetManager.loadXMLAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
+		HPPAssetManager.loadXMLAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
+		HPPAssetManager.loadJsonAtlas( "assets/images/terrain_textures.png", "assets/images/terrain_textures.json" );
+		HPPAssetManager.loadXMLBitmapFont( "assets/fonts/aachen-light.png", "assets/fonts/aachen-light.fnt.xml" );
 		
 		build();
 	}
@@ -215,8 +219,6 @@ class PlayState extends FlxState
 				break;
 		}
 
-		// add gui
-		addChild( _gameGui = new GameGui( _levelID, _worldID ) );
 		_gameGui.addEventListener( GameGuiEvent.INGAME_RESTART_REQUEST, restartRequest );
 		_gameGui.addEventListener( GameGuiEvent.PAUSE_REQUEST, pauseRequest );
 		_gameGui.addEventListener( GameGuiEvent.RESUME_REQUEST, resumeRequest );
@@ -230,6 +232,8 @@ class PlayState extends FlxState
 		}
 		addEventListener( TouchEvent.TOUCH, onTouch );
 */
+		add( gameGui = new GameGui() );
+
 		reset();
 	}
 	
@@ -249,6 +253,8 @@ class PlayState extends FlxState
 		countOfBackFlip = 0;
 		countOfNiceAirTime = 0;
 		countOfNiceWheelie = 0;
+		
+		gameGui.updateCoinCount( collectedCoin );
 		
 		for( i in 0...coins.length )
 		{
@@ -281,11 +287,18 @@ class PlayState extends FlxState
 
 		this.resetCrates();
 
-		// Start level
-		onUpdate( new Event( Event.ENTER_FRAME ) );
-
 		this._gameGui.showStartGamePanel( exit );
 		this._gameGui.enable();*/
+		
+		start();
+	}
+	
+	function start():Void
+	{
+		isGameStarted = true;
+
+		gameTime = 0;
+		gameStartTime = Date.now().getTime();
 	}
 	
 	function createGroundGraphics():Void
@@ -295,8 +308,8 @@ class PlayState extends FlxState
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
 			levelData.groundPoints,
-			AssetManager.getGraphic( "terrain_ground_texture_00000" ),
-			AssetManager.getGraphic( "terrain_fill_texture_00000" ),
+			HPPAssetManager.getGraphic( "terrain_ground_texture_00000" ),
+			HPPAssetManager.getGraphic( "terrain_fill_texture_00000" ),
 			64,
 			24,
 			.5
@@ -392,7 +405,7 @@ class PlayState extends FlxState
 			body.space = FlxNapeSpace.space;
 			bridgeBodies[bridgeBodies.length - 1].push( body );
 			
-			var bridgeBlock:FlxSprite = AssetManager.getSprite( "bridge" );
+			var bridgeBlock:FlxSprite = HPPAssetManager.getSprite( "bridge" );
 			container.add( bridgeBlock );
 			bridgeBlocks[bridgeBlocks.length - 1].push( bridgeBlock );
 			
@@ -428,7 +441,7 @@ class PlayState extends FlxState
 		
 		for( i in 0...5 )
 		{
-			var backgroundPiece:HPPMovieClip = AssetManager.getMovieClip( assetId );
+			var backgroundPiece:HPPMovieClip = HPPAssetManager.getMovieClip( assetId );
 			backgroundData.container.add( backgroundPiece );
 			backgroundData.elements.push( backgroundPiece );
 			
@@ -471,7 +484,7 @@ class PlayState extends FlxState
 		{
 			for( i in 0...levelData.gameObjects.length )
 			{
-				var selectedObject:FlxSprite = AssetManager.getSprite( levelData.gameObjects[ i ].texture );
+				var selectedObject:FlxSprite = HPPAssetManager.getSprite( levelData.gameObjects[ i ].texture );
 				
 				selectedObject.setPosition( levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y );
 				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
@@ -488,6 +501,9 @@ class PlayState extends FlxState
 	{
 		super.update( elapsed );
 		
+		calculateGameTime();
+		gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
+		
 		car.accelerateToRight();
 		
 		//camera.zoom = .8 + Math.max( 700 - car.carBodyPhysics.velocity.x, 0 ) / 700 * .2;
@@ -500,9 +516,22 @@ class PlayState extends FlxState
 		updateSmallRocks();
 		checkCoinPickUp();
 		checkLoose();
-		checkWin();
+		checkWin();	
 	}
 	
+	function calculateGameTime():Void
+	{
+		if( isGameStarted )
+		{
+			var now:Float = Date.now().getTime();
+			gameTime = now - gameStartTime - totalPausedTime;
+		}
+		else
+		{
+			gameTime = 0;
+		}
+	}
+
 	function updateBackgrounds():Void
 	{
 		for( i in 0...backgroundDatas.length )
@@ -597,6 +626,8 @@ class PlayState extends FlxState
 			if( !coin.isCollected && coin.overlaps( car.carBodyGraphics ) )
 			{
 				coin.collect();
+				collectedCoin++;
+				gameGui.updateCoinCount( collectedCoin );
 			}
 		}
 	}

@@ -6,7 +6,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxTween.TweenOptions;
 import flixel.tweens.misc.VarTween;
-import hpp.flixel.util.AssetManager;
+import hpp.flixel.util.HPPAssetManager;
 
 /**
  * ...
@@ -22,7 +22,7 @@ class Coin extends FlxSprite
 	{
 		super( x, y );
 		
-		loadGraphic( AssetManager.getGraphic( "coin" ) );
+		loadGraphic( HPPAssetManager.getGraphic( "coin" ) );
 	}
 	
 	public function collect():Void

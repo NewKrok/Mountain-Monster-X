@@ -5,7 +5,7 @@ import flixel.addons.nape.FlxNapeSpace;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
-import hpp.flixel.util.AssetManager;
+import hpp.flixel.util.HPPAssetManager;
 import nape.callbacks.InteractionType;
 import nape.constraint.DistanceJoint;
 import nape.constraint.PivotJoint;
@@ -86,13 +86,13 @@ class Car extends FlxSpriteGroup
 	
 	function buildGraphics():Void
 	{
-		add( carBodyGraphics = AssetManager.getSprite( "car_body_" + carData.graphicId ) );
+		add( carBodyGraphics = HPPAssetManager.getSprite( "car_body_" + carData.graphicId ) );
 		carBodyGraphics.antialiasing = true;
 		
-		add( wheelRightGraphics = AssetManager.getSprite( "wheel_" + carData.graphicId ) );
+		add( wheelRightGraphics = HPPAssetManager.getSprite( "wheel_" + carData.graphicId ) );
 		wheelRightGraphics.antialiasing = true;
 		
-		add( wheelLeftGraphics = AssetManager.getSprite( "wheel_" + carData.graphicId ) );
+		add( wheelLeftGraphics = HPPAssetManager.getSprite( "wheel_" + carData.graphicId ) );
 		wheelLeftGraphics.antialiasing = true;
 	}
 	

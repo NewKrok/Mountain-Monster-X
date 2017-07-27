@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
-import hpp.flixel.util.AssetManager;
+import hpp.flixel.util.HPPAssetManager;
 
 /**
  * ...
@@ -22,7 +22,7 @@ class SmallRock extends FlxSprite
 	{
 		super();
 		
-		loadGraphic( AssetManager.getGraphic( assetId ) );
+		loadGraphic( HPPAssetManager.getGraphic( assetId ) );
 		this.releaserRutin = releaserRutin;
 		
 		origin.set( width / 2, height / 2 );
