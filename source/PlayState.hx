@@ -22,6 +22,7 @@ import mmx.game.GameGui;
 import mmx.game.SmallRock;
 import mmx.game.constant.CGameTimeValue;
 import mmx.game.constant.CPhysicsValues;
+import mmx.game.snow.Snow;
 import mmx.game.terrain.BrushTerrain;
 import mmx.util.LevelUtil;
 import nape.constraint.PivotJoint;
@@ -65,9 +66,8 @@ class PlayState extends FlxState
 	var controlUp:Image;
 	var controlDown:Image;*/
 	var car:Car;
+	var snow:Snow;
 /*
-	var snowModule:SnowModule;
-
 	var startCounter:StartCounter;
 
 	var achievementManager:AchievementManager;
@@ -109,7 +109,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		worldId = 0;
+		worldId = 1;
 		levelId = 0;
 		
 		FlxG.scaleMode = new RatioScaleMode();
@@ -210,15 +210,14 @@ class PlayState extends FlxState
 		addChild( _controlDown = new Image( StaticAssetManager.instance.getTexture( "control_down" ) ) );
 		_controlDown.x = _controlUp.x - _controlUp.width - 10;
 		_controlDown.y = _controlLeft.y;
-
-		switch( _worldID )
+*/
+		switch( worldId )
 		{
 			case 1:
-				this._snowModule = new SnowModule();
-				this.addChild( this._snowModule.getView() );
-				break;
+				snow = new Snow();
+				add( snow );
 		}
-
+/*
 		_gameGui.addEventListener( GameGuiEvent.INGAME_RESTART_REQUEST, restartRequest );
 		_gameGui.addEventListener( GameGuiEvent.PAUSE_REQUEST, pauseRequest );
 		_gameGui.addEventListener( GameGuiEvent.RESUME_REQUEST, resumeRequest );
@@ -308,8 +307,8 @@ class PlayState extends FlxState
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
 			levelData.groundPoints,
-			HPPAssetManager.getGraphic( "terrain_ground_texture_00000" ),
-			HPPAssetManager.getGraphic( "terrain_fill_texture_00000" ),
+			HPPAssetManager.getGraphic( "terrain_ground_texture_" + worldId + "0000" ),
+			HPPAssetManager.getGraphic( "terrain_fill_texture_" + worldId + "0000" ),
 			64,
 			24,
 			.5

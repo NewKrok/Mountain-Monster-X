@@ -22,11 +22,13 @@ class BrushTerrain extends FlxSprite
 	var uvtData:Array<Float>;
 	var lastLength:Float = 0;
 	var segLength:Float = 0;
+	var groundBaseXOffset:Float;
 	
 	public function new ( levelSize:Rectangle, groundPoints:Array<FlxPoint>, brushTexture:FlxGraphic, terrainContentTexture:FlxGraphic, textureMaxWidth:Float, textureHeight:Float, scaleGroundSize:Float = 1, groundBaseHeight:Float = 700 )
 	{
 		super();
 		
+		groundBaseXOffset = groundPoints[0].x < 0 ? -groundPoints[0].x / 2 : 0;
 		groundPoints = optimizeGroundPointsToGraphics( groundPoints, brushTexture.width, textureMaxWidth );
 		textureMaxWidth *= scaleGroundSize;
 		textureHeight *= scaleGroundSize;
@@ -141,7 +143,7 @@ class BrushTerrain extends FlxSprite
 		for ( i in 0...cast linePoints.length / 2 - 1 )
 		{
 			lp = linePoints[index];
-			vertices = vertices.concat( [lp.xL + 140, lp.yL, lp.xR + 140, lp.yR] );
+			vertices = vertices.concat( [lp.xL + groundBaseXOffset, lp.yL, lp.xR + groundBaseXOffset, lp.yR] );
 			
 			if ( index == linePoints.length - 1 )
 			{
@@ -152,7 +154,7 @@ class BrushTerrain extends FlxSprite
 				lp = linePoints[index + 1];
 			}
 			
-			vertices = vertices.concat( [lp.xL + 140, lp.yL, lp.xR + 140, lp.yR] );
+			vertices = vertices.concat( [lp.xL + groundBaseXOffset, lp.yL, lp.xR + groundBaseXOffset, lp.yR] );
 			indices = indices.concat( [count, count + 1, count + 2, count + 1, count + 2, count + 3] );
 			indices = indices.concat( [count + 2, count + 3, count + 4, count + 3, count + 4, count + 5] );
 			uvtData = uvtData.concat( [0, 0, 0, 1, .5, 0, .5, 1] );
