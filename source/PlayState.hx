@@ -21,6 +21,7 @@ import mmx.game.Car;
 import mmx.game.Coin;
 import mmx.game.GameGui;
 import mmx.game.SmallRock;
+import mmx.game.StartCounter;
 import mmx.game.constant.CGameTimeValue;
 import mmx.game.constant.CPhysicsValues;
 import mmx.game.snow.Snow;
@@ -36,30 +37,29 @@ import nape.shape.Polygon;
 import openfl.Assets;
 import openfl.geom.Rectangle;
 
-
 class PlayState extends FlxState
 {
 	inline static var LEVEL_DATA_SCALE:Float = 2;
-	
+
 	var gameGui:GameGui;
-	
+
 	var container:FlxSpriteGroup;
 	var terrainContainer:FlxSpriteGroup;
 	var coinContainer:FlxSpriteGroup;
 	var libraryElementContainer:FlxSpriteGroup;
-	
+
 	var lastCameraStepOffset:FlxPoint;
-	
+
 	var groundBodies:Array<Body>;
-	
+
 	var bridgeBodies:Array<Array<Body>>;
 	var bridgeBlocks:Array<Array<FlxSprite>>;
-	
+
 	var smallRocks:Array<SmallRock>;
 	var usedSmallRocks:Array<SmallRock>;
-	
+
 	var coins:Array<Coin>;
-	
+
 	var gameObjects:Array<FlxSprite>;
 
 	/*var controlLeft:Image;
@@ -68,15 +68,14 @@ class PlayState extends FlxState
 	var controlDown:Image;*/
 	var car:Car;
 	var snow:Snow;
-/*
-	var startCounter:StartCounter;
+	/*
 
-	var achievementManager:AchievementManager;
+		var achievementManager:AchievementManager;
 
-	var effects:Vector.<Image> = new Vector.<Image>;
+		var effects:Vector.<Image> = new Vector.<Image>;
 
-	var crates:Vector.<BaseCrate> = new Vector.<BaseCrate>;
-*/
+		var crates:Vector.<BaseCrate> = new Vector.<BaseCrate>;
+	*/
 	var backgroundDatas:Array<BackgroundData> = [];
 
 	var levelData:LevelData;
@@ -105,42 +104,43 @@ class PlayState extends FlxState
 	var isWon:Bool;
 	var canControll:Bool;
 	var isGameStarted:Bool;
-	
+	var isGamePaused:Bool;
+
 	override public function create():Void
 	{
 		super.create();
-		
+
 		worldId = 0;
 		levelId = 0;
-		
+
 		FlxG.scaleMode = new RatioScaleMode();
-		
+
 		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level_" + worldId + "_" + levelId + ".json" ) );
 		setLevelDataScale();
-		
+
 		CarDatas.loadData( Assets.getText( "assets/data/car_datas.json" ) );
-		
+
 		HPPAssetManager.loadXMLAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
 		HPPAssetManager.loadXMLAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
 		HPPAssetManager.loadXMLAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
 		HPPAssetManager.loadJsonAtlas( "assets/images/terrain_textures.png", "assets/images/terrain_textures.json" );
 		HPPAssetManager.loadXMLBitmapFont( "assets/fonts/aachen-light.png", "assets/fonts/aachen-light.fnt.xml" );
-		
+
 		build();
 	}
-	
+
 	function setLevelDataScale():Void
 	{
 		for ( i in 0...levelData.groundPoints.length )
 		{
 			levelData.groundPoints[i] = new FlxPoint( levelData.groundPoints[i].x * LEVEL_DATA_SCALE, levelData.groundPoints[i].y * LEVEL_DATA_SCALE );
 		}
-		
+
 		for ( i in 0...levelData.starPoints.length )
 		{
 			levelData.starPoints[i] = new FlxPoint( levelData.starPoints[i].x * LEVEL_DATA_SCALE, levelData.starPoints[i].y * LEVEL_DATA_SCALE );
 		}
-		
+
 		for ( i in 0...levelData.bridgePoints.length )
 		{
 			levelData.bridgePoints[i].bridgeAX *= LEVEL_DATA_SCALE;
@@ -148,7 +148,7 @@ class PlayState extends FlxState
 			levelData.bridgePoints[i].bridgeBX *= LEVEL_DATA_SCALE;
 			levelData.bridgePoints[i].bridgeBY *= LEVEL_DATA_SCALE;
 		}
-		
+
 		for ( i in 0...levelData.gameObjects.length )
 		{
 			levelData.gameObjects[i].x *= LEVEL_DATA_SCALE;
@@ -156,10 +156,10 @@ class PlayState extends FlxState
 			levelData.gameObjects[i].pivotX *= LEVEL_DATA_SCALE;
 			levelData.gameObjects[i].pivotY *= LEVEL_DATA_SCALE;
 		}
-		
+
 		levelData.startPoint = new FlxPoint( levelData.startPoint.x * LEVEL_DATA_SCALE, levelData.startPoint.y * LEVEL_DATA_SCALE );
 		levelData.finishPoint = new FlxPoint( levelData.finishPoint.x * LEVEL_DATA_SCALE, levelData.finishPoint.y * LEVEL_DATA_SCALE );
-		
+
 		levelData.cameraBounds = new Rectangle(
 			levelData.cameraBounds.x * LEVEL_DATA_SCALE,
 			levelData.cameraBounds.y * LEVEL_DATA_SCALE,
@@ -167,19 +167,15 @@ class PlayState extends FlxState
 			levelData.cameraBounds.height * LEVEL_DATA_SCALE
 		);
 	}
-	
+
 	function build():Void
 	{
 		lastCameraStepOffset = new FlxPoint();
-		
+
 		add( container = new FlxSpriteGroup() );
-		
-		FlxNapeSpace.init();
-		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValues.GRAVITY );
-		FlxNapeSpace.createWalls( 0, 0, levelData.cameraBounds.width, levelData.cameraBounds.height );
-		FlxNapeSpace.drawDebug = true;
 
 		createCamera();
+		createPhysicsWorld();
 		createBackground();
 		createGroundPhysics();
 		createCar();
@@ -188,51 +184,51 @@ class PlayState extends FlxState
 		createGroundGraphics();
 		createCoins();
 		createSmallRocks();
-		
-		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
-		
-/*
-		this.addLibraryElements();
 
-		// add control buttons
-		addChild( _controlLeft = new Image( StaticAssetManager.instance.getTexture( "control_left" ) ) );
-		_controlLeft.x = 10;
-		_controlLeft.y = stage.stageHeight - 10 - _controlLeft.height;
-		addChild( _controlRight = new Image( StaticAssetManager.instance.getTexture( "control_right" ) ) );
-		_controlRight.x = _controlLeft.x + _controlLeft.width + 10;
-		_controlRight.y = _controlLeft.y;
-		addChild( _controlUp = new Image( StaticAssetManager.instance.getTexture( "control_up" ) ) );
-		_controlUp.x = stage.stageWidth - 10 - _controlUp.width;
-		_controlUp.y = _controlLeft.y;
-		addChild( _controlDown = new Image( StaticAssetManager.instance.getTexture( "control_down" ) ) );
-		_controlDown.x = _controlUp.x - _controlUp.width - 10;
-		_controlDown.y = _controlLeft.y;
-*/
-		switch( worldId )
+		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
+
+		/*
+				this.addLibraryElements();
+
+				// add control buttons
+				addChild( _controlLeft = new Image( StaticAssetManager.instance.getTexture( "control_left" ) ) );
+				_controlLeft.x = 10;
+				_controlLeft.y = stage.stageHeight - 10 - _controlLeft.height;
+				addChild( _controlRight = new Image( StaticAssetManager.instance.getTexture( "control_right" ) ) );
+				_controlRight.x = _controlLeft.x + _controlLeft.width + 10;
+				_controlRight.y = _controlLeft.y;
+				addChild( _controlUp = new Image( StaticAssetManager.instance.getTexture( "control_up" ) ) );
+				_controlUp.x = stage.stageWidth - 10 - _controlUp.width;
+				_controlUp.y = _controlLeft.y;
+				addChild( _controlDown = new Image( StaticAssetManager.instance.getTexture( "control_down" ) ) );
+				_controlDown.x = _controlUp.x - _controlUp.width - 10;
+				_controlDown.y = _controlLeft.y;
+		*/
+		switch ( worldId )
 		{
 			case 1:
 				snow = new Snow();
 				add( snow );
 		}
-/*
-		_gameGui.addEventListener( GameGuiEvent.INGAME_RESTART_REQUEST, restartRequest );
-		_gameGui.addEventListener( GameGuiEvent.PAUSE_REQUEST, pauseRequest );
-		_gameGui.addEventListener( GameGuiEvent.RESUME_REQUEST, resumeRequest );
-		_gameGui.addEventListener( GameGuiEvent.GAME_END_REQUEST, gameEndRequest );
-		_gameGui.addEventListener( GameGuiEvent.NEXT_LEVEL_REQUEST, nextLevelRequest );
+		/*
+				_gameGui.addEventListener( GameGuiEvent.INGAME_RESTART_REQUEST, restartRequest );
+				_gameGui.addEventListener( GameGuiEvent.PAUSE_REQUEST, pauseRequest );
+				_gameGui.addEventListener( GameGuiEvent.RESUME_REQUEST, resumeRequest );
+				_gameGui.addEventListener( GameGuiEvent.GAME_END_REQUEST, gameEndRequest );
+				_gameGui.addEventListener( GameGuiEvent.NEXT_LEVEL_REQUEST, nextLevelRequest );
 
-		if( !CONFIG::IS_IOS_VERSION && !CONFIG::IS_ANDROID_VERSION )
-		{
-			stage.addEventListener( KeyboardEvent.KEY_DOWN, onKeydown );
-			stage.addEventListener( KeyboardEvent.KEY_UP, onKeyup );
-		}
-		addEventListener( TouchEvent.TOUCH, onTouch );
-*/
-		add( gameGui = new GameGui() );
+				if( !CONFIG::IS_IOS_VERSION && !CONFIG::IS_ANDROID_VERSION )
+				{
+					stage.addEventListener( KeyboardEvent.KEY_DOWN, onKeydown );
+					stage.addEventListener( KeyboardEvent.KEY_UP, onKeyup );
+				}
+				addEventListener( TouchEvent.TOUCH, onTouch );
+		*/
+		add( gameGui = new GameGui( resume, pause ) );
 
 		reset();
 	}
-	
+
 	function reset():Void
 	{
 		isLost = false;
@@ -243,33 +239,37 @@ class PlayState extends FlxState
 		up = false;
 		down = false;
 		isGameStarted = false;
+		isGamePaused = false;
 		collectedCoin = 0;
 		collectedExtraCoins = 0;
 		countOfFrontFlip = 0;
 		countOfBackFlip = 0;
 		countOfNiceAirTime = 0;
 		countOfNiceWheelie = 0;
-		
+		gameTime = 0;
+		totalPausedTime = 0;
+
 		gameGui.updateCoinCount( collectedCoin );
-		
-		for( i in 0...coins.length )
+		gameGui.updateRemainingTime( CGameTimeValue.MAXIMUM_GAME_TIME );
+
+		for ( i in 0...coins.length )
 		{
 			coins[ i ].reset( levelData.starPoints[ i ].x, levelData.starPoints[ i ].y );
 		}
-		
-		for( i in 0...smallRocks.length )
+
+		for ( i in 0...smallRocks.length )
 		{
 			smallRocks[ i ].reset( 0, 0 );
 		}
-		
+
 		car.teleportTo( levelData.startPoint.x, levelData.startPoint.y );
-		
+
 		cast( camera, HPPCamera ).resetPosition();
 		camera.focusOn( car.carBodyGraphics.getPosition() );
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
-		
+
 		/*
-		
+
 		switch( _worldID )
 		{
 			case 1:
@@ -278,48 +278,106 @@ class PlayState extends FlxState
 				break;
 		}
 
-		// Reset camera
-		_lastCameraStepOffset.setTo( 0, 0 );
-		updateCamera( false );
-
 		this.resetCrates();
 
 		this._gameGui.showStartGamePanel( exit );
 		this._gameGui.enable();*/
-		
+
 		start();
 	}
-	
+
 	function start():Void
 	{
 		isGameStarted = true;
 
-		gameTime = 0;
 		gameStartTime = Date.now().getTime();
+
+		resumeRequest();
+		update( 0 );
 	}
-	
+
+	function resumeRequest():Void
+	{
+		if ( !isGamePaused )
+		{
+			pause();
+		}
+
+		gameGui.resumeGameRequest();
+	}
+
+	function resume():Void
+	{
+		isGamePaused = false;
+		
+		totalPausedTime += Date.now().getTime() - pauseStartTime;
+	}
+
+	function pause():Void
+	{
+		isGamePaused = true;
+		
+		pauseStartTime = Date.now().getTime();
+	}
+
 	function createCamera():Void
 	{
 		camera = new HPPCamera();
 		camera.bgColor = FlxColor.BLACK;
 		camera.targetOffset.set( 200, -50 );
 		camera.setScrollBoundsRect( levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height );
-		
+
 		FlxG.cameras.remove( FlxG.cameras.list[0], false );
+		FlxG.camera = camera;
 		FlxG.cameras.add( camera );
 		FlxCamera.defaultCameras = [ camera ];
 	}
-	
+
+	function createPhysicsWorld():Void
+	{
+		FlxNapeSpace.init();
+		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValues.GRAVITY );
+		FlxNapeSpace.createWalls( 0, -500, levelData.cameraBounds.width, levelData.cameraBounds.height );
+
+		#if debug
+		FlxNapeSpace.drawDebug = true;
+		#end
+	}
+
 	function createBackground():Void
 	{
 		addBackground( 'back_world_' + worldId + '_a00', 100, new FlxPoint( .1, .1 ), -.5 );
 		addBackground( 'back_world_' + worldId + '_b00', 200, new FlxPoint( .35, .35 ), -.5 );
 	}
-	
+
+	function addBackground( assetId:String, baseYOffset:Float, easing:FlxPoint, xOverlap:Float ):Void
+	{
+		var backgroundData:BackgroundData = {
+			easing: easing,
+			container: new FlxSpriteGroup(),
+			elements: []
+		};
+		backgroundDatas.push( backgroundData );
+
+		container.add( backgroundData.container );
+		backgroundData.container.scrollFactor.set();
+
+		for ( i in 0...5 )
+		{
+			var backgroundPiece:HPPMovieClip = HPPAssetManager.getMovieClip( assetId );
+			backgroundData.container.add( backgroundPiece );
+			backgroundData.elements.push( backgroundPiece );
+
+			backgroundPiece.gotoAndStop( i == 4 ? 0 : i );
+			backgroundPiece.x = i * ( backgroundPiece.width + xOverlap );
+			backgroundPiece.y = baseYOffset;
+		}
+	}
+
 	function createGroundGraphics():Void
 	{
 		container.add( terrainContainer = new FlxSpriteGroup() );
-		
+
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
 			levelData.groundPoints,
@@ -331,10 +389,10 @@ class PlayState extends FlxState
 		);
 		generatedTerrain.origin.set( 0, 0 );
 		generatedTerrain.scale.set( 2, 2 );
-		
+
 		terrainContainer.add( generatedTerrain );
 	}
-	
+
 	function createGroundPhysics():Void
 	{
 		groundBodies = [];
@@ -342,8 +400,8 @@ class PlayState extends FlxState
 		var filter:InteractionFilter = new InteractionFilter();
 		filter.collisionGroup = CPhysicsValues.GROUND_FILTER_CATEGORY;
 		filter.collisionMask = CPhysicsValues.GROUND_FILTER_MASK;
-		
-		for( i in 0...levelData.groundPoints.length - 1 )
+
+		for ( i in 0...levelData.groundPoints.length - 1 )
 		{
 			var angle:Float = Math.atan2( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y, levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x );
 			var distance:Float = Math.sqrt(
@@ -352,32 +410,32 @@ class PlayState extends FlxState
 			);
 
 			var body:Body = new Body( BodyType.STATIC );
-			
+
 			body.shapes.add( new Polygon( Polygon.box( distance, 1 ) ) );
 			body.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
-			
+
 			body.position.x = levelData.groundPoints[ i ].x + ( levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x ) / 2;
 			body.position.y = levelData.groundPoints[ i ].y + ( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y ) / 2;
 			body.rotation = angle;
-			
+
 			body.space = FlxNapeSpace.space;
-			
+
 			groundBodies.push( body );
 		}
 	}
-	
+
 	function createBridges():Void
 	{
 		bridgeBodies = [];
 		bridgeBlocks = [];
-		
+
 		var index:UInt = 0;
-		for( i in 0...levelData.bridgePoints.length )
+		for ( i in 0...levelData.bridgePoints.length )
 		{
-			createBridge( 	
-							new FlxPoint( levelData.bridgePoints[i].bridgeAX, levelData.bridgePoints[i].bridgeAY ), 
-							new FlxPoint( levelData.bridgePoints[i].bridgeBX, levelData.bridgePoints[i].bridgeBY )
-						);
+			createBridge(
+				new FlxPoint( levelData.bridgePoints[i].bridgeAX, levelData.bridgePoints[i].bridgeAY ),
+				new FlxPoint( levelData.bridgePoints[i].bridgeBX, levelData.bridgePoints[i].bridgeBY )
+			);
 		}
 	}
 
@@ -386,14 +444,14 @@ class PlayState extends FlxState
 		var filter:InteractionFilter = new InteractionFilter();
 		filter.collisionGroup = CPhysicsValues.BRIDGE_FILTER_CATEGORY;
 		filter.collisionMask = CPhysicsValues.BRIDGE_FILTER_MASK;
-			
+
 		var bridgeAngle:Float = Math.atan2( pointB.y - pointA.y, pointB.x - pointA.x );
 		var bridgeElementWidth:UInt = 60;
 		var bridgeElementHeight:UInt = 30;
 		var bridgeDistance:Float = pointA.distanceTo( pointB );
 		var pieces:UInt = Math.floor( bridgeDistance / bridgeElementWidth ) + 1;
 
-		if( bridgeDistance % bridgeElementWidth == 0 )
+		if ( bridgeDistance % bridgeElementWidth == 0 )
 		{
 			pieces++;
 		}
@@ -401,10 +459,10 @@ class PlayState extends FlxState
 		bridgeBlocks.push( [] );
 		bridgeBodies.push( [] );
 
-		for( i in 0...pieces )
+		for ( i in 0...pieces )
 		{
 			var isLockedBridgeElement:Bool = false;
-			if( i == 0 || i == cast( pieces - 1 ) )
+			if ( i == 0 || i == cast( pieces - 1 ) )
 			{
 				isLockedBridgeElement = true;
 			}
@@ -419,16 +477,16 @@ class PlayState extends FlxState
 			body.rotation = bridgeAngle;
 			body.space = FlxNapeSpace.space;
 			bridgeBodies[bridgeBodies.length - 1].push( body );
-			
+
 			var bridgeBlock:FlxSprite = HPPAssetManager.getSprite( "bridge" );
 			container.add( bridgeBlock );
 			bridgeBlocks[bridgeBlocks.length - 1].push( bridgeBlock );
-			
+
 			if ( i > 0 )
 			{
 				var anchorA:Vec2 = new Vec2( bridgeElementWidth / 2, 0 );
 				var anchorB:Vec2 = new Vec2( -bridgeElementWidth / 2, 0 );
-				
+
 				var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint( bridgeBodies[bridgeBodies.length - 1][i - 1], bridgeBodies[bridgeBodies.length - 1][i], anchorA, anchorB );
 				pivotJointLeftLeftWheel.damping = 1;
 				pivotJointLeftLeftWheel.frequency = 20;
@@ -436,105 +494,86 @@ class PlayState extends FlxState
 			}
 		}
 	}
-	
+
 	function createCar():Void
 	{
 		car = new Car( levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValues.CAR_FILTER_CATEGORY, CPhysicsValues.CAR_FILTER_MASK );
 		container.add( car );
 	}
-	
-	function addBackground( assetId:String, baseYOffset:Float, easing:FlxPoint, xOverlap:Float ):Void
-	{
-		var backgroundData:BackgroundData = {
-			easing: easing,
-			container: new FlxSpriteGroup(),
-			elements: []
-		};
-		backgroundDatas.push( backgroundData );
-		
-		container.add( backgroundData.container );
-		backgroundData.container.scrollFactor.set();
-		
-		for( i in 0...5 )
-		{
-			var backgroundPiece:HPPMovieClip = HPPAssetManager.getMovieClip( assetId );
-			backgroundData.container.add( backgroundPiece );
-			backgroundData.elements.push( backgroundPiece );
-			
-			backgroundPiece.gotoAndStop( i == 4 ? 0 : i );
-			backgroundPiece.x = i * ( backgroundPiece.width + xOverlap );
-			backgroundPiece.y = baseYOffset;
-		}
-	}
-	
+
 	function createCoins():Void
 	{
 		coins = [];
-		
+
 		container.add( coinContainer = new FlxSpriteGroup() );
-		
-		for( i in 0...levelData.starPoints.length )
+
+		for ( i in 0...levelData.starPoints.length )
 		{
 			coins.push( cast coinContainer.add( new Coin( levelData.starPoints[ i ].x, levelData.starPoints[ i ].y ) ) );
 		}
 	}
-	
+
 	function createSmallRocks():Void
 	{
 		smallRocks = [];
 		usedSmallRocks = [];
-		
-		for( i in 0...30 )
+
+		for ( i in 0...30 )
 		{
 			var smallRock:SmallRock = new SmallRock( "small_rock_" + worldId + "_" + Math.floor( Math.random() * 3 + 1 ), releaseSmallRock );
 			container.add( smallRock );
 			smallRocks.push( smallRock );
 		}
 	}
-	
+
 	function createGameObjects():Void
 	{
 		gameObjects = [];
-		
+
 		if ( levelData.gameObjects != null )
 		{
-			for( i in 0...levelData.gameObjects.length )
+			for ( i in 0...levelData.gameObjects.length )
 			{
 				var selectedObject:FlxSprite = HPPAssetManager.getSprite( levelData.gameObjects[ i ].texture );
-				
+
 				selectedObject.setPosition( levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y );
 				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
 				selectedObject.scale.set( levelData.gameObjects[ i ].scaleX, levelData.gameObjects[ i ].scaleY );
 				selectedObject.angle = levelData.gameObjects[ i ].rotation;
-				
+
 				container.add( selectedObject );
 				gameObjects.push( selectedObject );
 			}
 		}
 	}
-	
+
 	override public function update( elapsed:Float ):Void
 	{
 		super.update( elapsed );
 		
+		updateBackgrounds();
+		
+		if ( isGamePaused )
+		{
+			return;
+		}
+		
 		calculateGameTime();
 		gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
-		
+
 		car.accelerateToRight();
-		
-		//camera.zoom = .8 + Math.max( 700 - car.carBodyPhysics.velocity.x, 0 ) / 700 * .2;
-		
-		updateBackgrounds();
+
 		updateBridges();
 		updateSmallRocks();
+
 		checkCoinPickUp();
 		checkLoose();
-		checkWin();	
+		checkWin();
 	}
-	
+
 	function calculateGameTime():Void
 	{
-		if( isGameStarted )
+		if ( isGameStarted )
 		{
 			var now:Float = Date.now().getTime();
 			gameTime = now - gameStartTime - totalPausedTime;
@@ -548,25 +587,25 @@ class PlayState extends FlxState
 	function updateBackgrounds():Void
 	{
 		lastCameraStepOffset.set( camera.scroll.x - lastCameraStepOffset.x, camera.scroll.y - lastCameraStepOffset.y );
-		
-		for( i in 0...backgroundDatas.length )
+
+		for ( i in 0...backgroundDatas.length )
 		{
 			var backgroundData:BackgroundData = backgroundDatas[i];
 
 			backgroundData.container.x -= lastCameraStepOffset.x * backgroundData.easing.x;
 
-			while( backgroundData.container.x > 0 )
+			while ( backgroundData.container.x > 0 )
 			{
-				for( j in 0...backgroundData.elements.length )
+				for ( j in 0...backgroundData.elements.length )
 				{
 					backgroundData.elements[j].currentFrame = backgroundData.elements[j].currentFrame == 0 ? backgroundData.elements[j].numFrames - 1 : backgroundData.elements[j].currentFrame - 1;
 				}
 				backgroundData.container.x -= backgroundData.elements[ 0 ].width;
 			}
 
-			while( backgroundData.container.x < -backgroundData.elements[ 0 ].width )
+			while ( backgroundData.container.x < -backgroundData.elements[ 0 ].width )
 			{
-				for( j in 0...backgroundData.elements.length )
+				for ( j in 0...backgroundData.elements.length )
 				{
 					backgroundData.elements[j].currentFrame = ( backgroundData.elements[j] .currentFrame == cast( backgroundData.elements[j].numFrames - 1 ) ) ? 0 : backgroundData.elements[j].currentFrame + 1;
 				}
@@ -575,37 +614,37 @@ class PlayState extends FlxState
 
 			backgroundData.container.y = FlxG.height - backgroundData.container.height - camera.scroll.y * backgroundData.easing.y;
 		}
-		
+
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 	}
-	
+
 	function updateBridges():Void
 	{
-		for( i in 0...bridgeBlocks.length )
+		for ( i in 0...bridgeBlocks.length )
 		{
-			for( j in 0...bridgeBlocks[i].length )
+			for ( j in 0...bridgeBlocks[i].length )
 			{
 				var block:FlxSprite = bridgeBlocks[i][j];
 				var body:Body = bridgeBodies[i][j];
-				
+
 				block.x = body.position.x - block.origin.x;
 				block.y = body.position.y - block.origin.y;
 				block.angle = body.rotation * FlxAngle.TO_DEG;
 			}
 		}
 	}
-	
+
 	function updateSmallRocks():Void
 	{
 		var leftAngularVelocity:Float = Math.abs( car.wheelLeftPhysics.angularVel );
 		var rightAngularVelocity:Float = Math.abs( car.wheelRightPhysics.angularVel );
 		var carDirection:Int = car.wheelLeftPhysics.velocity.x >= 0 ? 1 : -1;
-		
-		if( !car.leftWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8 )
+
+		if ( !car.leftWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8 )
 		{
 			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
 			smallRocks.pop();
-			
+
 			var selectedSmallRock:SmallRock = usedSmallRocks[ usedSmallRocks.length - 1 ];
 			selectedSmallRock.visible = true;
 			selectedSmallRock.alpha = 1;
@@ -613,12 +652,12 @@ class PlayState extends FlxState
 			selectedSmallRock.y = car.wheelLeftGraphics.y + car.wheelLeftGraphics.height - selectedSmallRock.height;
 			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
 		}
-		
-		if( !car.rightWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .8 )
+
+		if ( !car.rightWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .8 )
 		{
 			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
 			smallRocks.pop();
-			
+
 			var selectedSmallRock:SmallRock = usedSmallRocks[ usedSmallRocks.length - 1 ];
 			selectedSmallRock.visible = true;
 			selectedSmallRock.alpha = 1;
@@ -627,20 +666,20 @@ class PlayState extends FlxState
 			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
 		}
 	}
-	
+
 	function releaseSmallRock( target:SmallRock ):Void
 	{
 		smallRocks.push( target );
 		usedSmallRocks.remove( target );
 	}
-	
+
 	function checkCoinPickUp():Void
 	{
-		for( i in 0...coins.length )
+		for ( i in 0...coins.length )
 		{
 			var coin:Coin = coins[ i ];
-			
-			if( !coin.isCollected && coin.overlaps( car.carBodyGraphics ) )
+
+			if ( !coin.isCollected && coin.overlaps( car.carBodyGraphics ) )
 			{
 				coin.collect();
 				collectedCoin++;
@@ -648,24 +687,24 @@ class PlayState extends FlxState
 			}
 		}
 	}
-	
+
 	function checkLoose():Void
 	{
-		if( !isLost && !isWon && car.isCarCrashed )
+		if ( !isLost && !isWon && car.isCarCrashed )
 		{
 			camera.shake( .02, .2 );
-			reset();
+			restartRutin();
 		}
 	}
-	
+
 	function checkWin():Void
 	{
-		if( !isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x )
+		if ( !isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x )
 		{
-			reset();
+			restartRutin();
 		}
 	}
-	
+
 	function restartRutin():Void
 	{
 		reset();

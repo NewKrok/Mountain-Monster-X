@@ -1,10 +1,7 @@
 package mmx.game;
 
-import flixel.FlxCamera;
 import flixel.FlxG;
-import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
-import flixel.text.FlxText;
 import mmx.game.TimeCounter;
 
 /**
@@ -15,9 +12,9 @@ class GameGui extends FlxSpriteGroup
 {
 	var coinCounter:CoinCounter;
 	var timeCounter:TimeCounter;
-	var guiCamera:FlxCamera;
+	var startCounter:StartCounter;
 	
-	public function new() 
+	public function new( resumeGameCallBack:Void->Void, pauseGameCallBack:Void->Void ) 
 	{
 		super();
 		
@@ -29,7 +26,14 @@ class GameGui extends FlxSpriteGroup
 		timeCounter.x = FlxG.width / 2 - timeCounter.width / 2;
 		timeCounter.y = 10;
 		
+		add( startCounter = new StartCounter( resumeGameCallBack ) );
+		
 		scrollFactor.set();
+	}
+	
+	public function resumeGameRequest():Void
+	{
+		startCounter.start();
 	}
 	
 	public function updateCoinCount( value:UInt ):Void
