@@ -1,16 +1,17 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.nape.FlxNapeSpace;
-import flixel.graphics.frames.FlxBitmapFont;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.system.scaleModes.RatioScaleMode;
 import flixel.util.FlxColor;
+import hpp.flixel.HPPCamera;
 import hpp.flixel.display.HPPMovieClip;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.assets.CarDatas;
@@ -109,7 +110,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		worldId = 1;
+		worldId = 0;
 		levelId = 0;
 		
 		FlxG.scaleMode = new RatioScaleMode();
@@ -173,26 +174,22 @@ class PlayState extends FlxState
 		
 		add( container = new FlxSpriteGroup() );
 		
-		addBackground( 'back_world_' + worldId + '_a00', 100, new FlxPoint( .1, .1 ), -.5 );
-		addBackground( 'back_world_' + worldId + '_b00', 200, new FlxPoint( .35, .35 ), -.5 );
-		
 		FlxNapeSpace.init();
 		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValues.GRAVITY );
 		FlxNapeSpace.createWalls( 0, 0, levelData.cameraBounds.width, levelData.cameraBounds.height );
 		FlxNapeSpace.drawDebug = true;
 
+		createCamera();
+		createBackground();
 		createGroundPhysics();
 		createCar();
 		createGameObjects();
 		createBridges();
 		createGroundGraphics();
-		
-		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
-		camera.targetOffset.set( 200 );
-		camera.setScrollBoundsRect( levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height );
-		
 		createCoins();
 		createSmallRocks();
+		
+		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
 		
 /*
 		this.addLibraryElements();
@@ -267,8 +264,9 @@ class PlayState extends FlxState
 		
 		car.teleportTo( levelData.startPoint.x, levelData.startPoint.y );
 		
-		camera.bgColor = FlxColor.BLACK;
-		camera.focusOn( levelData.startPoint );
+		cast( camera, HPPCamera ).resetPosition();
+		camera.focusOn( car.carBodyGraphics.getPosition() );
+		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 		
 		/*
 		
@@ -298,6 +296,24 @@ class PlayState extends FlxState
 
 		gameTime = 0;
 		gameStartTime = Date.now().getTime();
+	}
+	
+	function createCamera():Void
+	{
+		camera = new HPPCamera();
+		camera.bgColor = FlxColor.BLACK;
+		camera.targetOffset.set( 200, -50 );
+		camera.setScrollBoundsRect( levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height );
+		
+		FlxG.cameras.remove( FlxG.cameras.list[0], false );
+		FlxG.cameras.add( camera );
+		FlxCamera.defaultCameras = [ camera ];
+	}
+	
+	function createBackground():Void
+	{
+		addBackground( 'back_world_' + worldId + '_a00', 100, new FlxPoint( .1, .1 ), -.5 );
+		addBackground( 'back_world_' + worldId + '_b00', 200, new FlxPoint( .35, .35 ), -.5 );
 	}
 	
 	function createGroundGraphics():Void
@@ -437,6 +453,7 @@ class PlayState extends FlxState
 		backgroundDatas.push( backgroundData );
 		
 		container.add( backgroundData.container );
+		backgroundData.container.scrollFactor.set();
 		
 		for( i in 0...5 )
 		{
@@ -507,10 +524,7 @@ class PlayState extends FlxState
 		
 		//camera.zoom = .8 + Math.max( 700 - car.carBodyPhysics.velocity.x, 0 ) / 700 * .2;
 		
-		lastCameraStepOffset.set( camera.scroll.x - lastCameraStepOffset.x, camera.scroll.y - lastCameraStepOffset.y );
 		updateBackgrounds();
-		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
-		
 		updateBridges();
 		updateSmallRocks();
 		checkCoinPickUp();
@@ -533,13 +547,15 @@ class PlayState extends FlxState
 
 	function updateBackgrounds():Void
 	{
+		lastCameraStepOffset.set( camera.scroll.x - lastCameraStepOffset.x, camera.scroll.y - lastCameraStepOffset.y );
+		
 		for( i in 0...backgroundDatas.length )
 		{
 			var backgroundData:BackgroundData = backgroundDatas[i];
 
 			backgroundData.container.x -= lastCameraStepOffset.x * backgroundData.easing.x;
 
-			while( backgroundData.container.x > 0 + camera.scroll.x )
+			while( backgroundData.container.x > 0 )
 			{
 				for( j in 0...backgroundData.elements.length )
 				{
@@ -548,7 +564,7 @@ class PlayState extends FlxState
 				backgroundData.container.x -= backgroundData.elements[ 0 ].width;
 			}
 
-			while( backgroundData.container.x < -backgroundData.elements[ 0 ].width + camera.scroll.x )
+			while( backgroundData.container.x < -backgroundData.elements[ 0 ].width )
 			{
 				for( j in 0...backgroundData.elements.length )
 				{
@@ -557,8 +573,10 @@ class PlayState extends FlxState
 				backgroundData.container.x += backgroundData.elements[ 0 ].width;
 			}
 
-			backgroundData.container.y = 640 - backgroundData.container.height + container.y * backgroundData.easing.y;
+			backgroundData.container.y = FlxG.height - backgroundData.container.height - camera.scroll.y * backgroundData.easing.y;
 		}
+		
+		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 	}
 	
 	function updateBridges():Void
@@ -579,8 +597,8 @@ class PlayState extends FlxState
 	
 	function updateSmallRocks():Void
 	{
-		var leftAngularVelocity:Float = Math.abs( car.wheelRightPhysics.angularVel );
-		var rightAngularVelocity:Float = Math.abs( car.wheelLeftPhysics.angularVel );
+		var leftAngularVelocity:Float = Math.abs( car.wheelLeftPhysics.angularVel );
+		var rightAngularVelocity:Float = Math.abs( car.wheelRightPhysics.angularVel );
 		var carDirection:Int = car.wheelLeftPhysics.velocity.x >= 0 ? 1 : -1;
 		
 		if( !car.leftWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8 )

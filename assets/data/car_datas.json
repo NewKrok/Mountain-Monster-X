@@ -5,7 +5,7 @@
 			"id": 0, 
 			"graphicId": 0, 
 			"starRequired": 0, 
-			"speed": 450, 
+			"speed": 500, 
 			"rotation": 6, 
 			"damping": 0.8
 		},

@@ -270,5 +270,7 @@ class Car extends FlxSpriteGroup
 		hitArea.rotation = 0;
 		hitArea.velocity.setxy( 0, 0 );
 		hitArea.angularVel = 0;
+		
+		update( 0 );
 	}
 }
