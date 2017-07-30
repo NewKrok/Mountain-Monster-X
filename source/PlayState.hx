@@ -23,7 +23,16 @@ import mmx.game.GameGui;
 import mmx.game.SmallRock;
 import mmx.game.StartCounter;
 import mmx.game.constant.CGameTimeValue;
-import mmx.game.constant.CPhysicsValues;
+import mmx.game.constant.CLibraryElement;
+import mmx.game.constant.CPhysicsValue;
+import mmx.game.library.crate.AbstractCrate;
+import mmx.game.library.crate.Crate;
+import mmx.game.library.crate.LongCrate;
+import mmx.game.library.crate.LongCrate;
+import mmx.game.library.crate.RampCrate;
+import mmx.game.library.crate.SmallCrate;
+import mmx.game.library.crate.SmallLongCrate;
+import mmx.game.library.crate.SmallRampCrate;
 import mmx.game.snow.Snow;
 import mmx.game.terrain.BrushTerrain;
 import mmx.util.LevelUtil;
@@ -73,9 +82,8 @@ class PlayState extends FlxState
 		var achievementManager:AchievementManager;
 
 		var effects:Vector.<Image> = new Vector.<Image>;
-
-		var crates:Vector.<BaseCrate> = new Vector.<BaseCrate>;
 	*/
+	var crates:Array<AbstractCrate> = [];
 	var backgroundDatas:Array<BackgroundData> = [];
 
 	var levelData:LevelData;
@@ -110,7 +118,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 
-		worldId = 0;
+		worldId = 2;
 		levelId = 0;
 
 		FlxG.scaleMode = new RatioScaleMode();
@@ -156,6 +164,12 @@ class PlayState extends FlxState
 			levelData.gameObjects[i].pivotX *= LEVEL_DATA_SCALE;
 			levelData.gameObjects[i].pivotY *= LEVEL_DATA_SCALE;
 		}
+		
+		for ( i in 0...levelData.libraryElements.length )
+		{
+			levelData.libraryElements[i].x *= LEVEL_DATA_SCALE;
+			levelData.libraryElements[i].y *= LEVEL_DATA_SCALE;
+		}
 
 		levelData.startPoint = new FlxPoint( levelData.startPoint.x * LEVEL_DATA_SCALE, levelData.startPoint.y * LEVEL_DATA_SCALE );
 		levelData.finishPoint = new FlxPoint( levelData.finishPoint.x * LEVEL_DATA_SCALE, levelData.finishPoint.y * LEVEL_DATA_SCALE );
@@ -184,11 +198,12 @@ class PlayState extends FlxState
 		createGroundGraphics();
 		createCoins();
 		createSmallRocks();
+		createLibraryElements();
 
 		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
 
 		/*
-				this.addLibraryElements();
+				
 
 				// add control buttons
 				addChild( _controlLeft = new Image( StaticAssetManager.instance.getTexture( "control_left" ) ) );
@@ -268,6 +283,8 @@ class PlayState extends FlxState
 		camera.focusOn( car.carBodyGraphics.getPosition() );
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 
+		resetCrates();
+		
 		/*
 
 		switch( _worldID )
@@ -278,12 +295,18 @@ class PlayState extends FlxState
 				break;
 		}
 
-		this.resetCrates();
-
 		this._gameGui.showStartGamePanel( exit );
 		this._gameGui.enable();*/
 
 		start();
+	}
+	
+	function resetCrates():Void
+	{
+		for( i in 0...crates.length )
+		{
+			crates[ i ].resetToDefault();
+		}
 	}
 
 	function start():Void
@@ -336,7 +359,7 @@ class PlayState extends FlxState
 	function createPhysicsWorld():Void
 	{
 		FlxNapeSpace.init();
-		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValues.GRAVITY );
+		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValue.GRAVITY );
 		FlxNapeSpace.createWalls( 0, -500, levelData.cameraBounds.width, levelData.cameraBounds.height );
 
 		#if debug
@@ -398,8 +421,8 @@ class PlayState extends FlxState
 		groundBodies = [];
 
 		var filter:InteractionFilter = new InteractionFilter();
-		filter.collisionGroup = CPhysicsValues.GROUND_FILTER_CATEGORY;
-		filter.collisionMask = CPhysicsValues.GROUND_FILTER_MASK;
+		filter.collisionGroup = CPhysicsValue.GROUND_FILTER_CATEGORY;
+		filter.collisionMask = CPhysicsValue.GROUND_FILTER_MASK;
 
 		for ( i in 0...levelData.groundPoints.length - 1 )
 		{
@@ -442,8 +465,8 @@ class PlayState extends FlxState
 	function createBridge( pointA:FlxPoint, pointB:FlxPoint ):Void
 	{
 		var filter:InteractionFilter = new InteractionFilter();
-		filter.collisionGroup = CPhysicsValues.BRIDGE_FILTER_CATEGORY;
-		filter.collisionMask = CPhysicsValues.BRIDGE_FILTER_MASK;
+		filter.collisionGroup = CPhysicsValue.BRIDGE_FILTER_CATEGORY;
+		filter.collisionMask = CPhysicsValue.BRIDGE_FILTER_MASK;
 
 		var bridgeAngle:Float = Math.atan2( pointB.y - pointA.y, pointB.x - pointA.x );
 		var bridgeElementWidth:UInt = 60;
@@ -497,8 +520,29 @@ class PlayState extends FlxState
 
 	function createCar():Void
 	{
-		car = new Car( levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValues.CAR_FILTER_CATEGORY, CPhysicsValues.CAR_FILTER_MASK );
+		car = new Car( levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK );
 		container.add( car );
+	}
+	
+	function createGameObjects():Void
+	{
+		gameObjects = [];
+
+		if ( levelData.gameObjects != null )
+		{
+			for ( i in 0...levelData.gameObjects.length )
+			{
+				var selectedObject:FlxSprite = HPPAssetManager.getSprite( levelData.gameObjects[ i ].texture );
+
+				selectedObject.setPosition( levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y );
+				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
+				selectedObject.scale.set( levelData.gameObjects[ i ].scaleX, levelData.gameObjects[ i ].scaleY );
+				selectedObject.angle = levelData.gameObjects[ i ].rotation;
+
+				container.add( selectedObject );
+				gameObjects.push( selectedObject );
+			}
+		}
 	}
 
 	function createCoins():Void
@@ -526,23 +570,46 @@ class PlayState extends FlxState
 		}
 	}
 
-	function createGameObjects():Void
+	function createLibraryElements():Void
 	{
-		gameObjects = [];
+		container.add( libraryElementContainer = new FlxSpriteGroup() );
 
-		if ( levelData.gameObjects != null )
+		for( i in 0...levelData.libraryElements.length )
 		{
-			for ( i in 0...levelData.gameObjects.length )
+			var libraryElement:LibraryElement = levelData.libraryElements[ i ];
+			var crate:AbstractCrate;
+			
+			switch( libraryElement.className )
 			{
-				var selectedObject:FlxSprite = HPPAssetManager.getSprite( levelData.gameObjects[ i ].texture );
+				case CLibraryElement.CRATE_0:
+					crate = new SmallCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+					libraryElementContainer.add( crate );
+					crates.push( crate );
 
-				selectedObject.setPosition( levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y );
-				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
-				selectedObject.scale.set( levelData.gameObjects[ i ].scaleX, levelData.gameObjects[ i ].scaleY );
-				selectedObject.angle = levelData.gameObjects[ i ].rotation;
+				case CLibraryElement.CRATE_1:
+					crate = new Crate( libraryElement.x, libraryElement.y, libraryElement.scale );
+					libraryElementContainer.add( crate );
+					crates.push( crate );
 
-				container.add( selectedObject );
-				gameObjects.push( selectedObject );
+				case CLibraryElement.CRATE_2:
+					crate = new LongCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+					libraryElementContainer.add( crate );
+					crates.push( crate );
+
+				case CLibraryElement.CRATE_3:
+					crate = new SmallLongCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+					libraryElementContainer.add( crate );
+					crates.push( crate );
+
+				case CLibraryElement.CRATE_4:
+					crate = new RampCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+					libraryElementContainer.add( crate );
+					crates.push( crate );
+
+				case CLibraryElement.CRATE_5:
+					crate = new SmallRampCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+					libraryElementContainer.add( crate );
+					crates.push( crate );
 			}
 		}
 	}

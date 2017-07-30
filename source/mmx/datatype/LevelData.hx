@@ -20,6 +20,7 @@ typedef LevelData =
 	
 	@:optional var bridgePoints( default, default ):Array<BridgeData>;
 	@:optional var gameObjects( default, default ):Array<GameObject>;
+	@:optional var libraryElements( default, default ):Array<LibraryElement>;
 }
 
 typedef BridgeData =
@@ -40,4 +41,12 @@ typedef GameObject =
 	var scaleY:Float;
 	var rotation:Float;
 	var texture:String;
+}
+
+typedef LibraryElement =
+{
+	var x:Float;
+	var y:Float;
+	var className:String;
+	var scale:Float;
 }
