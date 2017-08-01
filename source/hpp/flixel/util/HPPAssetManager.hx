@@ -119,4 +119,19 @@ class HPPAssetManager
 	{
 		return loadedFonts.filter( function( font:FlxBitmapFont ){ return font.fontName == fontName; } )[0];
 	}
+	
+	public static function clear():Void
+	{
+		for ( atlas in loadedAtlas )
+		{
+			atlas.destroy();
+		}
+		loadedAtlas = [];
+		
+		for ( font in loadedFonts )
+		{
+			font.destroy();
+		}
+		loadedFonts = [];
+	}
 }

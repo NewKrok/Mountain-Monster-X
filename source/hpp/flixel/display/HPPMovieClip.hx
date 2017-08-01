@@ -12,6 +12,7 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
 class HPPMovieClip extends FlxSprite
 {
 	inline static var defaultAnimName:String = "anim";
+	
 	public var animationPrefix( default, default ):String = "";
 	public var isPlaying( default, null ):Bool = false;
 	public var frameRate( default, set ):UInt = 30;
@@ -96,11 +97,14 @@ class HPPMovieClip extends FlxSprite
 	
 	function updateAnimationState():Void
 	{
-		animation.addByPrefix( defaultAnimName, animationPrefix, frameRate );
-		
-		if ( isPlaying )
+		if ( animation != null )
 		{
-			play();
+			animation.addByPrefix( defaultAnimName, animationPrefix, frameRate );
+			
+			if ( isPlaying )
+			{
+				play();
+			}
 		}
 	}
 }

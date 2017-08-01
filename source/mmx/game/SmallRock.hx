@@ -5,6 +5,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
 import hpp.flixel.util.HPPAssetManager;
+import mmx.AppConfig;
 
 /**
  * ...
@@ -87,7 +88,7 @@ class SmallRock extends FlxSprite
 			this,
 			{ 
 				y: y + Math.sin( Math.PI * 2 - angle + ( Math.random() * ( Math.PI / 4 ) ) ) * ( Math.random() * 10 ),
-				alpha: 0
+				alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1
 			},
 			.3,
 			{ type: FlxTween.ONESHOT, startDelay: .2, onComplete: animationEnded }

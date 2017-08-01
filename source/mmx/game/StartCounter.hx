@@ -20,6 +20,8 @@ class StartCounter extends FlxSpriteGroup
 	var animationIndex:UInt;
 	var showTween:VarTween;
 	var hideTween:VarTween;
+	
+	var tweenData:Array<TweenData>;
 
 	public function new( onCompleteCallback:Void->Void )
 	{
@@ -78,6 +80,8 @@ class StartCounter extends FlxSpriteGroup
 			showTween.destroy();
 			showTween = null;
 		}
+		
+		tweenData = [];
 	}
 	
 	function handleNextAnimation( tween:FlxTween ):Void
@@ -86,10 +90,12 @@ class StartCounter extends FlxSpriteGroup
 		{
 			hideTween = FlxTween.tween( 
 				counterImages[ animationIndex - 1 ],
-				{ alpha: 0, y: animationIndex == counterImages.length ? counterImages[ animationIndex - 1 ].y : FlxG.height / 2 - 200 },
+				{ alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1, y: animationIndex == counterImages.length ? counterImages[ animationIndex - 1 ].y : FlxG.height / 2 - 200 },
 				.4,
-				{ startDelay: .3, ease: FlxEase.cubeOut }
+				{ startDelay: .3, ease: FlxEase.cubeOut, onComplete: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? null : hideInstantCounterImage }
 			);
+			
+			tweenData.push( { tween: hideTween, tweenTarget: counterImages[ animationIndex - 1 ] } );
 		}
 		
 		if ( animationIndex == counterImages.length )
@@ -104,11 +110,30 @@ class StartCounter extends FlxSpriteGroup
 					counterImages[ animationIndex ],
 					{ alpha: 1, y: FlxG.height / 2 - 100 },
 					.4,
-					{ startDelay: .2, onComplete: handleNextAnimation, ease: FlxEase.cubeOut }
+					{ startDelay: .2, onComplete: handleNextAnimation, onStart: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? null : showInstantCounterImage, ease: FlxEase.cubeOut }
 				);
+				
+				tweenData.push( { tween: showTween, tweenTarget: counterImages[ animationIndex ] } );
 			}
 
 			animationIndex++;
 		}
 	}
+	
+	function showInstantCounterImage( tween:FlxTween ):Void
+	{
+		var tweenTarget = tweenData.filter( function ( tweenData:TweenData ):Bool { return tween == tweenData.tween; } )[0].tweenTarget;
+		tweenTarget.alpha = 1;
+	}
+	
+	function hideInstantCounterImage( tween:FlxTween ):Void
+	{
+		var tweenTarget = tweenData.filter( function ( tweenData:TweenData ):Bool { return tween == tweenData.tween; } )[0].tweenTarget;
+		tweenTarget.alpha = 0;
+	}
+}
+
+typedef TweenData = {
+	var tween:VarTween;
+	var tweenTarget:FlxSprite;
 }

@@ -7,6 +7,7 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxTween.TweenOptions;
 import flixel.tweens.misc.VarTween;
 import hpp.flixel.util.HPPAssetManager;
+import mmx.AppConfig;
 
 /**
  * ...
@@ -33,7 +34,7 @@ class Coin extends FlxSprite
 		
 		tween = FlxTween.tween( 
 			this,
-			{ x: x - 100, y: y-50, alpha: 0, angle: Math.PI * 6 },
+			{ x: x - 100, y: y-50, alpha: AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1, angle: Math.PI * 6 },
 			.5,
 			{ type: FlxTween.ONESHOT, onComplete: tweenCompleted }
 		);
