@@ -43,7 +43,7 @@ class Background extends FlxSpriteGroup
 	function build():Void
 	{
 		removeCurrent();
-		
+
 		backgroundDatas = [];
 		addBackground( 'back_world_' + worldId + '_a00', 100, new FlxPoint( .1, .1 ), -.5 );
 		addBackground( 'back_world_' + worldId + '_b00', 200, new FlxPoint( .35, .35 ), -.5 );
