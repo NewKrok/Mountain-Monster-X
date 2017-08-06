@@ -9,6 +9,7 @@ Haxe port of the Mountain Monster mobile game
 ## Dependencies:
 - **HaxeFlixel 4.2.1** Cross Platform Game Engine. http://haxeflixel.com/
 - **HaxeFlixel-Addons 2.4.1** Optional classes for HaxeFlixel. https://github.com/HaxeFlixel/flixel-addons
+- **HaxeFlixel-Ui 2.2.0** UI addons for HaxeFlixel. https://github.com/HaxeFlixel/flixel-ui
 - **Nape 2.0.20** 2D Physics Engine. https://code.google.com/p/tweener/
 
 ## Notice
