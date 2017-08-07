@@ -1,11 +1,15 @@
 package mmx.menu.substate;
 
+import flash.display.BitmapData;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIList;
 import flixel.group.FlxSpriteGroup;
+import flixel.input.touch.FlxTouchManager;
 import flixel.math.FlxPoint;
 import hpp.flixel.ui.HPPButton;
+import hpp.flixel.ui.HPPScrollContainer;
 import hpp.flixel.util.HPPAssetManager;
 
 /**
@@ -23,6 +27,7 @@ class LevelSelector extends FlxSubState
 		
 	public var worldId:UInt;
 
+	var levelButtonsContainer:HPPScrollContainer;
 	var controlButtonContainer:FlxSpriteGroup;
 
 	var backButton:HPPButton;
@@ -30,6 +35,8 @@ class LevelSelector extends FlxSubState
 	var onBackRequest:Void->Void;
 	var levelButtons:Array<LevelButton>;
 	var pages:Array<FlxSpriteGroup>;
+	var pagerStart:FlxSprite;
+	var pagerEnd:FlxSprite;
 
 	function new( onBackRequest:Void->Void ):Void
 	{
@@ -48,6 +55,9 @@ class LevelSelector extends FlxSubState
 	
 	function createLevelButtons() 
 	{
+		add( levelButtonsContainer = new HPPScrollContainer( FlxG.width, FlxG.height, ScrollDirection.HORIZONTAL, true ) );
+		levelButtonsContainer.scrollFactor.set();
+		
 		pages = [];
 		addPage();
 		
@@ -85,6 +95,12 @@ class LevelSelector extends FlxSubState
 				pages[pageIndex].add( pageContainer );
 			}
 		}
+		
+		levelButtonsContainer.add( pagerStart = new FlxSprite() );
+		pagerStart.loadGraphic( new BitmapData( 10, 10, true, 0x0 ) );
+		levelButtonsContainer.add( pagerEnd = new FlxSprite() );
+		pagerEnd.loadGraphic( new BitmapData( 10, 10, true, 0x0 ) );
+		pagerEnd.x = pageIndex * FlxG.width - pagerEnd.width;
 	}
 	
 	function addPage():Void
@@ -92,7 +108,7 @@ class LevelSelector extends FlxSubState
 		var page = new FlxSpriteGroup();
 		page.scrollFactor.set();
 		pages.push( page );
-		add( page );
+		levelButtonsContainer.add( page );
 	}
 
 	function createControlButtons()
