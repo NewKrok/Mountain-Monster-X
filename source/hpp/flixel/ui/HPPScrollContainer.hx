@@ -13,6 +13,8 @@ import flixel.tweens.misc.VarTween;
  */
 class HPPScrollContainer extends FlxSpriteGroup
 {
+	public static inline var MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE:Float = 200;
+	
 	var direction:ScrollDirection;
 	var snapToPages:Bool;
 	var pageHeight:Float;
@@ -23,6 +25,7 @@ class HPPScrollContainer extends FlxSpriteGroup
 	var containerTouchStartPosition:FlxPoint;
 	
 	var tween:VarTween;
+	var pageIndex:UInt = 0;
 	
 	public function new( pageWidth:Float, pageHeight:Float, direction:ScrollDirection = ScrollDirection.HORIZONTAL, snapToPages:Bool = false ) 
 	{
@@ -67,8 +70,20 @@ class HPPScrollContainer extends FlxSpriteGroup
 		}
 		else if ( FlxG.mouse.justReleased && snapToPages )
 		{
-			moveToPage( Math.round( -x / pageWidth ) );
-			FlxG.mouse.
+			var dragDistance:Float = containerTouchStartPosition.distanceTo( new FlxPoint( x, y ) );
+			trace(dragDistance, MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE, pageIndex,Math.ceil( width / pageWidth ));
+			if ( dragDistance > MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE && pageIndex < Math.ceil( width / pageWidth ) - 1 )
+			{
+				moveToPage( pageIndex + 1 );
+			} else if ( dragDistance >= MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE && pageIndex < Math.ceil( width / pageWidth ) )
+			{
+				// TODO handle back swapping
+				moveToPage( pageIndex );
+			}
+			else
+			{
+				moveToPage( pageIndex );
+			}
 		}
 		else
 		{
@@ -92,6 +107,8 @@ class HPPScrollContainer extends FlxSpriteGroup
 	
 	function moveToPage( pageIndex:UInt ) 
 	{
+		this.pageIndex = pageIndex;
+		
 		disposeTween();
 		
 		var tweenValues:Dynamic;

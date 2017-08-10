@@ -16,7 +16,7 @@ class LevelButton extends HPPButton
 	
 	public function new( worldId:UInt, levelId:UInt )
 	{
-		super( 0, 0, null, loadLevel );
+		super( null, loadLevel );
 		
 		this.worldId = worldId;
 		this.levelId = levelId;

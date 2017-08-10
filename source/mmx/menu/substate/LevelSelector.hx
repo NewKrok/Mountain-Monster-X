@@ -116,7 +116,7 @@ class LevelSelector extends FlxSubState
 		add( controlButtonContainer = new FlxSpriteGroup() );
 		controlButtonContainer.scrollFactor.set();
 
-		controlButtonContainer.add( backButton = new HPPButton( 0, 0, "Back", onBackRequest ) );
+		controlButtonContainer.add( backButton = new HPPButton( "Back", onBackRequest ) );
 		backButton.loadGraphic( HPPAssetManager.getGraphic( "base_button" ) );
 		backButton.autoCenterLabel();
 		backButton.overScale = .95;
