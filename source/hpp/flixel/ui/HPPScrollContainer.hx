@@ -13,7 +13,10 @@ import flixel.tweens.misc.VarTween;
  */
 class HPPScrollContainer extends FlxSpriteGroup
 {
-	public static inline var MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE:Float = 200;
+	public static var MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE:Float = 200;
+	public static var MAX_OVER_DRAG_SIZE:Float = 200;
+	public static var CHANGE_PAGE_MAX_SPEED:Float = .6;
+	public static var CHANGE_PAGE_EASING_TYPE:Float->Float = FlxEase.quadOut;
 	
 	var direction:ScrollDirection;
 	var snapToPages:Bool;
@@ -71,14 +74,13 @@ class HPPScrollContainer extends FlxSpriteGroup
 		else if ( FlxG.mouse.justReleased && snapToPages )
 		{
 			var dragDistance:Float = containerTouchStartPosition.distanceTo( new FlxPoint( x, y ) );
-			trace(dragDistance, MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE, pageIndex,Math.ceil( width / pageWidth ));
-			if ( dragDistance > MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE && pageIndex < Math.ceil( width / pageWidth ) - 1 )
+			
+			if ( dragDistance > MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE && containerTouchStartPosition.x > x && pageIndex < Math.ceil( width / pageWidth ) - 1 )
 			{
 				moveToPage( pageIndex + 1 );
-			} else if ( dragDistance >= MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE && pageIndex < Math.ceil( width / pageWidth ) )
+			} else if ( dragDistance >= MINIMUM_MOUSE_MOVE_TO_CHANGE_PAGE && containerTouchStartPosition.x < x && pageIndex > 0 )
 			{
-				// TODO handle back swapping
-				moveToPage( pageIndex );
+				moveToPage( pageIndex - 1 );
 			}
 			else
 			{
@@ -95,13 +97,13 @@ class HPPScrollContainer extends FlxSpriteGroup
 	{
 		if ( direction == ScrollDirection.HORIZONTAL )
 		{
-			x = Math.min( x, 0 );
-			x = Math.max( x, -width + pageWidth );
+			x = Math.min( x, MAX_OVER_DRAG_SIZE );
+			x = Math.max( x, -width + pageWidth - MAX_OVER_DRAG_SIZE );
 		}
 		else
 		{
-			y = Math.min( y, 0 );
-			y = Math.max( y, -height + pageHeight );
+			y = Math.min( y, MAX_OVER_DRAG_SIZE );
+			y = Math.max( y, -height + pageHeight - MAX_OVER_DRAG_SIZE );
 		}
 	}
 	
@@ -111,20 +113,24 @@ class HPPScrollContainer extends FlxSpriteGroup
 		
 		disposeTween();
 		
+		var speedBasedOnDistance:Float;
 		var tweenValues:Dynamic;
 		if ( direction == ScrollDirection.HORIZONTAL )
 		{
 			tweenValues = { x: pageIndex * -pageWidth };
+			speedBasedOnDistance = Math.abs( ( x - pageIndex * -pageWidth ) / pageWidth * CHANGE_PAGE_MAX_SPEED );
 		}
 		else
 		{
 			tweenValues = { y: pageIndex * -pageHeight };
+			speedBasedOnDistance = Math.abs( ( y - pageIndex * -pageHeight ) / pageHeight * CHANGE_PAGE_MAX_SPEED );
 		}
+		
 		tween = FlxTween.tween( 
 			this,
 			tweenValues,
-			.4,
-			{ ease: FlxEase.expoOut }
+			speedBasedOnDistance,
+			{ ease: CHANGE_PAGE_EASING_TYPE }
 		);
 	}
 	
