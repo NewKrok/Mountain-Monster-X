@@ -37,7 +37,8 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="nape" />
 	<haxelib name="flixel-ui" />
-
+	<haxelib name="hpp" src="git://github.com/NewKrok/HPP-Package.git" />
+	
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Enable the Flixel core recording system-->
