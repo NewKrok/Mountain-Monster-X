@@ -5,6 +5,7 @@ import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
+import mmx.common.view.LongBackButton;
 
 /**
  * ...
@@ -91,10 +92,7 @@ class WorldSelector extends FlxSubState
 		add( controlButtonContainer = new FlxSpriteGroup() );
 		controlButtonContainer.scrollFactor.set();
 		
-		controlButtonContainer.add( backButton = new HPPButton( "Back" ) );
-		backButton.loadGraphic( HPPAssetManager.getGraphic( "base_button" ) );
-		backButton.autoCenterLabel();
-		backButton.overScale = .95;
+		controlButtonContainer.add( backButton = new LongBackButton() );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}

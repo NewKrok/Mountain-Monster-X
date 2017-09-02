@@ -4,13 +4,11 @@ import flash.display.BitmapData;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
-import flixel.addons.ui.FlxUIList;
 import flixel.group.FlxSpriteGroup;
-import flixel.input.touch.FlxTouchManager;
 import flixel.math.FlxPoint;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPScrollContainer;
-import hpp.flixel.util.HPPAssetManager;
+import mmx.common.view.LongBackButton;
 
 /**
  * ...
@@ -116,10 +114,7 @@ class LevelSelector extends FlxSubState
 		add( controlButtonContainer = new FlxSpriteGroup() );
 		controlButtonContainer.scrollFactor.set();
 
-		controlButtonContainer.add( backButton = new HPPButton( "Back", onBackRequest ) );
-		backButton.loadGraphic( HPPAssetManager.getGraphic( "base_button" ) );
-		backButton.autoCenterLabel();
-		backButton.overScale = .95;
+		controlButtonContainer.add( backButton = new LongBackButton( onBackRequest ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}
