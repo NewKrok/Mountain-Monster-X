@@ -7,7 +7,7 @@ import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import hpp.flixel.ui.HPPButton;
-import hpp.flixel.ui.HPPScrollContainer;
+import hpp.flixel.ui.HPPTouchScrollContainer;
 import mmx.common.view.LongBackButton;
 
 /**
@@ -25,7 +25,7 @@ class LevelSelector extends FlxSubState
 		
 	public var worldId:UInt;
 
-	var levelButtonsContainer:HPPScrollContainer;
+	var levelButtonsContainer:HPPTouchScrollContainer;
 	var controlButtonContainer:FlxSpriteGroup;
 
 	var backButton:HPPButton;
@@ -53,7 +53,7 @@ class LevelSelector extends FlxSubState
 	
 	function createLevelButtons() 
 	{
-		add( levelButtonsContainer = new HPPScrollContainer( FlxG.width, FlxG.height, ScrollDirection.HORIZONTAL, true ) );
+		add( levelButtonsContainer = new HPPTouchScrollContainer( FlxG.width, FlxG.height, ScrollDirection.HORIZONTAL, true ) );
 		levelButtonsContainer.scrollFactor.set();
 		
 		pages = [];
