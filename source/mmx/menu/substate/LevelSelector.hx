@@ -53,7 +53,7 @@ class LevelSelector extends FlxSubState
 	
 	function createLevelButtons() 
 	{
-		add( levelButtonsContainer = new HPPTouchScrollContainer( FlxG.width, FlxG.height, ScrollDirection.HORIZONTAL, true ) );
+		add( levelButtonsContainer = new HPPTouchScrollContainer( FlxG.width, FlxG.height, new HPPTouchScrollContainerConfig( { snapToPages: true } ) ) );
 		levelButtonsContainer.scrollFactor.set();
 		
 		pages = [];
