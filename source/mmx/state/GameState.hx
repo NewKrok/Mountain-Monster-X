@@ -124,7 +124,7 @@ class GameState extends FlxState
 
 		loadAssets();
 		
-		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level_" + worldId + "_" + levelId + ".json" ) );
+		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json" ) );
 		setLevelDataScale();
 
 		build();
@@ -255,6 +255,9 @@ class GameState extends FlxState
 				addEventListener( TouchEvent.TOUCH, onTouch );
 		*/
 		add( gameGui = new GameGui( resume, pause ) );
+		
+		//cast( camera, HPPCamera ).addZoomResistanceToSprite( gameGui );
+		//cast( camera, HPPCamera ).addZoomResistanceToSprite( background );
 
 		reset();
 	}
@@ -361,6 +364,9 @@ class GameState extends FlxState
 	function createCamera():Void
 	{
 		camera = new HPPCamera();
+		/*cast( camera, HPPCamera ).speedZoomEnabled = true;
+		cast( camera, HPPCamera ).maxSpeedZoom = 2;
+		cast( camera, HPPCamera ).speedZoomRatio = 100;*/
 		camera.bgColor = FlxColor.BLACK;
 		camera.targetOffset.set( 200, -50 );
 		camera.setScrollBoundsRect( levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height );
