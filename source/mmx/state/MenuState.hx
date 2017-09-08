@@ -78,7 +78,7 @@ class MenuState extends FlxState
 		openSubState( levelSelector );
 	}
 	
-	function openWorldSelector():Void
+	function openWorldSelector( target:HPPButton = null ):Void
 	{
 		openSubState( worldSelector );
 	}

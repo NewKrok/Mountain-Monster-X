@@ -68,22 +68,22 @@ class WorldSelector extends FlxSubState
 		levelPackButtonContainer.y = FlxG.height / 2 - levelPackButtonContainer.height / 2 - 50;
 	}
 	
-	function loadWorld0():Void
+	function loadWorld0( target:HPPButton ):Void
 	{
 		onWorldSelected( 0 );
 	}
 
-	function loadWorld1() :Void
+	function loadWorld1( target:HPPButton ):Void
 	{
 		onWorldSelected( 1 );
 	}
 
-	function loadWorld2():Void
+	function loadWorld2( target:HPPButton ):Void
 	{
 		onWorldSelected( 2 );
 	}
 	
-	function loadWorld3():Void
+	function loadWorld3( target:HPPButton ):Void
 	{
 	}
 	

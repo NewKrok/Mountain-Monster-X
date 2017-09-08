@@ -5,6 +5,7 @@ import flixel.group.FlxSpriteGroup;
 import hpp.flixel.text.HPPBitmapText;
 import hpp.flixel.util.HPPAssetManager;
 import hpp.flixel.util.HPPTimeUtil;
+import mmx.assets.Fonts;
 
 /**
  * ...
@@ -21,7 +22,7 @@ class TimeCounter extends FlxSpriteGroup
 
 		add( background = HPPAssetManager.getSprite( "gui_time_back" ) );
 
-		text = new HPPBitmapText( "Aachen-Light", "00:00", 30, 0xFF26FF92, "center" );
+		text = new HPPBitmapText( Fonts.AACHEN_LIGHT, "00:00", 30, 0xFF26FF92, "center" );
 		text.autoSize = false;
 		text.fieldWidth = cast width + 45;
 		

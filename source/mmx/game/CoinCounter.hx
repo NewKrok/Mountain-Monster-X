@@ -8,6 +8,7 @@ import flixel.tweens.misc.VarTween;
 import flixel.util.FlxColor;
 import hpp.flixel.text.HPPBitmapText;
 import hpp.flixel.util.HPPAssetManager;
+import mmx.assets.Fonts;
 
 /**
  * ...
@@ -27,7 +28,7 @@ class CoinCounter extends FlxSpriteGroup
 
 		add( background = HPPAssetManager.getSprite( "gui_coin_back" ) );
 
-		text = new HPPBitmapText( "Aachen-Light", "0", 35, FlxColor.YELLOW, "center" );
+		text = new HPPBitmapText( Fonts.AACHEN_LIGHT, "0", 35, FlxColor.YELLOW, "center" );
 		text.autoSize = false;
 		text.fieldWidth = cast width + 45;
 		defaultTextScale = text.scale.x;

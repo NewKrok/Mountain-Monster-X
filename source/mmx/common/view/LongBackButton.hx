@@ -11,7 +11,7 @@ import mmx.assets.Fonts;
  */
 class LongBackButton extends HPPButton
 {
-	public function new( callBack:Void->Void = null )
+	public function new( callBack:HPPButton->Void = null )
 	{
 		super( "Back", callBack );
 		

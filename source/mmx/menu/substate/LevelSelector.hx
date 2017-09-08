@@ -30,13 +30,13 @@ class LevelSelector extends FlxSubState
 
 	var backButton:HPPButton;
 
-	var onBackRequest:Void->Void;
+	var onBackRequest:HPPButton->Void;
 	var levelButtons:Array<LevelButton>;
 	var pages:Array<FlxSpriteGroup>;
 	var pagerStart:FlxSprite;
 	var pagerEnd:FlxSprite;
 
-	function new( onBackRequest:Void->Void ):Void
+	function new( onBackRequest:HPPButton->Void ):Void
 	{
 		this.onBackRequest = onBackRequest;
 
