@@ -1,16 +1,14 @@
 package mmx.menu.view;
 
 import flixel.FlxG;
-import flixel.addons.text.FlxTextField;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import hpp.flixel.text.HPPBitmapText;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPExtendableButton;
 import hpp.flixel.ui.HPPVUIBox;
+import hpp.util.HPPNumberUtil;
 import mmx.assets.Fonts;
 import mmx.state.GameState;
-import openfl.Assets;
 
 /**
  * ...
@@ -34,7 +32,7 @@ class LevelButton extends HPPExtendableButton
 		
 		overScale = .95;
 		
-		var container:HPPVUIBox = new HPPVUIBox( 4 );
+		var container:HPPVUIBox = new HPPVUIBox( 6 );
 		
 		title = new FlxText( 0, 0, cast width, "Level " + ( levelId + 1 ), 25 );
 		title.font = Fonts.AACHEN_LIGHT;
@@ -43,9 +41,9 @@ class LevelButton extends HPPExtendableButton
 		container.add( title );
 		
 		container.add( levelStarView = new LevelStarView() );
-		levelStarView.setStarCount( Math.floor( Math.random() * 3 ) );
+		levelStarView.setStarCount( Math.floor( Math.random() * 4 ) );
 		
-		score = new FlxText( 0, 0, title.width, "9 999", 25 );
+		score = new FlxText( 0, 0, title.width, HPPNumberUtil.formatNumber( Math.floor( Math.random() * 20000 ) ), 25 );
 		score.font = Fonts.AACHEN_LIGHT;
 		score.color = FlxColor.YELLOW;
 		score.alignment = "center";
@@ -53,7 +51,7 @@ class LevelButton extends HPPExtendableButton
 		
 		add( container );
 		
-		container.y = 8;
+		container.y = 9;
 	}
 	
 	function loadLevel( target:HPPButton ):Void

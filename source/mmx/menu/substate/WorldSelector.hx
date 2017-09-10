@@ -25,9 +25,11 @@ class WorldSelector extends FlxSubState
 	var backButton:HPPButton;
 	
 	var onWorldSelected:UInt->Void;
+	var openWelcomePage:HPPButton->Void;
 	
-	function new( onWorldSelected:UInt->Void ):Void
+	function new( openWelcomePage:HPPButton->Void, onWorldSelected:UInt->Void ):Void
 	{
+		this.openWelcomePage = openWelcomePage;
 		this.onWorldSelected = onWorldSelected;
 		
 		super();
@@ -85,7 +87,7 @@ class WorldSelector extends FlxSubState
 		add( controlButtonContainer = new FlxSpriteGroup() );
 		controlButtonContainer.scrollFactor.set();
 		
-		controlButtonContainer.add( backButton = new LongBackButton() );
+		controlButtonContainer.add( backButton = new LongBackButton( openWelcomePage ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}

@@ -1,7 +1,8 @@
 package mmx.menu.view;
 
+import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
-import hpp.flixel.display.HPPMovieClip;
+import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.util.HPPAssetManager;
 
 /**
@@ -10,22 +11,33 @@ import hpp.flixel.util.HPPAssetManager;
  */
 class LevelStarView extends FlxSpriteGroup
 {
-	var view:HPPMovieClip;
+	var stars:Array<FlxSprite>;
+	var starContainer:HPPHUIBox;
 	
 	public function new() 
 	{
 		super();
 		
-		add( view = HPPAssetManager.getMovieClip( "level_button_stars_", "0" ) );
+		add( starContainer = new HPPHUIBox( 11 ) );
+		
+		stars = [];
+		for ( i in 0...3 )
+		{
+			stars.push( HPPAssetManager.getSprite( "level_button_star" ) );
+			starContainer.add( stars[i] );
+		}
 	}
 	
 	public function setStarCount( value:UInt ):Void
 	{
-		view.gotoAndStop( value );
+		for ( i in 0...3 )
+		{
+			stars[i].visible = i < value;
+		}
 	}
 	
-	override function get_width():Float 
+	override function get_height():Float 
 	{
-		return 115;
+		return super.get_height() + 3;
 	}
 }

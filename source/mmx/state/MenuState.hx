@@ -11,6 +11,8 @@ import hpp.flixel.util.HPPAssetManager;
 import js.Browser;
 import mmx.game.Background;
 import mmx.menu.substate.LevelSelector;
+import mmx.menu.substate.SettingsPage;
+import mmx.menu.substate.WelcomePage;
 import mmx.menu.substate.WorldSelector;
 import openfl.Lib;
 import openfl.display.Stage;
@@ -28,6 +30,8 @@ class MenuState extends FlxState
 	var backgroundTween:VarTween;
 	var offsetPercent:FlxPoint = new FlxPoint();
 	
+	var welcomePage:WelcomePage;
+	var settingsPage:SettingsPage;
 	var worldSelector:WorldSelector;
 	var levelSelector:LevelSelector;
 	
@@ -37,7 +41,7 @@ class MenuState extends FlxState
 
 		loadAssets();
 		build();
-		openWorldSelector();
+		openWelcomePage();
 		
 		#if html5
 		Browser.window.addEventListener( 'devicemotion', accelerometerMove, true );
@@ -62,10 +66,22 @@ class MenuState extends FlxState
 		add( background = new Background( 0 ) );
 		
 		destroySubStates = false;
-		worldSelector = new WorldSelector( openLevelSelector );
+		welcomePage = new WelcomePage( openSettings, openWorldSelector );
+		settingsPage = new SettingsPage( openWelcomePage );
+		worldSelector = new WorldSelector( openWelcomePage, openLevelSelector );
 		levelSelector = new LevelSelector( openWorldSelector );
 
 		camera.scroll.set( stage.stageWidth / 2, stage.stageHeight / 2 );
+	}
+	
+	function openWelcomePage( target:HPPButton = null ):Void
+	{
+		openSubState( welcomePage );
+	}
+	
+	function openSettings( target:HPPButton = null ):Void
+	{
+		openSubState( settingsPage );
 	}
 	
 	function openLevelSelector( worldId:UInt ):Void

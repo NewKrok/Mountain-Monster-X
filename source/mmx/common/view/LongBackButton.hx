@@ -14,7 +14,7 @@ class LongBackButton extends HPPButton
 {
 	public function new( callBack:HPPButton->Void = null )
 	{
-		super( "Back", callBack );
+		super( "BACK", callBack );
 		
 		label.font = Fonts.AACHEN_LIGHT;
 		label.color = FlxColor.WHITE;
