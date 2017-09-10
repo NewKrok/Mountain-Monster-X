@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import hpp.flixel.ui.HPPButton;
+import hpp.flixel.ui.HPPUIGrid;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.common.view.LongBackButton;
 
@@ -13,7 +14,7 @@ import mmx.common.view.LongBackButton;
  */
 class WorldSelector extends FlxSubState
 {
-	var levelPackButtonContainer:FlxSpriteGroup;
+	var levelPackButtonContainer:HPPUIGrid;
 	var controlButtonContainer:FlxSpriteGroup;
 
 	var levelPackButton0:HPPButton;
@@ -42,27 +43,19 @@ class WorldSelector extends FlxSubState
 	
 	function createLevelPackButtons():Void 
 	{
-		add( levelPackButtonContainer = new FlxSpriteGroup() );
+		add( levelPackButtonContainer = new HPPUIGrid( 2, 20 ) );
 		levelPackButtonContainer.scrollFactor.set();
 		
-		levelPackButtonContainer.add( levelPackButton0 = new HPPButton( "", loadWorld0 ) );
-		levelPackButton0.loadGraphic( HPPAssetManager.getGraphic( "level_pack_0" ) );
-		levelPackButton0.overScale = .95;
+		levelPackButtonContainer.add( levelPackButton0 = new HPPButton( "", loadWorld0, "level_pack_0" ) );
+		levelPackButton0.overScale = .98;
 		
-		levelPackButtonContainer.add( levelPackButton1 = new HPPButton( "", loadWorld1 ) );
-		levelPackButton1.loadGraphic( HPPAssetManager.getGraphic( "level_pack_1" ) );
-		levelPackButton1.x = levelPackButton0.width + 10;
-		levelPackButton1.overScale = .95;
+		levelPackButtonContainer.add( levelPackButton1 = new HPPButton( "", loadWorld1, "level_pack_1" ) );
+		levelPackButton1.overScale = .98;
 		
-		levelPackButtonContainer.add( levelPackButton2 = new HPPButton( "", loadWorld2 ) );
-		levelPackButton2.loadGraphic( HPPAssetManager.getGraphic( "level_pack_2" ) );
-		levelPackButton2.y = levelPackButton0.height + 10;
-		levelPackButton2.overScale = .95;
+		levelPackButtonContainer.add( levelPackButton2 = new HPPButton( "", loadWorld2, "level_pack_2" ) );
+		levelPackButton2.overScale = .98;
 		
-		levelPackButtonContainer.add( levelPackButton3 = new HPPButton( "", loadWorld3 ) );
-		levelPackButton3.loadGraphic( HPPAssetManager.getGraphic( "level_pack_coming_soon" ) );
-		levelPackButton3.x = levelPackButton1.x;
-		levelPackButton3.y = levelPackButton2.y;
+		levelPackButtonContainer.add( levelPackButton3 = new HPPButton( "", loadWorld3, "level_pack_coming_soon" ) );
 		
 		levelPackButtonContainer.x = FlxG.width / 2 - levelPackButtonContainer.width / 2;
 		levelPackButtonContainer.y = FlxG.height / 2 - levelPackButtonContainer.height / 2 - 50;

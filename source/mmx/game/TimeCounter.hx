@@ -2,7 +2,7 @@ package mmx.game;
 
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
-import hpp.flixel.text.HPPBitmapText;
+import flixel.text.FlxText;
 import hpp.flixel.util.HPPAssetManager;
 import hpp.flixel.util.HPPTimeUtil;
 import mmx.assets.Fonts;
@@ -14,7 +14,7 @@ import mmx.assets.Fonts;
 class TimeCounter extends FlxSpriteGroup
 {
 	var background:FlxSprite;
-	var text:HPPBitmapText;
+	var text:FlxText;
 
 	public function new()
 	{
@@ -22,9 +22,12 @@ class TimeCounter extends FlxSpriteGroup
 
 		add( background = HPPAssetManager.getSprite( "gui_time_back" ) );
 
-		text = new HPPBitmapText( Fonts.AACHEN_LIGHT, "00:00", 30, 0xFF26FF92, "center" );
+		text = new FlxText( 0, 0, cast width + 45, "00:00", 35 );
 		text.autoSize = false;
-		text.fieldWidth = cast width + 45;
+		text.color = 0xFF26FF92;
+		text.alignment = "center";
+		text.font = Fonts.AACHEN_LIGHT;
+		text.y = 10;
 		
 		add( text );
 	}
@@ -33,11 +36,11 @@ class TimeCounter extends FlxSpriteGroup
 	{
 		if( value <= 1000 * 10 )
 		{
-			text.textColor = 0xFFFFB399;
+			text.color = 0xFFFFB399;
 		}
 		else
 		{
-			text.textColor = 0xFF26FF92;
+			text.color = 0xFF26FF92;
 		}
 		
 		text.text = HPPTimeUtil.timeStampToFormattedTime( value, HPPTimeUtil.TIME_FORMAT_MM_SS );

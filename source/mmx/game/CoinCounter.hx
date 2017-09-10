@@ -2,11 +2,11 @@ package mmx.game;
 
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
 import flixel.util.FlxColor;
-import hpp.flixel.text.HPPBitmapText;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.assets.Fonts;
 
@@ -17,7 +17,7 @@ import mmx.assets.Fonts;
 class CoinCounter extends FlxSpriteGroup
 {
 	var background:FlxSprite;
-	var text:HPPBitmapText;
+	var text:FlxText;
 	var defaultTextScale:Float;
 	var count:UInt;
 	var scaleTween:VarTween;
@@ -28,9 +28,12 @@ class CoinCounter extends FlxSpriteGroup
 
 		add( background = HPPAssetManager.getSprite( "gui_coin_back" ) );
 
-		text = new HPPBitmapText( Fonts.AACHEN_LIGHT, "0", 35, FlxColor.YELLOW, "center" );
+		text = new FlxText( 0, 0, cast width + 45, "0", 35 );
 		text.autoSize = false;
-		text.fieldWidth = cast width + 45;
+		text.color = FlxColor.YELLOW;
+		text.alignment = "center";
+		text.font = Fonts.AACHEN_LIGHT;
+		text.y = 10;
 		defaultTextScale = text.scale.x;
 		
 		add( text );

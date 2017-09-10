@@ -79,7 +79,7 @@ class Background extends FlxSpriteGroup
 
 		for ( i in 0...5 )
 		{
-			var backgroundPiece:HPPMovieClip = HPPAssetManager.getMovieClip( assetId );
+			var backgroundPiece:HPPMovieClip = HPPAssetManager.getMovieClip( assetId, "00" );
 			backgroundData.container.add( backgroundPiece );
 			backgroundData.elements.push( backgroundPiece );
 

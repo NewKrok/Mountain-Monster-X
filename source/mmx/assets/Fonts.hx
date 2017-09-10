@@ -7,5 +7,5 @@ package mmx.assets;
 class Fonts 
 {
 	public static inline var DEFAULT_FONT:String = "Verdana";
-	public static inline var AACHEN_LIGHT:String = "Aachen-Light";
+	public static inline var AACHEN_LIGHT:String = "Aachen Medium Plain";
 }
