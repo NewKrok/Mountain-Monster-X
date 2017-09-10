@@ -2,6 +2,7 @@ package mmx.game;
 
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
+import hpp.flixel.ui.HPPButton;
 import mmx.game.TimeCounter;
 
 /**
@@ -14,7 +15,9 @@ class GameGui extends FlxSpriteGroup
 	var timeCounter:TimeCounter;
 	var startCounter:StartCounter;
 	
-	public function new( resumeGameCallBack:Void->Void, pauseGameCallBack:Void->Void ) 
+	var pauseButton:HPPButton;
+	
+	public function new( resumeGameCallBack:Void->Void, pauseGameCallBack:HPPButton->Void ) 
 	{
 		super();
 		
@@ -28,7 +31,17 @@ class GameGui extends FlxSpriteGroup
 		
 		add( startCounter = new StartCounter( resumeGameCallBack ) );
 		
+		add( pauseButton = new HPPButton( "", pauseGameCallBack, "pause_button" ) );
+		pauseButton.overScale = .98;
+		pauseButton.x = FlxG.stage.stageWidth - pauseButton.width - 10;
+		pauseButton.y = 10;
+		
 		scrollFactor.set();
+	}
+	
+	public function pause():Void
+	{
+		startCounter.stop();
 	}
 	
 	public function resumeGameRequest():Void

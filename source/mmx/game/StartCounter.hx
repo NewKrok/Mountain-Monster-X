@@ -57,6 +57,13 @@ class StartCounter extends FlxSpriteGroup
 		}
 	}
 	
+	public function stop():Void
+	{
+		disposeTweens();
+		animationIndex = 0;
+		resetCounterImages();
+	}
+	
 	public function start():Void
 	{
 		disposeTweens();
@@ -128,8 +135,12 @@ class StartCounter extends FlxSpriteGroup
 	
 	function hideInstantCounterImage( tween:FlxTween ):Void
 	{
-		var tweenTarget = tweenData.filter( function ( tweenData:TweenData ):Bool { return tween == tweenData.tween; } )[0].tweenTarget;
-		tweenTarget.alpha = 0;
+		var tween:TweenData = tweenData.filter( function ( tweenData:TweenData ):Bool { return tween == tweenData.tween; } )[0];
+		
+		if ( tween != null )
+		{
+			tween.tweenTarget.alpha = 0;
+		}
 	}
 }
 

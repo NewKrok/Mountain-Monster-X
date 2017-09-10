@@ -35,13 +35,38 @@ class MenuState extends FlxState
 	var worldSelector:WorldSelector;
 	var levelSelector:LevelSelector;
 	
+	var startState:MenuSubStateType;
+	var config:MenuStateConfig;
+	
+	function new( startState:MenuSubStateType = MenuSubStateType.WELCOME_PAGE, config:MenuStateConfig )
+	{
+		super();
+		
+		this.startState = startState;
+		this.config = config;
+	}
+	
 	override public function create():Void
 	{
 		super.create();
 
 		loadAssets();
 		build();
-		openWelcomePage();
+
+		switch ( startState )
+		{
+			case MenuSubStateType.WELCOME_PAGE:
+				openWelcomePage();
+				
+			case MenuSubStateType.WORLD_SELECTOR:
+				openWorldSelector();
+				
+			case MenuSubStateType.LEVEL_SELECTOR:
+				openLevelSelector( config.worldId );
+				
+			case MenuSubStateType.SETTINGS_PAGE:
+				openSettingsPage();
+		}
 		
 		#if html5
 		Browser.window.addEventListener( 'devicemotion', accelerometerMove, true );
@@ -66,7 +91,7 @@ class MenuState extends FlxState
 		add( background = new Background( 0 ) );
 		
 		destroySubStates = false;
-		welcomePage = new WelcomePage( openSettings, openWorldSelector );
+		welcomePage = new WelcomePage( openSettingsPage, openWorldSelector );
 		settingsPage = new SettingsPage( openWelcomePage );
 		worldSelector = new WorldSelector( openWelcomePage, openLevelSelector );
 		levelSelector = new LevelSelector( openWorldSelector );
@@ -79,7 +104,7 @@ class MenuState extends FlxState
 		openSubState( welcomePage );
 	}
 	
-	function openSettings( target:HPPButton = null ):Void
+	function openSettingsPage( target:HPPButton = null ):Void
 	{
 		openSubState( settingsPage );
 	}
@@ -156,4 +181,17 @@ class MenuState extends FlxState
 
 		super.destroy();
 	}
+}
+
+@:enum
+abstract MenuSubStateType( String ) {
+  var WELCOME_PAGE = "welcome page";
+  var WORLD_SELECTOR = "world selector";
+  var LEVEL_SELECTOR = "level selector";
+  var SETTINGS_PAGE = "settings page";
+}
+
+typedef MenuStateConfig = {
+	@:optional var worldId:UInt;
+	@:optional var levelId:UInt;
 }

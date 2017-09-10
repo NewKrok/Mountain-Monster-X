@@ -11,6 +11,7 @@ import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import hpp.flixel.HPPCamera;
+import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.assets.CarDatas;
 import mmx.datatype.LevelData;
@@ -30,7 +31,9 @@ import mmx.game.library.crate.SmallCrate;
 import mmx.game.library.crate.SmallLongCrate;
 import mmx.game.library.crate.SmallRampCrate;
 import mmx.game.snow.Snow;
+import mmx.game.substate.PausePanel;
 import mmx.game.terrain.BrushTerrain;
+import mmx.state.MenuState.MenuSubStateType;
 import mmx.util.LevelUtil;
 import nape.constraint.PivotJoint;
 import nape.dynamics.InteractionFilter;
@@ -46,6 +49,8 @@ class GameState extends FlxState
 {
 	inline static var LEVEL_DATA_SCALE:Float = 2;
 
+	var pausePanel:PausePanel;
+	
 	var gameGui:GameGui;
 	var background:Background;
 
@@ -197,11 +202,15 @@ class GameState extends FlxState
 
 	function build():Void
 	{
+		destroySubStates = false;
+		
+		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
+		
 		lastCameraStepOffset = new FlxPoint();
 
 		add( background = new Background( worldId ) );
 		add( container = new FlxSpriteGroup() );
-
+		
 		createCamera();
 		createPhysicsWorld();
 		createGroundPhysics();
@@ -252,7 +261,7 @@ class GameState extends FlxState
 				}
 				addEventListener( TouchEvent.TOUCH, onTouch );
 		*/
-		add( gameGui = new GameGui( resume, pause ) );
+		add( gameGui = new GameGui( resume, pauseRequest ) );
 		
 		//cast( camera, HPPCamera ).addZoomResistanceToSprite( gameGui );
 		//cast( camera, HPPCamera ).addZoomResistanceToSprite( background );
@@ -335,8 +344,10 @@ class GameState extends FlxState
 		update( 0 );
 	}
 
-	function resumeRequest():Void
+	function resumeRequest( target:HPPButton = null ):Void
 	{
+		closeSubState();
+		
 		if ( !isGamePaused )
 		{
 			pause();
@@ -344,10 +355,18 @@ class GameState extends FlxState
 
 		gameGui.resumeGameRequest();
 	}
+	
+	function pauseRequest( target:HPPButton ):Void
+	{
+		openSubState( pausePanel );
+		
+		pause();
+	}
 
 	function resume():Void
 	{
 		isGamePaused = false;
+		FlxNapeSpace.isPaused = false;
 		
 		totalPausedTime += Date.now().getTime() - pauseStartTime;
 	}
@@ -355,10 +374,12 @@ class GameState extends FlxState
 	function pause():Void
 	{
 		isGamePaused = true;
+		FlxNapeSpace.isPaused = true;
 		
+		gameGui.pause();
 		pauseStartTime = Date.now().getTime();
 	}
-
+	
 	function createCamera():Void
 	{
 		camera = new HPPCamera();
@@ -731,5 +752,15 @@ class GameState extends FlxState
 	function restartRutin():Void
 	{
 		reset();
+	}
+	
+	function restartRequest( target:HPPButton = null ):Void
+	{
+		restartRutin();
+	}
+	
+	function exitRequest( target:HPPButton = null ):Void
+	{
+		FlxG.switchState( new MenuState( MenuSubStateType.LEVEL_SELECTOR, { worldId: worldId } ) );
 	}
 }
