@@ -15,6 +15,7 @@ Haxe port of the Mountain Monster mobile game
   * The latest HaxeFlixel use OpenFl 3.6.1 and it has a bug, so I use this fix from the latest OpenFl: https://github.com/openfl/openfl/commit/a38a666ed6b19f3d3c5320f3774f0bbddb16d9e2
   * You can't pause the FlxNapeSpace, So I added temporary this functionality 
 
+## Other
 Source of the original mobile version:
 https://github.com/NewKrok/Mountain-Monster-Mobile
 
