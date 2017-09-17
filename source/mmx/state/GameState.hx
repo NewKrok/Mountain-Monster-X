@@ -763,4 +763,11 @@ class GameState extends FlxState
 	{
 		FlxG.switchState( new MenuState( MenuSubStateType.LEVEL_SELECTOR, { worldId: worldId } ) );
 	}
+	
+	override public function destroy():Void
+	{
+		HPPAssetManager.clear();
+		
+		super.destroy();
+	}
 }

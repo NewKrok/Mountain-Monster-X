@@ -44,6 +44,7 @@ class WelcomePage extends FlxSubState
 		logo = HPPAssetManager.getSprite( "logo" );
 		logo.x = FlxG.stage.stageWidth / 2 - logo.width / 2;
 		logo.y = 30;
+		logo.scrollFactor.set();
 		add( logo );
 		
 		startButton = new HPPButton( "", openWorldSelector, "play_game_button" );

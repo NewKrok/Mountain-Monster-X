@@ -7,6 +7,7 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
 import flixel.ui.FlxButton;
 import hpp.flixel.ui.HPPButton;
+import hpp.flixel.ui.HPPTouchScrollContainer;
 import hpp.flixel.util.HPPAssetManager;
 import js.Browser;
 import mmx.game.Background;
@@ -94,7 +95,6 @@ class MenuState extends FlxState
 		welcomePage = new WelcomePage( openSettingsPage, openWorldSelector );
 		settingsPage = new SettingsPage( openWelcomePage );
 		worldSelector = new WorldSelector( openWelcomePage, openLevelSelector );
-		levelSelector = new LevelSelector( openWorldSelector );
 
 		camera.scroll.set( stage.stageWidth / 2, stage.stageHeight / 2 );
 	}
@@ -111,7 +111,27 @@ class MenuState extends FlxState
 	
 	function openLevelSelector( worldId:UInt ):Void
 	{
-		levelSelector.worldId = worldId;
+		var needCreateNewLevelSelector:Bool = true;
+		
+		if ( levelSelector != null )
+		{
+			if ( levelSelector.worldId != worldId )
+			{
+				levelSelector.destroy();
+				levelSelector = null;
+			}
+			else
+			{
+				needCreateNewLevelSelector = false;
+			}
+		}
+		
+		if ( needCreateNewLevelSelector )
+		{
+			levelSelector = new LevelSelector( openWorldSelector );
+			levelSelector.worldId = worldId;
+		}
+		
 		background.worldId = worldId;
 		
 		openSubState( levelSelector );
