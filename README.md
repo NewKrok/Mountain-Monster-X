@@ -10,6 +10,7 @@ Haxe port of the Mountain Monster mobile game
 - **HaxeFlixel-Addons 2.5.0** Optional classes for HaxeFlixel. https://github.com/HaxeFlixel/flixel-addons
 - **HaxeFlixel-Ui 2.2.0** UI addons for HaxeFlixel. https://github.com/HaxeFlixel/flixel-ui
 - **Nape 2.0.20** 2D Physics Engine. https://code.google.com/p/tweener/
+- **HPP Package** Some useful classes for haxe projects https://github.com/NewKrok/HPP-Package
 
 ## Notice
   * The latest HaxeFlixel use OpenFl 3.6.1 and it has a bug, so I use this fix from the latest OpenFl: https://github.com/openfl/openfl/commit/a38a666ed6b19f3d3c5320f3774f0bbddb16d9e2
