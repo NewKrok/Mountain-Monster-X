@@ -254,11 +254,6 @@ class GameState extends FlxState
 				_gameGui.addEventListener( GameGuiEvent.GAME_END_REQUEST, gameEndRequest );
 				_gameGui.addEventListener( GameGuiEvent.NEXT_LEVEL_REQUEST, nextLevelRequest );
 
-				if( !CONFIG::IS_IOS_VERSION && !CONFIG::IS_ANDROID_VERSION )
-				{
-					stage.addEventListener( KeyboardEvent.KEY_DOWN, onKeydown );
-					stage.addEventListener( KeyboardEvent.KEY_UP, onKeyup );
-				}
 				addEventListener( TouchEvent.TOUCH, onTouch );
 		*/
 		add( gameGui = new GameGui( resume, pauseRequest ) );
@@ -445,7 +440,7 @@ class GameState extends FlxState
 			var body:Body = new Body( BodyType.STATIC );
 
 			body.shapes.add( new Polygon( Polygon.box( distance, 1 ) ) );
-			body.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
+			body.setShapeMaterials( new Material( 1, 1, 1, 1, 0.001 ) );
 
 			body.position.x = levelData.groundPoints[ i ].x + ( levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x ) / 2;
 			body.position.y = levelData.groundPoints[ i ].y + ( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y ) / 2;
@@ -502,7 +497,7 @@ class GameState extends FlxState
 
 			var body:Body = new Body( isLockedBridgeElement ? BodyType.STATIC : BodyType.DYNAMIC );
 			body.shapes.add( new Polygon( Polygon.box( bridgeElementWidth, bridgeElementHeight ) ) );
-			body.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
+			body.setShapeMaterials( new Material( 1, 1, 1, 2, 0.001 ) );
 			body.setShapeFilters( filter );
 			body.allowRotation = !isLockedBridgeElement;
 			body.position.x = pointA.x + i * bridgeElementWidth * Math.cos( bridgeAngle );
@@ -636,10 +631,31 @@ class GameState extends FlxState
 			return;
 		}
 		
+		up = FlxG.keys.anyPressed( [UP, W] );
+		down = FlxG.keys.anyPressed( [DOWN, S] );
+		right = FlxG.keys.anyPressed( [RIGHT, D] );
+		left = FlxG.keys.anyPressed( [LEFT, A] );
+		
 		calculateGameTime();
 		gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
 
-		car.accelerateToRight();
+		if ( up )
+		{
+			car.accelerateToRight();
+		}
+		else if ( down )
+		{
+			car.accelerateToLeft();
+		}
+		
+		if ( right )
+		{
+			car.rotateRight();
+		}
+		else if ( left )
+		{
+			car.rotateLeft();
+		}
 
 		updateBridges();
 		updateSmallRocks();
@@ -684,7 +700,7 @@ class GameState extends FlxState
 		var rightAngularVelocity:Float = Math.abs( car.wheelRightPhysics.angularVel );
 		var carDirection:Int = car.wheelLeftPhysics.velocity.x >= 0 ? 1 : -1;
 
-		if ( !car.leftWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8 )
+		if ( !car.leftWheelOnAir && ( up || down ) && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8 )
 		{
 			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
 			smallRocks.pop();
@@ -697,7 +713,7 @@ class GameState extends FlxState
 			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
 		}
 
-		if ( !car.rightWheelOnAir /*&& ( _up || _down )*/ && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .8 )
+		if ( !car.rightWheelOnAir && ( up || down ) && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .8 )
 		{
 			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
 			smallRocks.pop();

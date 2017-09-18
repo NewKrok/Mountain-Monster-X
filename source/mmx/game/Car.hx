@@ -6,8 +6,8 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import hpp.flixel.util.HPPAssetManager;
+import mmx.datatype.CarData;
 import nape.callbacks.InteractionType;
-import nape.constraint.DistanceJoint;
 import nape.constraint.PivotJoint;
 import nape.constraint.WeldJoint;
 import nape.dynamics.InteractionFilter;
@@ -17,8 +17,6 @@ import nape.phys.BodyList;
 import nape.phys.Material;
 import nape.shape.Circle;
 import nape.shape.Polygon;
-
-import mmx.datatype.CarData;
 
 /**
  * ...
@@ -104,7 +102,7 @@ class Car extends FlxSpriteGroup
 		
 		wheelRightPhysics = new Body();
 		wheelRightPhysics.shapes.add( new Circle( firstWheelRadius ) );
-		wheelRightPhysics.setShapeMaterials( new Material( .5, .7, .7, 2, 0.001 ) );
+		wheelRightPhysics.setShapeMaterials( new Material( 1 - carData.damping, 1, 1, 1, 0.001 ) );
 		wheelRightPhysics.setShapeFilters( filter );
 		wheelRightPhysics.position.x = x + firstWheelXOffset;
 		wheelRightPhysics.position.y = y + firstWheelYOffset;
@@ -112,7 +110,7 @@ class Car extends FlxSpriteGroup
 		
 		wheelLeftPhysics = new Body();
 		wheelLeftPhysics.shapes.add( new Circle( firstWheelRadius ) );
-		wheelLeftPhysics.setShapeMaterials( new Material( .5, .7, .7, 2, 0.001 ) );
+		wheelLeftPhysics.setShapeMaterials( new Material( 1 - carData.damping, 1, 1, 1, 0.001 ) );
 		wheelLeftPhysics.setShapeFilters( filter );
 		wheelLeftPhysics.position.x = x + backWheelXOffset;
 		wheelLeftPhysics.position.y = y + backWheelYOffset;
