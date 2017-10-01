@@ -1,12 +1,12 @@
 package mmx.game;
 
 import flixel.FlxSprite;
-import flixel.addons.nape.FlxNapeSpace;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.datatype.CarData;
+import mmx.game.constant.CPhysicsValue;
 import nape.callbacks.InteractionType;
 import nape.constraint.PivotJoint;
 import nape.constraint.WeldJoint;
@@ -17,6 +17,7 @@ import nape.phys.BodyList;
 import nape.phys.Material;
 import nape.shape.Circle;
 import nape.shape.Polygon;
+import nape.space.Space;
 
 /**
  * ...
@@ -52,11 +53,13 @@ class Car extends FlxSpriteGroup
 	public var isCarCrashed( default, null ):Bool;
 	
 	var direction:Int = 1;
+	var space:Space;
 	
-	public function new( x:Float, y:Float, carData:CarData, scale:Float = 1, filterCategory:UInt = 0, filterMask:UInt = 0 )
+	public function new( space:Space, x:Float, y:Float, carData:CarData, scale:Float = 1, filterCategory:UInt = 0, filterMask:UInt = 0 )
 	{
 		super();
 		
+		this.space = space;
 		this.carData = carData;
 		
 		firstWheelXOffset += Math.isNaN( carData.carBodyXOffset ) ? 0 : carData.carBodyXOffset;
@@ -96,54 +99,62 @@ class Car extends FlxSpriteGroup
 	
 	function buildPhysics( x:Float, y:Float, filterCategory:Int = 0, filterMask:Int = 0 ):Void
 	{
+		var material:Material;
+		
 		var filter:InteractionFilter = new InteractionFilter();
 		filter.collisionGroup = filterCategory;
 		filter.collisionMask = filterMask;
 		
 		wheelRightPhysics = new Body();
 		wheelRightPhysics.shapes.add( new Circle( firstWheelRadius ) );
-		wheelRightPhysics.setShapeMaterials( new Material( 1 - carData.damping, 1, 1, 1, 0.001 ) );
+		material = CPhysicsValue.MATERIAL_WHEEL;
+		material.elasticity = carData.elasticity;
+		wheelRightPhysics.setShapeMaterials( material );
 		wheelRightPhysics.setShapeFilters( filter );
 		wheelRightPhysics.position.x = x + firstWheelXOffset;
 		wheelRightPhysics.position.y = y + firstWheelYOffset;
-		wheelRightPhysics.space = FlxNapeSpace.space;
+		wheelRightPhysics.space = space;
+		wheelRightPhysics.mass = 1;
 		
 		wheelLeftPhysics = new Body();
 		wheelLeftPhysics.shapes.add( new Circle( firstWheelRadius ) );
-		wheelLeftPhysics.setShapeMaterials( new Material( 1 - carData.damping, 1, 1, 1, 0.001 ) );
+		material = CPhysicsValue.MATERIAL_WHEEL;
+		material.elasticity = carData.elasticity;
+		wheelLeftPhysics.setShapeMaterials( material );
 		wheelLeftPhysics.setShapeFilters( filter );
 		wheelLeftPhysics.position.x = x + backWheelXOffset;
 		wheelLeftPhysics.position.y = y + backWheelYOffset;
-		wheelLeftPhysics.space = FlxNapeSpace.space;
+		wheelLeftPhysics.space = space;
+		wheelRightPhysics.mass = 1;
 		
 		carBodyPhysics = new Body();
 		carBodyPhysics.shapes.add( new Polygon( Polygon.box( bodyWidth, bodyHeight ) ) );
-		carBodyPhysics.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
 		carBodyPhysics.setShapeFilters( filter );
 		carBodyPhysics.position.x = x;
 		carBodyPhysics.position.y = y;
-		carBodyPhysics.space = FlxNapeSpace.space;
+		carBodyPhysics.space = space;
+		carBodyPhysics.mass = 1;
 		
 		hitArea = new Body();
 		hitArea.shapes.add( new Polygon( Polygon.box( bodyWidth * .7, hitAreaHeight ) ) );
-		hitArea.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
-		hitArea.space = FlxNapeSpace.space;
+		hitArea.space = space;
+		hitArea.mass = 1;
 		
 		var hitAreaAnchor:Vec2 = new Vec2( 0, bodyHeight / 2 + hitAreaHeight / 2 );
 		var hitJoin:WeldJoint = new WeldJoint( carBodyPhysics, hitArea, carBodyPhysics.localCOM, hitAreaAnchor );
-		hitJoin.space = FlxNapeSpace.space;
+		hitJoin.space = space;
 		
 		var bodyLeftAnchor:Vec2 = new Vec2( firstWheelXOffset, firstWheelYOffset );
 		var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint( wheelLeftPhysics, carBodyPhysics, wheelLeftPhysics.localCOM, bodyLeftAnchor );
 		pivotJointLeftLeftWheel.damping = 1;
 		pivotJointLeftLeftWheel.frequency = graphicJoinHertz;
-		pivotJointLeftLeftWheel.space = FlxNapeSpace.space;
+		pivotJointLeftLeftWheel.space = space;
 		
 		var bodyRightAnchor:Vec2 = new Vec2( backWheelXOffset, backWheelYOffset );
 		var pivotJointRightRightWheel:PivotJoint = new PivotJoint( wheelRightPhysics, carBodyPhysics, wheelRightPhysics.localCOM, bodyRightAnchor );
 		pivotJointRightRightWheel.damping = 1;
 		pivotJointRightRightWheel.frequency = graphicJoinHertz;
-		pivotJointRightRightWheel.space = FlxNapeSpace.space;
+		pivotJointRightRightWheel.space = space;
 	}
 	
 	public function getMidXPosition():Float
@@ -221,16 +232,16 @@ class Car extends FlxSpriteGroup
 	{
 		direction = -1;
 
-		wheelLeftPhysics.applyAngularImpulse( -carData.speed / 2 );
-		wheelRightPhysics.applyAngularImpulse( -carData.speed / 2 );
+		wheelLeftPhysics.angularVel = -carData.speed / 2;
+		wheelRightPhysics.angularVel = -carData.speed / 2;
 	}
 
 	public function accelerateToRight():Void
 	{
 		direction = 1;
 		
-		wheelLeftPhysics.applyAngularImpulse( carData.speed );
-		wheelRightPhysics.applyAngularImpulse( carData.speed );
+		wheelLeftPhysics.angularVel = carData.speed;
+		wheelRightPhysics.angularVel = carData.speed;
 	}
 
 	public function rotateLeft():Void

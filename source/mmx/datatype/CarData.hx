@@ -13,7 +13,7 @@ typedef CarData =
 	
 	var speed( default, default ):Float;
 	var rotation( default, default ):Float;
-	var damping( default, default ):Float;
+	var elasticity( default, default ):Float;
 	
 	@:optional var starRequired( default, default ):UInt;
 	@:optional var carBodyXOffset( default, default ):UInt;

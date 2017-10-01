@@ -5,11 +5,11 @@ import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.addons.nape.FlxNapeSpace;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
+import haxe.Json;
 import hpp.flixel.HPPCamera;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
@@ -40,8 +40,8 @@ import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
 import nape.phys.Body;
 import nape.phys.BodyType;
-import nape.phys.Material;
 import nape.shape.Polygon;
+import nape.space.Space;
 import openfl.Assets;
 import openfl.geom.Rectangle;
 
@@ -49,8 +49,9 @@ class GameState extends FlxState
 {
 	inline static var LEVEL_DATA_SCALE:Float = 2;
 
-	var pausePanel:PausePanel;
+	var space:Space;
 	
+	var pausePanel:PausePanel;
 	var gameGui:GameGui;
 	var background:Background;
 
@@ -306,15 +307,6 @@ class GameState extends FlxState
 		resetCrates();
 		
 		/*
-
-		switch( _worldID )
-		{
-			case 1:
-				_car.wheelLeft.SetLinearDamping( _car.damping + .3 );
-				_car.wheelRight.SetLinearDamping( _car.damping + .3 );
-				break;
-		}
-
 		this._gameGui.showStartGamePanel( exit );
 		this._gameGui.enable();*/
 
@@ -336,6 +328,7 @@ class GameState extends FlxState
 		gameStartTime = Date.now().getTime();
 
 		resumeRequest();
+		//FlxNapeSpace.isPaused = false;
 		update( 0 );
 	}
 
@@ -361,7 +354,7 @@ class GameState extends FlxState
 	function resume():Void
 	{
 		isGamePaused = false;
-		FlxNapeSpace.isPaused = false;
+		//FlxNapeSpace.isPaused = false;
 		
 		totalPausedTime += Date.now().getTime() - pauseStartTime;
 	}
@@ -369,7 +362,7 @@ class GameState extends FlxState
 	function pause():Void
 	{
 		isGamePaused = true;
-		FlxNapeSpace.isPaused = true;
+		//FlxNapeSpace.isPaused = true;
 		
 		gameGui.pause();
 		pauseStartTime = Date.now().getTime();
@@ -393,13 +386,9 @@ class GameState extends FlxState
 
 	function createPhysicsWorld():Void
 	{
-		FlxNapeSpace.init();
-		FlxNapeSpace.space.gravity.setxy( 0, CPhysicsValue.GRAVITY );
-		FlxNapeSpace.createWalls( 0, -500, levelData.cameraBounds.width, levelData.cameraBounds.height );
-
-		#if debug
-			FlxNapeSpace.drawDebug = true;
-		#end
+		space = new Space( new Vec2( 0, CPhysicsValue.GRAVITY ) );
+		
+		//FlxNapeSpace.createWalls( 0, -500, levelData.cameraBounds.width, levelData.cameraBounds.height );
 	}
 
 	function createGroundGraphics():Void
@@ -440,13 +429,13 @@ class GameState extends FlxState
 			var body:Body = new Body( BodyType.STATIC );
 
 			body.shapes.add( new Polygon( Polygon.box( distance, 1 ) ) );
-			body.setShapeMaterials( new Material( 1, 1, 1, 1, 0.001 ) );
-
+			body.setShapeMaterials( worldId == 1 ? CPhysicsValue.MATERIAL_NORMAL_GROUND : CPhysicsValue.MATERIAL_SNOWY_GROUND );
+			body.setShapeFilters( filter );
 			body.position.x = levelData.groundPoints[ i ].x + ( levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x ) / 2;
 			body.position.y = levelData.groundPoints[ i ].y + ( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y ) / 2;
 			body.rotation = angle;
 
-			body.space = FlxNapeSpace.space;
+			body.space = space;
 
 			groundBodies.push( body );
 		}
@@ -497,13 +486,13 @@ class GameState extends FlxState
 
 			var body:Body = new Body( isLockedBridgeElement ? BodyType.STATIC : BodyType.DYNAMIC );
 			body.shapes.add( new Polygon( Polygon.box( bridgeElementWidth, bridgeElementHeight ) ) );
-			body.setShapeMaterials( new Material( 1, 1, 1, 2, 0.001 ) );
+			body.setShapeMaterials( CPhysicsValue.MATERIAL_BRIDGE );
 			body.setShapeFilters( filter );
 			body.allowRotation = !isLockedBridgeElement;
 			body.position.x = pointA.x + i * bridgeElementWidth * Math.cos( bridgeAngle );
 			body.position.y = pointA.y + i * bridgeElementWidth * Math.sin( bridgeAngle );
 			body.rotation = bridgeAngle;
-			body.space = FlxNapeSpace.space;
+			body.space = space;
 			bridgeBodies[bridgeBodies.length - 1].push( body );
 
 			var bridgeBlock:FlxSprite = HPPAssetManager.getSprite( "bridge" );
@@ -518,14 +507,14 @@ class GameState extends FlxState
 				var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint( bridgeBodies[bridgeBodies.length - 1][i - 1], bridgeBodies[bridgeBodies.length - 1][i], anchorA, anchorB );
 				pivotJointLeftLeftWheel.damping = 1;
 				pivotJointLeftLeftWheel.frequency = 20;
-				pivotJointLeftLeftWheel.space = FlxNapeSpace.space;
+				pivotJointLeftLeftWheel.space = space;
 			}
 		}
 	}
 
 	function createCar():Void
 	{
-		car = new Car( levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK );
+		car = new Car( space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK );
 		container.add( car );
 	}
 	
@@ -630,6 +619,8 @@ class GameState extends FlxState
 		{
 			return;
 		}
+		
+		space.step( CPhysicsValue.STEP );
 		
 		up = FlxG.keys.anyPressed( [UP, W] );
 		down = FlxG.keys.anyPressed( [DOWN, S] );

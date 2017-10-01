@@ -5,9 +5,9 @@
 			"id": 0, 
 			"graphicId": 0, 
 			"starRequired": 0, 
-			"speed": 800, 
-			"rotation": 3000,
-			"damping": 0.8
+			"speed": 40, 
+			"rotation": 2500,
+			"elasticity": 1
 		},
 		{ 
 			"name": "Santa Rock", 
@@ -16,7 +16,7 @@
 			"starRequired": 15, 
 			"speed": 10, 
 			"rotation": 6, 
-			"damping": 0.8
+			"elasticity": 0.8
 		},
 		{ 
 			"name": "Snowy", 
@@ -25,7 +25,7 @@
 			"starRequired": 50, 
 			"speed": 11, 
 			"rotation": 6, 
-			"damping": 0.8, 
+			"elasticity": 0.8, 
 			"carBodyYOffset": -1
 		},
 		{ 
@@ -35,7 +35,7 @@
 			"starRequired": 100, 
 			"speed": 11, 
 			"rotation": 6, 
-			"damping": 0.65 
+			"elasticity": 0.65 
 		},
 		{ 
 			"name": "Turtle", 
@@ -44,7 +44,7 @@
 			"starRequired": 125, 
 			"speed": 12, 
 			"rotation": 7, 
-			"damping": 0.65
+			"elasticity": 0.65
 		},
 		{ 
 			"name": "Candy Car", 
@@ -53,7 +53,7 @@
 			"starRequired": 200, 
 			"speed": 13, 
 			"rotation": 8, 
-			"damping": 0.6
+			"elasticity": 0.6
 		},
 		{ 
 			"name": "Blue Hook", 
@@ -61,7 +61,7 @@
 			"graphicId": 2, 
 			"speed": 11, 
 			"rotation": 7, 
-			"damping": 0.75, 
+			"elasticity": 0.75, 
 			"carBodyYOffset": -2
 		},
 		{ 
@@ -70,7 +70,7 @@
 			"graphicId": 3, 
 			"speed": 11, 
 			"rotation": 7, 
-			"damping": 0.75, 
+			"elasticity": 0.75, 
 			"carBodyYOffset": -1
 		},
 		{ 
@@ -79,7 +79,7 @@
 			"graphicId": 4, 
 			"speed": 12, 
 			"rotation": 7.5, 
-			"damping": 0.65
+			"elasticity": 0.65
 		},
 		{ 
 			"name": "Judge", 
@@ -87,7 +87,7 @@
 			"graphicId": 7, 
 			"speed": 13, 
 			"rotation": 7, 
-			"damping": 0.6
+			"elasticity": 0.6
 		},
 		{ 
 			"name": "Hawk", 
@@ -95,7 +95,7 @@
 			"graphicId": 9, 
 			"speed": 14, 
 			"rotation": 8, 
-			"damping": 0.5
+			"elasticity": 0.5
 		},
 		{ 
 			"name": "Dawn", 
@@ -103,7 +103,7 @@
 			"graphicId": 10, 
 			"speed": 11, 
 			"rotation": 7, 
-			"damping": 0.75, 
+			"elasticity": 0.75, 
 			"carBodyYOffset": -2,
 			"unlockInformation": "Complete Sharp Mountain Tasks"
 		},
@@ -113,7 +113,7 @@
 			"graphicId": 11, 
 			"speed": 12, 
 			"rotation": 7.5, 
-			"damping": 0.65, 
+			"elasticity": 0.65, 
 			"carBodyXOffset": -2,
 			"carBodyYOffset": -4,
 			"unlockInformation": "Complete Ice World Tasks"
@@ -124,7 +124,7 @@
 			"graphicId": 12, 
 			"speed": 13, 
 			"rotation": 7, 
-			"damping": 0.6, 
+			"elasticity": 0.6, 
 			"carBodyXOffset": -2,
 			"carBodyYOffset": -4,
 			"carBodyGraphicXOffset": -2.5,
@@ -136,7 +136,7 @@
 			"graphicId": 14, 
 			"speed": 14, 
 			"rotation": 7.5, 
-			"damping": 0.6, 
+			"elasticity": 0.6, 
 			"unlockInformation": "Complete Candy Land Tasks"
 		}
 	]
