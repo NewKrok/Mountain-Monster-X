@@ -75,7 +75,6 @@ class MenuState extends FlxState
 		#end
 
 		stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
-		FlxG.switchState( new GameState( 0, 0 ) );
 	}
 	
 	function loadAssets():Void

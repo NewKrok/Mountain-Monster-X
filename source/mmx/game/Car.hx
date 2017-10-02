@@ -137,6 +137,8 @@ class Car extends FlxSpriteGroup
 		
 		hitArea = new Body();
 		hitArea.shapes.add( new Polygon( Polygon.box( bodyWidth * .7, hitAreaHeight ) ) );
+		hitArea.setShapeMaterials( material );
+		hitArea.setShapeFilters( filter );
 		hitArea.space = space;
 		hitArea.mass = 1;
 		

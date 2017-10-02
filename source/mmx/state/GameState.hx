@@ -5,6 +5,7 @@ import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.addons.nape.FlxNapeSpace;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
@@ -115,6 +116,7 @@ class GameState extends FlxState
 	var canControll:Bool;
 	var isGameStarted:Bool;
 	var isGamePaused:Bool;
+	var isPhysicsEnabled:Bool;
 
 	public function new( worldId:UInt, levelId:UInt ):Void
 	{
@@ -328,7 +330,9 @@ class GameState extends FlxState
 		gameStartTime = Date.now().getTime();
 
 		resumeRequest();
-		//FlxNapeSpace.isPaused = false;
+		
+		isPhysicsEnabled = true;
+		
 		update( 0 );
 	}
 
@@ -354,7 +358,7 @@ class GameState extends FlxState
 	function resume():Void
 	{
 		isGamePaused = false;
-		//FlxNapeSpace.isPaused = false;
+		isPhysicsEnabled = true;
 		
 		totalPausedTime += Date.now().getTime() - pauseStartTime;
 	}
@@ -362,7 +366,7 @@ class GameState extends FlxState
 	function pause():Void
 	{
 		isGamePaused = true;
-		//FlxNapeSpace.isPaused = true;
+		isPhysicsEnabled = false;
 		
 		gameGui.pause();
 		pauseStartTime = Date.now().getTime();
@@ -388,7 +392,10 @@ class GameState extends FlxState
 	{
 		space = new Space( new Vec2( 0, CPhysicsValue.GRAVITY ) );
 		
-		//FlxNapeSpace.createWalls( 0, -500, levelData.cameraBounds.width, levelData.cameraBounds.height );
+		var walls:Body = new Body( BodyType.STATIC );
+		walls.shapes.add( new Polygon( Polygon.rect( 0, 0, 1, levelData.cameraBounds.height ) ) );
+		walls.shapes.add( new Polygon( Polygon.rect( levelData.cameraBounds.width, 0, 1, levelData.cameraBounds.height ) ) );
+		walls.space = space;
 	}
 
 	function createGroundGraphics():Void
@@ -615,15 +622,19 @@ class GameState extends FlxState
 	{
 		super.update( elapsed );
 		
+		if ( isPhysicsEnabled )
+		{
+			space.step( CPhysicsValue.STEP );
+		}
+		
 		if ( isGamePaused )
 		{
 			return;
 		}
 		
-		space.step( CPhysicsValue.STEP );
-		
 		up = FlxG.keys.anyPressed( [UP, W] );
 		down = FlxG.keys.anyPressed( [DOWN, S] );
+		right = FlxG.keys.anyPressed( [RIGHT, D] );
 		right = FlxG.keys.anyPressed( [RIGHT, D] );
 		left = FlxG.keys.anyPressed( [LEFT, A] );
 		
