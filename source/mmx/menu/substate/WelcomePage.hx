@@ -18,18 +18,21 @@ class WelcomePage extends FlxSubState
 	var facebookButton:HPPButton;
 	var settingsButton:HPPButton;
 	var gitHubButton:HPPButton;
+	var newsButton:HPPButton;
 	
 	var logo:FlxSprite;
 	
 	var openSettings:HPPButton->Void;
 	var openWorldSelector:HPPButton->Void;
+	var openNews:HPPButton->Void;
 	
-	function new( openSettings:HPPButton->Void, openWorldSelector:HPPButton->Void ):Void
+	function new( openSettings:HPPButton->Void, openNews:HPPButton->Void, openWorldSelector:HPPButton->Void ):Void
 	{
 		super();
 		
 		this.openSettings = openSettings;
 		this.openWorldSelector = openWorldSelector;
+		this.openNews = openNews;
 	}
 
 	override public function create():Void
@@ -76,6 +79,12 @@ class WelcomePage extends FlxSubState
 		settingsButton.x = FlxG.stage.stageWidth - facebookButton.width - 20;
 		settingsButton.y = FlxG.stage.stageHeight - facebookButton.height - 20;
 		add( settingsButton );
+		
+		newsButton = new HPPButton( "", openNews, "info_button" );
+		newsButton.overScale = .98;
+		newsButton.x = 20;
+		newsButton.y = FlxG.stage.stageHeight - facebookButton.height - 20;
+		add( newsButton );
 	}
 	
 	function goToHome( target:HPPButton ):Void

@@ -8,12 +8,16 @@ import openfl.display.Sprite;
 
 class Main extends Sprite
 {
+	public static var fps:FPS;
+	
 	public function new()
 	{
 		super();
 		
 		addChild( new FlxGame( 0, 0, MenuState ) );
-		addChild( new FPS( stage.stageWidth - 75, 30, 0xffffff ) );
+		
+		addChild( fps = new FPS() );
+		fps.visible = false;
 		
 		FlxG.mouse.unload();
 		FlxG.mouse.useSystemCursor = true;

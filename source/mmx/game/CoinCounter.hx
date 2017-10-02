@@ -28,7 +28,7 @@ class CoinCounter extends FlxSpriteGroup
 
 		add( background = HPPAssetManager.getSprite( "gui_coin_back" ) );
 
-		text = new FlxText( 0, 0, cast width + 45, "0", 33 );
+		text = new FlxText( 40, 0, cast width - 40, "0", 33 );
 		text.autoSize = false;
 		text.color = FlxColor.YELLOW;
 		text.alignment = "center";

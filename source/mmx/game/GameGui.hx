@@ -3,6 +3,7 @@ package mmx.game;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 import hpp.flixel.ui.HPPButton;
+import mmx.common.GameConfig;
 import mmx.game.TimeCounter;
 
 /**
@@ -14,6 +15,7 @@ class GameGui extends FlxSpriteGroup
 	var coinCounter:CoinCounter;
 	var timeCounter:TimeCounter;
 	var startCounter:StartCounter;
+	var fpsCounter:FPSCounter;
 	
 	var pauseButton:HPPButton;
 	
@@ -28,6 +30,13 @@ class GameGui extends FlxSpriteGroup
 		add( timeCounter = new TimeCounter() );
 		timeCounter.x = FlxG.width / 2 - timeCounter.width / 2;
 		timeCounter.y = 10;
+		
+		if ( GameConfig.SHOW_FPS )
+		{
+			add( fpsCounter = new FPSCounter() );
+			fpsCounter.x = FlxG.width - fpsCounter.width - 10;
+			fpsCounter.y = FlxG.height - fpsCounter.height - 10;
+		}
 		
 		add( startCounter = new StartCounter( resumeGameCallBack ) );
 		
