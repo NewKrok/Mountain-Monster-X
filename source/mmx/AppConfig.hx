@@ -6,5 +6,6 @@ package mmx;
  */
 class AppConfig 
 {
-	public inline static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
+	public static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
+	public static var SHOW_FPS:Bool = false;
 }

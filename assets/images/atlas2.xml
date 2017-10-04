@@ -15,4 +15,6 @@
 	<SubTexture name="candy_ball_c" x="2" y="1841" width="30" height="30" pivotX="0" pivotY="0"/>
 	<SubTexture name="info_button" x="2" y="1875" width="114" height="132" pivotX="0" pivotY="0"/>
 	<SubTexture name="gui_fps_back" x="120" y="1875" width="135" height="60" pivotX="0" pivotY="0"/>
+	<SubTexture name="checkbox_on" x="120" y="1940" width="160" height="76" pivotX="0" pivotY="0"/>
+	<SubTexture name="checkbox_off" x="290" y="1940" width="160" height="76" pivotX="0" pivotY="0"/>
 </TextureAtlas>

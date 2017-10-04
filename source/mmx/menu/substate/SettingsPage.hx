@@ -2,10 +2,15 @@ package mmx.menu.substate;
 
 import flixel.FlxG;
 import flixel.FlxSubState;
-import flixel.addons.ui.FlxUIButton;
+import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
+import hpp.flixel.ui.HPPHUIBox;
+import hpp.flixel.ui.HPPToggleButton;
 import hpp.flixel.ui.HPPVUIBox;
-import mmx.common.GameConfig;
+import mmx.AppConfig;
+import mmx.assets.Fonts;
 import mmx.common.view.LongBackButton;
 
 /**
@@ -16,7 +21,12 @@ class SettingsPage extends FlxSubState
 {
 	var openWelcomePage:HPPButton->Void;
 	
-	var showFPSCheckbox:FlxUIButton;
+	var showFPSCheckbox:HPPToggleButton;
+	var fpsText:FlxText;
+	
+	var alphaAnimationCheckBox:HPPToggleButton;
+	var alphaAnimationsText:FlxText;
+	
 	var backButton:HPPButton;
 	
 	function new( openWelcomePage:HPPButton->Void ):Void
@@ -35,23 +45,95 @@ class SettingsPage extends FlxSubState
 
 	function build():Void
 	{
-		var container:HPPVUIBox = new HPPVUIBox( 20 );
+		var container:HPPVUIBox = new HPPVUIBox( 20, HPPVUIBoxAlign.LEFT );
+		container.scrollFactor.set();
 		
-		showFPSCheckbox = new FlxUIButton( 0, 0, "SHOW FPS", setFPS );
-		showFPSCheckbox.toggled = GameConfig.SHOW_FPS;
-		container.add( showFPSCheckbox );
+		var developerInfoText = new FlxText();
+		developerInfoText.color = FlxColor.YELLOW;
+		developerInfoText.alignment = "center";
+		developerInfoText.size = 25;
+		developerInfoText.font = Fonts.AACHEN_LIGHT;
+		developerInfoText.borderStyle = FlxTextBorderStyle.SHADOW;
+		developerInfoText.fieldWidth = 800;
+		developerInfoText.text = "Mountain Monster game created by Krisztian Somoracz (NewKrok)";
+		container.add( developerInfoText );
+		
+		container.add( createFpsSetting() );
+		container.add( createAlphaAnimationSetting() );
 		
 		container.x = FlxG.width / 2 - container.width / 2;
 		container.y = 40;
+		developerInfoText.fieldWidth = container.width;
+		add( container );
 		
 		add( backButton = new LongBackButton( openWelcomePage ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}
 	
-	function setFPS():Void
+	function setFPS( target:HPPToggleButton ):Void
 	{
-		showFPSCheckbox.toggled = !showFPSCheckbox.toggled;
-		GameConfig.SHOW_FPS = showFPSCheckbox.toggled;
+		updateFpsText();
+		
+		AppConfig.SHOW_FPS = showFPSCheckbox.isSelected;
+	}
+	
+	function updateFpsText():Void
+	{
+		fpsText.text = "Show FPS during the game (" + ( showFPSCheckbox.isSelected ? "TURNED ON" : "TURNED OFF" ) + ")";
+	}
+	
+	function createFpsSetting():FlxSpriteGroup 
+	{
+		var settingContainer:HPPHUIBox = new HPPHUIBox( 20 );
+		
+		showFPSCheckbox = new HPPToggleButton( "", "", setFPS, "checkbox_off", "checkbox_on" );
+		showFPSCheckbox.isSelected = AppConfig.SHOW_FPS;
+		settingContainer.add( showFPSCheckbox );
+		
+		fpsText = new FlxText();
+		fpsText.color = FlxColor.WHITE;
+		fpsText.alignment = "left";
+		fpsText.size = 35;
+		fpsText.font = Fonts.AACHEN_LIGHT;
+		fpsText.borderStyle = FlxTextBorderStyle.SHADOW;
+		fpsText.fieldWidth = 650;
+		updateFpsText();
+		settingContainer.add( fpsText );
+		
+		return cast settingContainer;
+	}
+	
+	function createAlphaAnimationSetting():FlxSpriteGroup 
+	{
+		var settingContainer:HPPHUIBox = new HPPHUIBox( 20 );
+		
+		alphaAnimationCheckBox = new HPPToggleButton( "", "", setAlphaAnimation, "checkbox_off", "checkbox_on" );
+		alphaAnimationCheckBox.isSelected = AppConfig.IS_ALPHA_ANIMATION_ENABLED;
+		settingContainer.add( alphaAnimationCheckBox );
+		
+		alphaAnimationsText = new FlxText();
+		alphaAnimationsText.color = FlxColor.WHITE;
+		alphaAnimationsText.alignment = "left";
+		alphaAnimationsText.size = 35;
+		alphaAnimationsText.font = Fonts.AACHEN_LIGHT;
+		alphaAnimationsText.borderStyle = FlxTextBorderStyle.SHADOW;
+		alphaAnimationsText.fieldWidth = 650;
+		updateAlphaAnimationText();
+		settingContainer.add( alphaAnimationsText );
+		
+		return cast settingContainer;
+	}
+	
+	function setAlphaAnimation( target:HPPToggleButton ):Void
+	{
+		updateAlphaAnimationText();
+		
+		AppConfig.IS_ALPHA_ANIMATION_ENABLED = alphaAnimationCheckBox.isSelected;
+	}
+	
+	function updateAlphaAnimationText():Void
+	{
+		alphaAnimationsText.text = "Enable alpha animations - Not recommended in mobile or with slow PC (" + ( alphaAnimationCheckBox.isSelected ? "TURNED ON" : "TURNED OFF" ) + ")";
 	}
 }

@@ -3,7 +3,7 @@ package mmx.game;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 import hpp.flixel.ui.HPPButton;
-import mmx.common.GameConfig;
+import mmx.AppConfig;
 import mmx.game.TimeCounter;
 
 /**
@@ -31,7 +31,7 @@ class GameGui extends FlxSpriteGroup
 		timeCounter.x = FlxG.width / 2 - timeCounter.width / 2;
 		timeCounter.y = 10;
 		
-		if ( GameConfig.SHOW_FPS )
+		if ( AppConfig.SHOW_FPS )
 		{
 			add( fpsCounter = new FPSCounter() );
 			fpsCounter.x = FlxG.width - fpsCounter.width - 10;
