@@ -34,7 +34,7 @@ class LevelSelectorPage extends FlxSpriteGroup
 		}
 		
 		grid.x = FlxG.stage.stageWidth / 2 - grid.width / 2;
-		grid.y = FlxG.stage.stageHeight / 2 - grid.height / 2 - 40;
+		grid.y = FlxG.stage.stageHeight / 2 - grid.height / 2 - 70;
 		
 		add( grid );
 	}

@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.flixel.util.HPPTimeUtil;
+import hpp.util.HPPTimeUtil;
 import mmx.assets.Fonts;
 
 /**

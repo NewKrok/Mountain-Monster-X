@@ -8,6 +8,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
+import hpp.flixel.ui.HPPPager;
 import hpp.flixel.ui.HPPTouchScrollContainer;
 import hpp.flixel.ui.HPPUIGrid;
 import mmx.common.view.LongBackButton;
@@ -28,10 +29,7 @@ class LevelSelector extends FlxSubState
 	var backButton:HPPButton;
 
 	var onBackRequest:HPPButton->Void;
-	var levelButtons:Array<LevelButton>;
-	var pages:Array<HPPUIGrid>;
-	var pagerStart:FlxSprite;
-	var pagerEnd:FlxSprite;
+	var pager:HPPPager;
 
 	function new( onBackRequest:HPPButton->Void ):Void
 	{
@@ -46,6 +44,7 @@ class LevelSelector extends FlxSubState
 
 		createLevelButtons();
 		createControlButtons();
+		createPager();
 	}
 	
 	function createLevelButtons() 
@@ -68,5 +67,12 @@ class LevelSelector extends FlxSubState
 		controlButtonContainer.add( backButton = new LongBackButton( onBackRequest ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
+	}
+	
+	function createPager():Void 
+	{
+		add( pager = new HPPPager( levelButtonsContainer, "pager_page", "pager_selected", 10 ) );
+		pager.x = FlxG.width / 2 - pager.width / 2;
+		pager.y = backButton.y - 40;
 	}
 }

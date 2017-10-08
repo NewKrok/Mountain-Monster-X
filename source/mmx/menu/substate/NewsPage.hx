@@ -41,7 +41,6 @@ class NewsPage extends FlxSubState
 		
 		container.add( createTitle() );
 		container.add( createEntry( "- 0.1 -", "This is the First version with version number. The game currently is under development." ) );
-		container.add( createEntry( "- 0.0 -", "This is the First version with version number. The game currently is under development." ) );
 		
 		container.x = FlxG.width / 2 - container.width / 2;
 		container.y = 40;

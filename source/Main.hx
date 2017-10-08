@@ -1,7 +1,7 @@
 package;
 
 import flixel.FlxG;
-import flixel.FlxGame;
+import hpp.flixel.system.HPPFlxMain;
 import mmx.state.MenuState;
 import openfl.display.FPS;
 import openfl.display.Sprite;
@@ -14,7 +14,7 @@ class Main extends Sprite
 	{
 		super();
 		
-		addChild( new FlxGame( 0, 0, MenuState ) );
+		addChild( new HPPFlxMain( 0, 0, MenuState ) );
 		
 		addChild( fps = new FPS() );
 		fps.visible = false;
