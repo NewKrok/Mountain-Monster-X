@@ -6,6 +6,7 @@ import mmx.game.constant.CPhysicsValue;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
 import nape.phys.Body;
+import nape.space.Space;
 
 /**
  * ...
@@ -19,10 +20,13 @@ class AbstractCrate extends FlxSprite
 	
 	var filter:InteractionFilter;
 	var body:Body;
+	var space:Space;
 	
-	public function new( x:Float, y:Float, scale:Float )
+	public function new( space:Space, x:Float, y:Float, scale:Float )
 	{
 		super();
+		
+		this.space = space;
 		
 		baseXPosition = x;
 		baseYPosition = y;

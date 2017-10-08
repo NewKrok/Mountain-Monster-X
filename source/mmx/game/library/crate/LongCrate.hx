@@ -1,6 +1,5 @@
 package mmx.game.library.crate;
 
-import flixel.addons.nape.FlxNapeSpace;
 import hpp.flixel.util.HPPAssetManager;
 import nape.phys.Body;
 import nape.phys.Material;
@@ -21,7 +20,7 @@ class LongCrate extends AbstractCrate
 		body.shapes.add( new Polygon( Polygon.box( WIDTH, HEIGHT ) ) );
 		body.setShapeMaterials( new Material( .5, .5, .5, 2, 0.001 ) );
 		body.setShapeFilters( filter );
-		body.space = FlxNapeSpace.space;
+		body.space = space;
 	}
 
 	override private function createImage():Void

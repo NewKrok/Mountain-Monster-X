@@ -34,7 +34,6 @@
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
-	<haxelib name="flixel-addons" />
 	<haxelib name="nape" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="hpp" src="git://github.com/NewKrok/HPP-Package.git" />

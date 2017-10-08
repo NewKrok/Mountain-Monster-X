@@ -5,7 +5,6 @@ import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.addons.nape.FlxNapeSpace;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
@@ -591,32 +590,32 @@ class GameState extends FlxState
 				switch( libraryElement.className )
 				{
 					case CLibraryElement.CRATE_0:
-						crate = new SmallCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+						crate = new SmallCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
 						libraryElementContainer.add( crate );
 						crates.push( crate );
 
 					case CLibraryElement.CRATE_1:
-						crate = new Crate( libraryElement.x, libraryElement.y, libraryElement.scale );
+						crate = new Crate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
 						libraryElementContainer.add( crate );
 						crates.push( crate );
 
 					case CLibraryElement.CRATE_2:
-						crate = new LongCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+						crate = new LongCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
 						libraryElementContainer.add( crate );
 						crates.push( crate );
 
 					case CLibraryElement.CRATE_3:
-						crate = new SmallLongCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+						crate = new SmallLongCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
 						libraryElementContainer.add( crate );
 						crates.push( crate );
 
 					case CLibraryElement.CRATE_4:
-						crate = new RampCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+						crate = new RampCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
 						libraryElementContainer.add( crate );
 						crates.push( crate );
 
 					case CLibraryElement.CRATE_5:
-						crate = new SmallRampCrate( libraryElement.x, libraryElement.y, libraryElement.scale );
+						crate = new SmallRampCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
 						libraryElementContainer.add( crate );
 						crates.push( crate );
 				}
