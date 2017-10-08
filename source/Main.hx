@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import hpp.flixel.system.HPPFlxMain;
 import mmx.state.MenuState;
+import mmx.util.SavedDataUtil;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 
@@ -13,6 +14,8 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+		
+		SavedDataUtil.load( "MountainMonsterSavedData" );
 		
 		addChild( new HPPFlxMain( 0, 0, MenuState ) );
 		

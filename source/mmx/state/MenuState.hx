@@ -1,14 +1,11 @@
 package mmx.state;
 
-import flixel.FlxG;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
-import flixel.ui.FlxButton;
 import hpp.flixel.ui.HPPButton;
-import hpp.flixel.ui.HPPTouchScrollContainer;
 import hpp.flixel.util.HPPAssetManager;
 import js.Browser;
 import mmx.game.Background;

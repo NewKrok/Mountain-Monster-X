@@ -36,6 +36,7 @@ import mmx.game.substate.PausePanel;
 import mmx.game.terrain.BrushTerrain;
 import mmx.state.MenuState.MenuSubStateType;
 import mmx.util.LevelUtil;
+import mmx.util.SavedDataUtil;
 import nape.constraint.PivotJoint;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
@@ -122,6 +123,11 @@ class GameState extends FlxState
 	{
 		this.worldId = worldId;
 		this.levelId = levelId;
+		
+		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
+		SavedDataUtil.resetLastPlayedInfo();
+		levelInfo.isLastPlayed = true;
+		SavedDataUtil.save();
 		
 		super();
 	}
@@ -763,8 +769,58 @@ class GameState extends FlxState
 	{
 		if ( !isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x )
 		{
-			restartRutin();
+			var score:UInt = calculateScore();
+			var starCount:UInt = coinsToStarCount(score);
+			var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
+			levelInfo.time = gameTime < levelInfo.time ? gameTime : levelInfo.time;
+			levelInfo.score = score > levelInfo.score ? score : levelInfo.score;
+			levelInfo.isCompleted = true;
+			levelInfo.starCount = starCount > levelInfo.starCount ? starCount : levelInfo.starCount;
+			
+			if (levelId < 23)
+			{
+				levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
+				levelInfo.isEnabled = true;
+			}
+			if (levelId == 23)
+			{
+				levelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
+				levelInfo.isEnabled = true;
+			}
+			
+			SavedDataUtil.save();
+			
+			exitRequest();
 		}
+	}
+	
+	function calculateScore():UInt
+	{
+		var result = 0;
+		
+		result = Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - gameTime / 10);
+		result += collectedCoin * AppConfig.COIN_SCORE_MULTIPLIER;
+		
+		return result;
+	}
+	
+	public function coinsToStarCount(value:UInt):UInt
+	{
+		var starCount:UInt = 0;
+
+		for( i in 0...levelData.starValues.length)
+		{
+			if(value >= levelData.starValues[i])
+			{
+				starCount = i + 1;
+			}
+			else
+			{
+				return starCount;
+			}
+		}
+
+		return starCount;
 	}
 
 	function restartRutin():Void

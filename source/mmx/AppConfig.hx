@@ -6,6 +6,12 @@ package mmx;
  */
 class AppConfig 
 {
+	public static inline var GAME_NAME:String = "MountainMonster";
+	public static inline var GAME_VERSION:String = "0.1";
+	
+	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 12000;
+	public static inline var COIN_SCORE_MULTIPLIER:Int = 50;
+	
 	public static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
 	public static var SHOW_FPS:Bool = false;
 }

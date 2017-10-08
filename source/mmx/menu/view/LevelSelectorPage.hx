@@ -6,6 +6,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPUIGrid;
+import mmx.util.SavedDataUtil;
 
 /**
  * ...
@@ -30,7 +31,7 @@ class LevelSelectorPage extends FlxSpriteGroup
 		
 		for( i in startIndex...endIndex )
 		{
-			grid.add( new LevelButton( worldId, i ) );
+			grid.add( new LevelButton( worldId, i, SavedDataUtil.getLevelInfo(worldId, i) ) );
 		}
 		
 		grid.x = FlxG.stage.stageWidth / 2 - grid.width / 2;
