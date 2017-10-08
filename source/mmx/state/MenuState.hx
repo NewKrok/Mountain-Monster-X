@@ -12,6 +12,7 @@ import hpp.flixel.ui.HPPTouchScrollContainer;
 import hpp.flixel.util.HPPAssetManager;
 import js.Browser;
 import mmx.game.Background;
+import mmx.menu.substate.AboutUsPage;
 import mmx.menu.substate.LevelSelector;
 import mmx.menu.substate.NewsPage;
 import mmx.menu.substate.SettingsPage;
@@ -35,6 +36,7 @@ class MenuState extends FlxState
 	
 	var welcomePage:WelcomePage;
 	var settingsPage:SettingsPage;
+	var aboutUsPage:AboutUsPage;
 	var newsPage:NewsPage;
 	var worldSelector:WorldSelector;
 	var levelSelector:LevelSelector;
@@ -71,6 +73,9 @@ class MenuState extends FlxState
 			case MenuSubStateType.SETTINGS_PAGE:
 				openSettingsPage();
 				
+			case MenuSubStateType.ABOUT_US_PAGE:
+				openAboutUsPage();
+				
 			case MenuSubStateType.NEWS_PAGE:
 				openNewsPage();
 		}
@@ -98,8 +103,9 @@ class MenuState extends FlxState
 		add( background = new Background( 0 ) );
 		
 		destroySubStates = false;
-		welcomePage = new WelcomePage( openSettingsPage, openNewsPage, openWorldSelector );
+		welcomePage = new WelcomePage( openSettingsPage, openAboutUsPage, openNewsPage, openWorldSelector );
 		settingsPage = new SettingsPage( openWelcomePage );
+		aboutUsPage = new AboutUsPage( openWelcomePage );
 		newsPage = new NewsPage( openWelcomePage );
 		worldSelector = new WorldSelector( openWelcomePage, openLevelSelector );
 
@@ -114,6 +120,11 @@ class MenuState extends FlxState
 	function openSettingsPage( target:HPPButton = null ):Void
 	{
 		openSubState( settingsPage );
+	}
+	
+	function openAboutUsPage( target:HPPButton = null ):Void
+	{
+		openSubState( aboutUsPage );
 	}
 	
 	function openNewsPage( target:HPPButton = null ):Void
@@ -221,6 +232,7 @@ abstract MenuSubStateType( String ) {
   var WORLD_SELECTOR = "world selector";
   var LEVEL_SELECTOR = "level selector";
   var SETTINGS_PAGE = "settings page";
+  var ABOUT_US_PAGE = "about us page";
   var NEWS_PAGE = "news page";
 }
 

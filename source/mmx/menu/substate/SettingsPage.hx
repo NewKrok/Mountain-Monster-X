@@ -1,6 +1,7 @@
 package mmx.menu.substate;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
@@ -45,25 +46,19 @@ class SettingsPage extends FlxSubState
 
 	function build():Void
 	{
+		var baseBack:FlxSprite = new FlxSprite();
+		baseBack.makeGraphic( FlxG.width, FlxG.height, 0xAA000000 );
+		baseBack.scrollFactor.set();
+		add( baseBack );
+		
 		var container:HPPVUIBox = new HPPVUIBox( 20, HPPVUIBoxAlign.LEFT );
 		container.scrollFactor.set();
-		
-		var developerInfoText = new FlxText();
-		developerInfoText.color = FlxColor.YELLOW;
-		developerInfoText.alignment = "center";
-		developerInfoText.size = 25;
-		developerInfoText.font = Fonts.AACHEN_LIGHT;
-		developerInfoText.borderStyle = FlxTextBorderStyle.SHADOW;
-		developerInfoText.fieldWidth = 800;
-		developerInfoText.text = "Mountain Monster game created by Krisztian Somoracz (NewKrok)";
-		container.add( developerInfoText );
 		
 		container.add( createFpsSetting() );
 		container.add( createAlphaAnimationSetting() );
 		
 		container.x = FlxG.width / 2 - container.width / 2;
 		container.y = 40;
-		developerInfoText.fieldWidth = container.width;
 		add( container );
 		
 		add( backButton = new LongBackButton( openWelcomePage ) );

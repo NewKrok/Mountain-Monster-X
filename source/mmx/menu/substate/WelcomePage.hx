@@ -17,6 +17,7 @@ class WelcomePage extends FlxSubState
 	var homeButton:HPPButton;
 	var facebookButton:HPPButton;
 	var settingsButton:HPPButton;
+	var aboutUsButton:HPPButton;
 	var gitHubButton:HPPButton;
 	var newsButton:HPPButton;
 	
@@ -25,11 +26,13 @@ class WelcomePage extends FlxSubState
 	var openSettings:HPPButton->Void;
 	var openWorldSelector:HPPButton->Void;
 	var openNews:HPPButton->Void;
+	var openAboutUs:HPPButton->Void;
 	
-	function new( openSettings:HPPButton->Void, openNews:HPPButton->Void, openWorldSelector:HPPButton->Void ):Void
+	function new( openSettings:HPPButton->Void, openAboutUs:HPPButton->Void, openNews:HPPButton->Void, openWorldSelector:HPPButton->Void ):Void
 	{
 		super();
 		
+		this.openAboutUs = openAboutUs;
 		this.openSettings = openSettings;
 		this.openWorldSelector = openWorldSelector;
 		this.openNews = openNews;
@@ -79,6 +82,12 @@ class WelcomePage extends FlxSubState
 		settingsButton.x = FlxG.stage.stageWidth - facebookButton.width - 20;
 		settingsButton.y = FlxG.stage.stageHeight - facebookButton.height - 20;
 		add( settingsButton );
+		
+		aboutUsButton = new HPPButton( "", openAboutUs, "about_us_button" );
+		aboutUsButton.overScale = .98;
+		aboutUsButton.x = settingsButton.x - aboutUsButton.width - 20;
+		aboutUsButton.y = settingsButton.y;
+		add( aboutUsButton );
 		
 		newsButton = new HPPButton( "", openNews, "info_button" );
 		newsButton.overScale = .98;

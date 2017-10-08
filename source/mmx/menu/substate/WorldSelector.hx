@@ -49,7 +49,7 @@ class WorldSelector extends FlxSubState
 		levelPackButtonContainer.scrollFactor.set();
 		
 		levelPackButtonContainer.add( levelPackButton0 = new HPPButton( "", loadWorld0, "level_pack_0" ) );
-		//levelPackButton0.overScale = .98;
+		levelPackButton0.overScale = .98;
 		
 		levelPackButtonContainer.add( levelPackButton1 = new HPPButton( "", loadWorld1, "level_pack_coming_soon"/*"level_pack_1"*/ ) );
 		//levelPackButton1.overScale = .98;
@@ -58,6 +58,7 @@ class WorldSelector extends FlxSubState
 		//levelPackButton2.overScale = .98;
 		
 		levelPackButtonContainer.add( levelPackButton3 = new HPPButton( "", loadWorld3, "level_pack_coming_soon" ) );
+		//levelPackButton3.overScale = .98;
 		
 		levelPackButtonContainer.x = FlxG.width / 2 - levelPackButtonContainer.width / 2;
 		levelPackButtonContainer.y = FlxG.height / 2 - levelPackButtonContainer.height / 2 - 50;

@@ -1,11 +1,13 @@
 package mmx.menu.substate;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
+import hpp.flixel.ui.HPPTouchScrollContainer;
 import hpp.flixel.ui.HPPVUIBox;
 import mmx.assets.Fonts;
 import mmx.common.view.LongBackButton;
@@ -20,7 +22,7 @@ class NewsPage extends FlxSubState
 	
 	var backButton:HPPButton;
 	
-	function new( openWelcomePage:HPPButton->Void ):Void
+	function new(openWelcomePage:HPPButton->Void):Void
 	{
 		super();
 		
@@ -36,11 +38,25 @@ class NewsPage extends FlxSubState
 
 	function build():Void
 	{
-		var container:HPPVUIBox = new HPPVUIBox( 20 );
+		var baseBack:FlxSprite = new FlxSprite();
+		baseBack.makeGraphic(FlxG.width, FlxG.height, 0xAA000000);
+		baseBack.scrollFactor.set();
+		add(baseBack);
+		
+		var container:HPPVUIBox = new HPPVUIBox(20);
 		container.scrollFactor.set();
 		
 		container.add( createTitle() );
-		container.add( createEntry( "- 0.1 -", "This is the First version with version number. The game currently is under development." ) );
+		
+		// TODO later add the entries to the scroll container
+		/*var scrollContainerConfig:HPPTouchScrollContainerConfig = new HPPTouchScrollContainerConfig();
+		scrollContainerConfig.snapToPages = false;
+		scrollContainerConfig.direction = HPPScrollDirection.VERTICAL;
+		var scrollContainer:HPPTouchScrollContainer = new HPPTouchScrollContainer(FlxG.width, 400, scrollContainerConfig);*/
+		
+		container.add(createEntry("- 0.1 -", "This is the First version with version number. The game currently is under development."));
+		
+		//container.add(scrollContainer);
 		
 		container.x = FlxG.width / 2 - container.width / 2;
 		container.y = 40;
@@ -55,20 +71,20 @@ class NewsPage extends FlxSubState
 	{
 		var text = new FlxText();
 		
-		text.color = FlxColor.GREEN;
+		text.color = FlxColor.CYAN;
 		text.alignment = "center";
 		text.size = 40;
 		text.font = Fonts.AACHEN_LIGHT;
-		text.borderStyle = FlxTextBorderStyle.OUTLINE;
+		text.borderStyle = FlxTextBorderStyle.SHADOW;
 		text.fieldWidth = 800;
 		text.text = "LATEST NEWS";
 		
 		return text;
 	}
 	
-	function createEntry( version:String, description:String ):FlxSpriteGroup
+	function createEntry(version:String, description:String):FlxSpriteGroup
 	{
-		var entryContainer:HPPVUIBox = new HPPVUIBox( 5 );
+		var entryContainer:HPPVUIBox = new HPPVUIBox(5);
 		
 		var versionText = new FlxText();
 		versionText.color = FlxColor.WHITE;
@@ -77,15 +93,15 @@ class NewsPage extends FlxSubState
 		versionText.font = Fonts.AACHEN_LIGHT;
 		versionText.borderStyle = FlxTextBorderStyle.OUTLINE;
 		versionText.text = version;
-		entryContainer.add( versionText );
+		entryContainer.add(versionText);
 		
 		var descText = new FlxText();
-		descText.color = FlxColor.BLACK;
+		descText.color = FlxColor.WHITE;
 		descText.alignment = "center";
 		descText.size = 25;
 		descText.font = Fonts.AACHEN_LIGHT;
 		descText.text = description;
-		entryContainer.add( descText );
+		entryContainer.add(descText);
 		
 		return entryContainer;
 	}

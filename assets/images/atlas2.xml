@@ -17,4 +17,9 @@
 	<SubTexture name="gui_fps_back" x="120" y="1875" width="135" height="60" pivotX="0" pivotY="0"/>
 	<SubTexture name="checkbox_on" x="120" y="1940" width="160" height="76" pivotX="0" pivotY="0"/>
 	<SubTexture name="checkbox_off" x="290" y="1940" width="160" height="76" pivotX="0" pivotY="0"/>
+	<SubTexture name="haxe_flixel_logo" x="465" y="1880" width="84" height="84" pivotX="0" pivotY="0"/>
+	<SubTexture name="haxe_logo" x="559" y="1880" width="84" height="84" pivotX="0" pivotY="0"/>
+	<SubTexture name="nape_logo" x="653" y="1880" width="84" height="109" pivotX="0" pivotY="0"/>
+	<SubTexture name="haxe_plus_plus_logo" x="747" y="1880" width="124" height="64" pivotX="0" pivotY="0"/>
+	<SubTexture name="about_us_button" x="885" y="1875" width="114" height="132" pivotX="0" pivotY="0"/>
 </TextureAtlas>
