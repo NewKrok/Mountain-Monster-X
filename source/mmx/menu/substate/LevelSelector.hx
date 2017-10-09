@@ -11,7 +11,7 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPPager;
 import hpp.flixel.ui.HPPTouchScrollContainer;
 import hpp.flixel.ui.HPPUIGrid;
-import mmx.common.view.LongBackButton;
+import mmx.common.view.LongButton;
 import mmx.menu.view.LevelButton;
 import mmx.menu.view.LevelSelectorPage;
 
@@ -64,7 +64,7 @@ class LevelSelector extends FlxSubState
 		add( controlButtonContainer = new FlxSpriteGroup() );
 		controlButtonContainer.scrollFactor.set();
 
-		controlButtonContainer.add( backButton = new LongBackButton( onBackRequest ) );
+		controlButtonContainer.add( backButton = new LongButton( "BACK", onBackRequest ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}

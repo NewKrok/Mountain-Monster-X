@@ -9,7 +9,6 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
-import haxe.Json;
 import hpp.flixel.HPPCamera;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
@@ -32,6 +31,7 @@ import mmx.game.library.crate.SmallLongCrate;
 import mmx.game.library.crate.SmallRampCrate;
 import mmx.game.snow.Snow;
 import mmx.game.substate.PausePanel;
+import mmx.game.substate.StartLevelPanel;
 import mmx.game.terrain.BrushTerrain;
 import mmx.state.MenuState.MenuSubStateType;
 import mmx.util.LevelUtil;
@@ -52,6 +52,7 @@ class GameState extends FlxState
 
 	var space:Space;
 	
+	var startLevelPanel:StartLevelPanel;
 	var pausePanel:PausePanel;
 	var gameGui:GameGui;
 	var background:Background;
@@ -213,6 +214,7 @@ class GameState extends FlxState
 		destroySubStates = false;
 		
 		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
+		startLevelPanel = new StartLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 		
 		lastCameraStepOffset = new FlxPoint();
 
@@ -318,6 +320,9 @@ class GameState extends FlxState
 		this._gameGui.enable();*/
 
 		start();
+		
+		openSubState( startLevelPanel );
+		pause();
 	}
 	
 	function resetCrates():Void
@@ -771,7 +776,8 @@ class GameState extends FlxState
 			var score:UInt = calculateScore();
 			var starCount:UInt = coinsToStarCount(score);
 			var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
-			levelInfo.time = gameTime < levelInfo.time ? gameTime : levelInfo.time;
+			levelInfo.time = ( gameTime < levelInfo.time || levelInfo.time == 0 ) ? gameTime : levelInfo.time;
+			
 			levelInfo.score = score > levelInfo.score ? score : levelInfo.score;
 			levelInfo.isCompleted = true;
 			levelInfo.starCount = starCount > levelInfo.starCount ? starCount : levelInfo.starCount;
@@ -827,14 +833,24 @@ class GameState extends FlxState
 		reset();
 	}
 	
-	function restartRequest( target:HPPButton = null ):Void
+	function restartRequest(target:HPPButton = null):Void
 	{
 		restartRutin();
 	}
 	
-	function exitRequest( target:HPPButton = null ):Void
+	function exitRequest(target:HPPButton = null):Void
 	{
-		FlxG.switchState( new MenuState( MenuSubStateType.LEVEL_SELECTOR, { worldId: worldId } ) );
+		FlxG.switchState(new MenuState(MenuSubStateType.LEVEL_SELECTOR, {worldId: worldId}));
+	}
+	
+	function nextLevelRequest(target:HPPButton = null):Void
+	{
+		FlxG.switchState( new GameState(worldId, levelId + 1));
+	}
+	
+	function prevLevelRequest(target:HPPButton = null):Void
+	{
+		FlxG.switchState( new GameState(worldId, levelId - 1));
 	}
 	
 	override public function destroy():Void

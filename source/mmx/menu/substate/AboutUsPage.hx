@@ -13,7 +13,7 @@ import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.AppConfig;
 import mmx.assets.Fonts;
-import mmx.common.view.LongBackButton;
+import mmx.common.view.LongButton;
 import openfl.net.URLRequest;
 
 /**
@@ -94,7 +94,7 @@ class AboutUsPage extends FlxSubState
 		developerInfoText.fieldWidth = container.width;
 		add( container );
 		
-		add( backButton = new LongBackButton( openWelcomePage ) );
+		add( backButton = new LongButton( "BACK", openWelcomePage ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}

@@ -12,7 +12,7 @@ import hpp.flixel.ui.HPPToggleButton;
 import hpp.flixel.ui.HPPVUIBox;
 import mmx.AppConfig;
 import mmx.assets.Fonts;
-import mmx.common.view.LongBackButton;
+import mmx.common.view.LongButton;
 
 /**
  * ...
@@ -61,7 +61,7 @@ class SettingsPage extends FlxSubState
 		container.y = 40;
 		add( container );
 		
-		add( backButton = new LongBackButton( openWelcomePage ) );
+		add( backButton = new LongButton( "BACK", openWelcomePage ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}

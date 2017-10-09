@@ -10,17 +10,17 @@ import mmx.assets.Fonts;
  * ...
  * @author Krisztian Somoracz
  */
-class LongBackButton extends HPPButton
+class LongButton extends HPPButton
 {
-	public function new( callBack:HPPButton->Void = null )
+	public function new(title:String = "", callBack:HPPButton->Void = null)
 	{
-		super( "BACK", callBack );
+		super(title, callBack);
 		
 		label.font = Fonts.AACHEN_LIGHT;
 		label.color = FlxColor.WHITE;
 		labelSize = 25;
-		labelOffsets = [ new FlxPoint( 0, -7 ), new FlxPoint( 0, -7 ), new FlxPoint( 0, -7 ) ];
-		loadGraphic( HPPAssetManager.getGraphic( "base_button" ) );
-		overScale = .95;
+		labelOffsets = [new FlxPoint(0, -7), new FlxPoint(0, -7), new FlxPoint(0, -7)];
+		loadGraphic(HPPAssetManager.getGraphic("base_button"));
+		overScale = .98;
 	}
 }

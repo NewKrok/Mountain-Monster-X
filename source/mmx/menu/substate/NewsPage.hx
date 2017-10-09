@@ -10,7 +10,7 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPTouchScrollContainer;
 import hpp.flixel.ui.HPPVUIBox;
 import mmx.assets.Fonts;
-import mmx.common.view.LongBackButton;
+import mmx.common.view.LongButton;
 
 /**
  * ...
@@ -62,7 +62,7 @@ class NewsPage extends FlxSubState
 		container.y = 40;
 		add( container );
 		
-		add( backButton = new LongBackButton( openWelcomePage ) );
+		add( backButton = new LongButton( "BACK", openWelcomePage ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}
