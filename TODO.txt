@@ -1,6 +1,5 @@
 Needed for v1.0
 =================================================
-End level page
 Check world 0 levels
 Mobile controller
 Fix menu background on mobile
@@ -9,7 +8,6 @@ Fix black screen after game start
 Level preloader - maybe it's not needed
 World 0 tutorial
 Switchable control - up/W to accerelate or right/D
-Fix car wheel position after reset
 Fix background position after start game
 Publish to main site
 
@@ -21,6 +19,7 @@ Sound + Music checkbox in menu
 Flip + Air time detection + give bonus + show info
 Set all car properties
 Advertisement for the mobile version
+full screen from settings and from pause menu
 
 
 Needed for v1.2
@@ -31,6 +30,7 @@ Check world 1 levels
 Car selector
 Show stars by world
 Show all star
+Show new highscore
 
 
 Needed for v1.3

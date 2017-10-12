@@ -15,14 +15,15 @@ import hpp.util.HPPNumberUtil;
 import hpp.util.HPPTimeUtil;
 import mmx.assets.Fonts;
 import mmx.common.view.LongButton;
-import mmx.game.view.StarRequirementView;
+import mmx.game.CoinCounter;
+import mmx.game.TimeCounter;
 import mmx.util.SavedDataUtil.LevelInfo;
 
 /**
  * ...
  * @author Krisztian Somoracz
  */ 
-class StartLevelPanel extends FlxSubState
+class EndLevelPanel extends FlxSubState
 {
 	var content:HPPVUIBox;
 	
@@ -31,23 +32,37 @@ class StartLevelPanel extends FlxSubState
 	var nextButton:HPPButton;
 	var prevButton:HPPButton;
 	
-	var startRequest:HPPButton->Void;
+	var restartRequest:HPPButton->Void;
 	var exitRequest:HPPButton->Void;
 	var nextLevelRequest:HPPButton->Void;
 	var prevLevelRequest:HPPButton->Void;
+	
+	var scoreText:FlxText;
+	var earnedStarView:FlxSprite;
+	var earnedStarContainer:FlxSpriteGroup;
+	var bestScoreText:FlxText;
+	var bestTimeText:FlxText;
+	var coinCounter:CoinCounter;
+	var timeCounter:TimeCounter;
 	
 	var baseBack:FlxSprite;
 	var container:FlxSpriteGroup;
 	var starRequirements:Array<UInt>;
 	var levelInfo:LevelInfo;
 	
-	function new(levelInfo:LevelInfo, starRequirements:Array<UInt>, startRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
+	var isBuilt:Bool;
+	var currentScore:UInt;
+	var currentTime:Float;
+	var currentCollectedCoins:UInt;
+	var currentEarnedStarView:UInt;
+	
+	function new(levelInfo:LevelInfo, starRequirements:Array<UInt>, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
 	{
 		super();
 		
 		this.levelInfo = levelInfo;
 		this.starRequirements = starRequirements;
-		this.startRequest = startRequest;
+		this.restartRequest = restartRequest;
 		this.exitRequest = exitRequest;
 		this.nextLevelRequest = nextLevelRequest;
 		this.prevLevelRequest = prevLevelRequest;
@@ -56,11 +71,12 @@ class StartLevelPanel extends FlxSubState
 	override public function create():Void
 	{
 		super.create();
-
+		
 		build();
+		isBuilt = true;
 	}
 
-	function build():Void
+	function build()
 	{
 		add(container = new FlxSpriteGroup());
 		container.scrollFactor.set();
@@ -72,16 +88,18 @@ class StartLevelPanel extends FlxSubState
 		var baseBack:FlxSprite = HPPAssetManager.getSprite("panel_background");
 		container.add(baseBack);
 		baseBack.x = container.width / 2 - baseBack.width / 2;
-		baseBack.y = container.height / 2 - baseBack.height / 2 - 40 - (canStartPrevLevel() || canStartNextLevel() ? 47 : 0);
+		baseBack.y = container.height / 2 - baseBack.height / 2 - 40 - ( canStartPrevLevel() || canStartNextLevel() ? 50 : 0 );
 		
 		content = new HPPVUIBox();
 		container.add(content);
 		
 		content.add(new PlaceHolder(0,36));
 		createTitle();
-		content.add(new PlaceHolder(0,10));
-		createStarRequirementView();
-		content.add(new PlaceHolder(0,20));
+		content.add(new PlaceHolder(0, 20));
+		createEarnedStarView();
+		createScoreView();
+		createResultView();
+		content.add(new PlaceHolder(0,30));
 		createFooter();
 		content.add(new PlaceHolder(0,50));
 		createButtons();
@@ -90,9 +108,9 @@ class StartLevelPanel extends FlxSubState
 		content.y = container.height / 2 - content.height / 2 - 5;
 	}
 	
-	function createTitle():Void 
+	function createTitle() 
 	{
-		var levelText:FlxText = new FlxText(0, 0, cast baseBack.width, "Level " + (levelInfo.levelId + 1), 35);
+		var levelText:FlxText = new FlxText(0, 0, cast baseBack.width, "LEVEL COMPLETED", 35);
 		levelText.autoSize = false;
 		levelText.color = FlxColor.WHITE;
 		levelText.alignment = "center";
@@ -100,7 +118,7 @@ class StartLevelPanel extends FlxSubState
 		levelText.y = 12;
 		content.add(levelText);
 		
-		var worldText:FlxText = new FlxText(0, 0, cast baseBack.width, "Level pack " + (levelInfo.worldId + 1), 20);
+		var worldText:FlxText = new FlxText(0, 0, cast baseBack.width, "Level pack " + (levelInfo.worldId + 1) + " - LEVEL " + (levelInfo.levelId + 1), 20);
 		worldText.autoSize = false;
 		worldText.color = FlxColor.WHITE;
 		worldText.alignment = "center";
@@ -109,16 +127,35 @@ class StartLevelPanel extends FlxSubState
 		content.add(worldText);
 	}
 	
-	function createStarRequirementView():Void 
+	function createEarnedStarView()
 	{
-		var starInfoContainer:HPPVUIBox = new HPPVUIBox(10, HPPVUIBoxAlign.LEFT);
+		earnedStarContainer = new FlxSpriteGroup();
+		earnedStarContainer.add(earnedStarView = HPPAssetManager.getSprite("large_star_" + currentEarnedStarView));
 		
-		for (i in 0...3) starInfoContainer.add(new StarRequirementView(3 - i, starRequirements[2 - i]));
-		
-		content.add(starInfoContainer);
+		content.add(earnedStarContainer);
 	}
 	
-	function createFooter():Void 
+	function createScoreView()
+	{
+		scoreText = new FlxText(0, 0, 0, "SCORE: " + HPPNumberUtil.formatNumber(currentScore), 35);
+		scoreText.autoSize = true;
+		scoreText.color = FlxColor.YELLOW;
+		scoreText.alignment = "center";
+		scoreText.font = Fonts.AACHEN_LIGHT;
+		content.add(scoreText);
+	}
+	
+	function createResultView()
+	{
+		var row:HPPHUIBox = new HPPHUIBox( 60 );
+		
+		row.add(coinCounter = new CoinCounter(currentCollectedCoins));
+		row.add(timeCounter = new TimeCounter(currentTime));
+		
+		content.add( row );
+	}
+	
+	function createFooter() 
 	{
 		var footer:HPPHUIBox = new HPPHUIBox();
 		
@@ -129,7 +166,7 @@ class StartLevelPanel extends FlxSubState
 		bestScoreLabelText.font = Fonts.AACHEN_LIGHT;
 		footer.add(bestScoreLabelText);
 		
-		var bestScoreText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPNumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
+		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPNumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
@@ -145,7 +182,7 @@ class StartLevelPanel extends FlxSubState
 		bestTimeLabelText.font = Fonts.AACHEN_LIGHT;
 		footer.add(bestTimeLabelText);
 		
-		var bestTimeText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPTimeUtil.timeStampToFormattedTime(levelInfo.time, HPPTimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 25);
+		bestTimeText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPTimeUtil.timeStampToFormattedTime(levelInfo.time, HPPTimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 25);
 		bestTimeText.autoSize = true;
 		bestTimeText.color = FlxColor.YELLOW;
 		bestTimeText.alignment = "left";
@@ -155,12 +192,12 @@ class StartLevelPanel extends FlxSubState
 		content.add(footer);
 	}
 	
-	function createButtons():Void 
+	function createButtons() 
 	{
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
 		
 		buttonContainer.add(exitButton = new LongButton("EXIT", exitRequest));
-		buttonContainer.add(startButton = new LongButton("START GAME", startRequest));
+		buttonContainer.add(startButton = new LongButton("RESTART GAME", restartRequest));
 		
 		content.add(buttonContainer);
 		
@@ -191,5 +228,27 @@ class StartLevelPanel extends FlxSubState
 	function canStartNextLevel():Bool
 	{
 		return levelInfo.isCompleted && levelInfo.levelId != 23;
+	}
+	
+	public function updateView(currentScore:UInt, currentTime:Float, currentCollectedCoins:UInt, currentEarnedStarView:UInt):Void 
+	{
+		this.currentTime = currentTime;
+		this.currentScore = currentScore;
+		this.currentCollectedCoins = currentCollectedCoins;
+		this.currentEarnedStarView = currentEarnedStarView;
+		
+		if (!isBuilt) return;
+		
+		scoreText.text = "SCORE: " + HPPNumberUtil.formatNumber(currentScore);
+		
+		earnedStarContainer.remove( earnedStarView );
+		earnedStarView.destroy();
+		earnedStarContainer.add(earnedStarView = HPPAssetManager.getSprite("large_star_" + currentEarnedStarView));
+		
+		coinCounter.updateValue(currentCollectedCoins);
+		timeCounter.updateValue(currentTime);
+		
+		bestScoreText.text = levelInfo.isCompleted ? HPPNumberUtil.formatNumber(levelInfo.score) : "N/A";
+		bestTimeText.text = levelInfo.isCompleted ? HPPTimeUtil.timeStampToFormattedTime(levelInfo.time, HPPTimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A";
 	}
 }

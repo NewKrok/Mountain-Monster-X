@@ -22,13 +22,13 @@ class CoinCounter extends FlxSpriteGroup
 	var count:UInt;
 	var scaleTween:VarTween;
 
-	public function new()
+	public function new(defaultValue:UInt = 0)
 	{
 		super();
 
 		add( background = HPPAssetManager.getSprite( "gui_coin_back" ) );
 
-		text = new FlxText( 40, 0, cast width - 40, "0", 33 );
+		text = new FlxText( 40, 0, cast width - 40, Std.string(defaultValue), 33 );
 		text.autoSize = false;
 		text.color = FlxColor.YELLOW;
 		text.alignment = "center";

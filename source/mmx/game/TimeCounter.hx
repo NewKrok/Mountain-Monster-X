@@ -16,11 +16,11 @@ class TimeCounter extends FlxSpriteGroup
 	var background:FlxSprite;
 	var text:FlxText;
 
-	public function new()
+	public function new(defaultValue:Float = 0)
 	{
 		super();
 
-		add( background = HPPAssetManager.getSprite( "gui_time_back" ) );
+		add( background = HPPAssetManager.getSprite("gui_time_back"));
 
 		text = new FlxText( 40, 0, cast width - 40, "00:00", 33 );
 		text.autoSize = false;
@@ -29,12 +29,14 @@ class TimeCounter extends FlxSpriteGroup
 		text.font = Fonts.AACHEN_LIGHT;
 		text.y = 12;
 		
-		add( text );
+		add(text);
+		
+		updateValue(defaultValue);
 	}
 
-	public function updateValue( value:Float ):Void
+	public function updateValue(value:Float):Void
 	{
-		if( value <= 1000 * 10 )
+		if(value <= 1000 * 10)
 		{
 			text.color = 0xFFFFB399;
 		}
@@ -43,6 +45,6 @@ class TimeCounter extends FlxSpriteGroup
 			text.color = 0xFF26FF92;
 		}
 		
-		text.text = HPPTimeUtil.timeStampToFormattedTime( value, HPPTimeUtil.TIME_FORMAT_MM_SS );
+		text.text = HPPTimeUtil.timeStampToFormattedTime(value, HPPTimeUtil.TIME_FORMAT_MM_SS);
 	}
 }

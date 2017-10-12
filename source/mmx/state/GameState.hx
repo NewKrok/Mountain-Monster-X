@@ -9,6 +9,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
+import haxe.Timer;
 import hpp.flixel.HPPCamera;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
@@ -30,6 +31,7 @@ import mmx.game.library.crate.SmallCrate;
 import mmx.game.library.crate.SmallLongCrate;
 import mmx.game.library.crate.SmallRampCrate;
 import mmx.game.snow.Snow;
+import mmx.game.substate.EndLevelPanel;
 import mmx.game.substate.PausePanel;
 import mmx.game.substate.StartLevelPanel;
 import mmx.game.terrain.BrushTerrain;
@@ -53,6 +55,7 @@ class GameState extends FlxState
 	var space:Space;
 	
 	var startLevelPanel:StartLevelPanel;
+	var endLevelPanel:EndLevelPanel;
 	var pausePanel:PausePanel;
 	var gameGui:GameGui;
 	var background:Background;
@@ -215,6 +218,7 @@ class GameState extends FlxState
 		
 		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
 		startLevelPanel = new StartLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
+		endLevelPanel = new EndLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 		
 		lastCameraStepOffset = new FlxPoint();
 
@@ -314,15 +318,12 @@ class GameState extends FlxState
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 
 		resetCrates();
-		
-		/*
-		this._gameGui.showStartGamePanel( exit );
-		this._gameGui.enable();*/
 
 		start();
 		
 		openSubState( startLevelPanel );
 		pause();
+		isPhysicsEnabled = true;
 	}
 	
 	function resetCrates():Void
@@ -342,8 +343,6 @@ class GameState extends FlxState
 		resumeRequest();
 		
 		isPhysicsEnabled = true;
-		
-		update( 0 );
 	}
 
 	function resumeRequest( target:HPPButton = null ):Void
@@ -764,16 +763,19 @@ class GameState extends FlxState
 	{
 		if ( !isLost && !isWon && car.isCarCrashed )
 		{
+			isLost = true;
+			
 			camera.shake( .02, .2 );
-			restartRutin();
+			Timer.delay(restartRutin, 1000);
 		}
 	}
 
 	function checkWin():Void
 	{
-		if ( !isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x )
+		if (!isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x)
 		{
 			var score:UInt = calculateScore();
+			
 			var starCount:UInt = coinsToStarCount(score);
 			var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 			levelInfo.time = ( gameTime < levelInfo.time || levelInfo.time == 0 ) ? gameTime : levelInfo.time;
@@ -781,6 +783,7 @@ class GameState extends FlxState
 			levelInfo.score = score > levelInfo.score ? score : levelInfo.score;
 			levelInfo.isCompleted = true;
 			levelInfo.starCount = starCount > levelInfo.starCount ? starCount : levelInfo.starCount;
+			levelInfo.collectedCoins = collectedCoin > levelInfo.collectedCoins ? collectedCoin : levelInfo.collectedCoins;
 			
 			if (levelId < 23)
 			{
@@ -795,7 +798,8 @@ class GameState extends FlxState
 			
 			SavedDataUtil.save();
 			
-			exitRequest();
+			openSubState( endLevelPanel );
+			endLevelPanel.updateView(score, gameTime, collectedCoin, starCount);
 		}
 	}
 	
