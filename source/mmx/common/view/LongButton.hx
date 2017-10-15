@@ -5,6 +5,7 @@ import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.assets.Fonts;
+import openfl.Assets;
 
 /**
  * ...
@@ -16,7 +17,7 @@ class LongButton extends HPPButton
 	{
 		super(title, callBack);
 		
-		label.font = Fonts.AACHEN_LIGHT;
+		label.font = Fonts.AACHEN_MEDIUM;
 		label.color = FlxColor.WHITE;
 		labelSize = 25;
 		labelOffsets = [new FlxPoint(0, -7), new FlxPoint(0, -7), new FlxPoint(0, -7)];

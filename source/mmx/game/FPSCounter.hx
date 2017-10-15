@@ -30,7 +30,7 @@ class FPSCounter extends FlxSpriteGroup
 		text.autoSize = false;
 		text.color = 0xFF4D90FE;
 		text.alignment = "center";
-		text.font = Fonts.AACHEN_LIGHT;
+		text.font = Fonts.AACHEN_MEDIUM;
 		text.y = 10;
 		defaultTextScale = text.scale.x;
 		

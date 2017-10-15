@@ -648,8 +648,11 @@ class GameState extends FlxState
 		left = FlxG.keys.anyPressed( [LEFT, A] );
 		
 		calculateGameTime();
-		gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
-
+		if (!isLost)
+		{
+			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
+		}
+		
 		if ( up )
 		{
 			car.accelerateToRight();
@@ -761,11 +764,12 @@ class GameState extends FlxState
 
 	function checkLoose():Void
 	{
-		if ( !isLost && !isWon && car.isCarCrashed )
+		if (!isLost && !isWon && (car.isCarCrashed || gameTime >= CGameTimeValue.MAXIMUM_GAME_TIME))
 		{
 			isLost = true;
 			
-			camera.shake( .02, .2 );
+			if (car.isCarCrashed) camera.shake( .02, .2 );
+			
 			Timer.delay(restartRutin, 1000);
 		}
 	}

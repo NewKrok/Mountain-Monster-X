@@ -39,7 +39,7 @@ class LevelButton extends HPPExtendableButton
 			var container:HPPVUIBox = new HPPVUIBox( 6 );
 			
 			title = new FlxText( 0, 0, cast width, "Level " + ( levelId + 1 ), 25 );
-			title.font = Fonts.AACHEN_LIGHT;
+			title.font = Fonts.AACHEN_MEDIUM;
 			title.color = FlxColor.WHITE;
 			title.alignment = "center";
 			container.add( title );
@@ -48,7 +48,7 @@ class LevelButton extends HPPExtendableButton
 			levelStarView.setStarCount( levelInfo.starCount );
 			
 			score = new FlxText( 0, 0, title.width, HPPNumberUtil.formatNumber( levelInfo.score ), 25 );
-			score.font = Fonts.AACHEN_LIGHT;
+			score.font = Fonts.AACHEN_MEDIUM;
 			score.color = FlxColor.YELLOW;
 			score.alignment = "center";
 			container.add( score );

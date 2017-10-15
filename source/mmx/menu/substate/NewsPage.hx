@@ -74,7 +74,7 @@ class NewsPage extends FlxSubState
 		text.color = FlxColor.CYAN;
 		text.alignment = "center";
 		text.size = 40;
-		text.font = Fonts.AACHEN_LIGHT;
+		text.font = Fonts.AACHEN_MEDIUM;
 		text.borderStyle = FlxTextBorderStyle.SHADOW;
 		text.fieldWidth = 800;
 		text.text = "LATEST NEWS";
@@ -90,7 +90,7 @@ class NewsPage extends FlxSubState
 		versionText.color = FlxColor.WHITE;
 		versionText.alignment = "center";
 		versionText.size = 30;
-		versionText.font = Fonts.AACHEN_LIGHT;
+		versionText.font = Fonts.AACHEN_MEDIUM;
 		versionText.borderStyle = FlxTextBorderStyle.OUTLINE;
 		versionText.text = version;
 		entryContainer.add(versionText);
@@ -99,7 +99,7 @@ class NewsPage extends FlxSubState
 		descText.color = FlxColor.WHITE;
 		descText.alignment = "center";
 		descText.size = 25;
-		descText.font = Fonts.AACHEN_LIGHT;
+		descText.font = Fonts.AACHEN_MEDIUM;
 		descText.text = description;
 		entryContainer.add(descText);
 		

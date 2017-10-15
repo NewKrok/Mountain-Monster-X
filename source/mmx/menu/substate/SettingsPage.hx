@@ -90,7 +90,7 @@ class SettingsPage extends FlxSubState
 		fpsText.color = FlxColor.WHITE;
 		fpsText.alignment = "left";
 		fpsText.size = 35;
-		fpsText.font = Fonts.AACHEN_LIGHT;
+		fpsText.font = Fonts.AACHEN_MEDIUM;
 		fpsText.borderStyle = FlxTextBorderStyle.SHADOW;
 		fpsText.fieldWidth = 650;
 		updateFpsText();
@@ -111,7 +111,7 @@ class SettingsPage extends FlxSubState
 		alphaAnimationsText.color = FlxColor.WHITE;
 		alphaAnimationsText.alignment = "left";
 		alphaAnimationsText.size = 35;
-		alphaAnimationsText.font = Fonts.AACHEN_LIGHT;
+		alphaAnimationsText.font = Fonts.AACHEN_MEDIUM;
 		alphaAnimationsText.borderStyle = FlxTextBorderStyle.SHADOW;
 		alphaAnimationsText.fieldWidth = 650;
 		updateAlphaAnimationText();

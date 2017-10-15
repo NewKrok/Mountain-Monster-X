@@ -3,8 +3,6 @@ Needed for v1.0
 Check world 0 levels
 Mobile controller
 Fix menu background on mobile
-Fix font problem
-Fix black screen after game start
 Level preloader - maybe it's not needed
 World 0 tutorial
 Switchable control - up/W to accerelate or right/D

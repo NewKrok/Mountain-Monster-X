@@ -54,7 +54,7 @@ class AboutUsPage extends FlxSubState
 		developerInfoText.color = FlxColor.CYAN;
 		developerInfoText.alignment = "center";
 		developerInfoText.size = 30;
-		developerInfoText.font = Fonts.AACHEN_LIGHT;
+		developerInfoText.font = Fonts.AACHEN_MEDIUM;
 		developerInfoText.borderStyle = FlxTextBorderStyle.SHADOW;
 		developerInfoText.fieldWidth = 800;
 		developerInfoText.text = "Mountain Monster game created by Krisztian Somoracz (NewKrok)";
@@ -66,7 +66,7 @@ class AboutUsPage extends FlxSubState
 		poweredByInfoText.color = FlxColor.CYAN;
 		poweredByInfoText.alignment = "center";
 		poweredByInfoText.size = 25;
-		poweredByInfoText.font = Fonts.AACHEN_LIGHT;
+		poweredByInfoText.font = Fonts.AACHEN_MEDIUM;
 		poweredByInfoText.borderStyle = FlxTextBorderStyle.SHADOW;
 		poweredByInfoText.text = "Game powered by:";
 		poweredByContainer.add(poweredByInfoText);

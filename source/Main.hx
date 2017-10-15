@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import hpp.flixel.system.HPPFlxMain;
+import mmx.assets.Fonts;
 import mmx.state.MenuState;
 import mmx.util.SavedDataUtil;
 import openfl.display.FPS;
@@ -16,6 +17,7 @@ class Main extends Sprite
 		super();
 		
 		SavedDataUtil.load( "MountainMonsterSavedData" );
+		Fonts.init();
 		
 		addChild( new HPPFlxMain( 0, 0, MenuState ) );
 		

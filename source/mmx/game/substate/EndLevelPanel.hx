@@ -114,7 +114,7 @@ class EndLevelPanel extends FlxSubState
 		levelText.autoSize = false;
 		levelText.color = FlxColor.WHITE;
 		levelText.alignment = "center";
-		levelText.font = Fonts.AACHEN_LIGHT;
+		levelText.font = Fonts.AACHEN_MEDIUM;
 		levelText.y = 12;
 		content.add(levelText);
 		
@@ -122,7 +122,7 @@ class EndLevelPanel extends FlxSubState
 		worldText.autoSize = false;
 		worldText.color = FlxColor.WHITE;
 		worldText.alignment = "center";
-		worldText.font = Fonts.AACHEN_LIGHT;
+		worldText.font = Fonts.AACHEN_MEDIUM;
 		worldText.y = 12;
 		content.add(worldText);
 	}
@@ -141,7 +141,7 @@ class EndLevelPanel extends FlxSubState
 		scoreText.autoSize = true;
 		scoreText.color = FlxColor.YELLOW;
 		scoreText.alignment = "center";
-		scoreText.font = Fonts.AACHEN_LIGHT;
+		scoreText.font = Fonts.AACHEN_MEDIUM;
 		content.add(scoreText);
 	}
 	
@@ -163,14 +163,14 @@ class EndLevelPanel extends FlxSubState
 		bestScoreLabelText.autoSize = true;
 		bestScoreLabelText.color = FlxColor.WHITE;
 		bestScoreLabelText.alignment = "left";
-		bestScoreLabelText.font = Fonts.AACHEN_LIGHT;
+		bestScoreLabelText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestScoreLabelText);
 		
 		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPNumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
-		bestScoreText.font = Fonts.AACHEN_LIGHT;
+		bestScoreText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestScoreText);
 		
 		footer.add(new PlaceHolder(100,0));
@@ -179,14 +179,14 @@ class EndLevelPanel extends FlxSubState
 		bestTimeLabelText.autoSize = true;
 		bestTimeLabelText.color = FlxColor.WHITE;
 		bestTimeLabelText.alignment = "left";
-		bestTimeLabelText.font = Fonts.AACHEN_LIGHT;
+		bestTimeLabelText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestTimeLabelText);
 		
 		bestTimeText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPTimeUtil.timeStampToFormattedTime(levelInfo.time, HPPTimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 25);
 		bestTimeText.autoSize = true;
 		bestTimeText.color = FlxColor.YELLOW;
 		bestTimeText.alignment = "left";
-		bestTimeText.font = Fonts.AACHEN_LIGHT;
+		bestTimeText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestTimeText);
 		
 		content.add(footer);
