@@ -11,8 +11,8 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.HPPNumberUtil;
-import hpp.util.HPPTimeUtil;
+import hpp.util.NumberUtil;
+import hpp.util.TimeUtil;
 import mmx.assets.Fonts;
 import mmx.common.view.LongButton;
 import mmx.game.CoinCounter;
@@ -137,7 +137,7 @@ class EndLevelPanel extends FlxSubState
 	
 	function createScoreView()
 	{
-		scoreText = new FlxText(0, 0, 0, "SCORE: " + HPPNumberUtil.formatNumber(currentScore), 35);
+		scoreText = new FlxText(0, 0, 0, "SCORE: " + NumberUtil.formatNumber(currentScore), 35);
 		scoreText.autoSize = true;
 		scoreText.color = FlxColor.YELLOW;
 		scoreText.alignment = "center";
@@ -166,7 +166,7 @@ class EndLevelPanel extends FlxSubState
 		bestScoreLabelText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestScoreLabelText);
 		
-		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPNumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
+		bestScoreText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
@@ -182,7 +182,7 @@ class EndLevelPanel extends FlxSubState
 		bestTimeLabelText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestTimeLabelText);
 		
-		bestTimeText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPTimeUtil.timeStampToFormattedTime(levelInfo.time, HPPTimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 25);
+		bestTimeText = new FlxText(0, 0, 0, levelInfo.isCompleted ? TimeUtil.timeStampToFormattedTime(levelInfo.time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 25);
 		bestTimeText.autoSize = true;
 		bestTimeText.color = FlxColor.YELLOW;
 		bestTimeText.alignment = "left";
@@ -239,7 +239,7 @@ class EndLevelPanel extends FlxSubState
 		
 		if (!isBuilt) return;
 		
-		scoreText.text = "SCORE: " + HPPNumberUtil.formatNumber(currentScore);
+		scoreText.text = "SCORE: " + NumberUtil.formatNumber(currentScore);
 		
 		earnedStarContainer.remove( earnedStarView );
 		earnedStarView.destroy();
@@ -248,7 +248,7 @@ class EndLevelPanel extends FlxSubState
 		coinCounter.updateValue(currentCollectedCoins);
 		timeCounter.updateValue(currentTime);
 		
-		bestScoreText.text = levelInfo.isCompleted ? HPPNumberUtil.formatNumber(levelInfo.score) : "N/A";
-		bestTimeText.text = levelInfo.isCompleted ? HPPTimeUtil.timeStampToFormattedTime(levelInfo.time, HPPTimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A";
+		bestScoreText.text = levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A";
+		bestTimeText.text = levelInfo.isCompleted ? TimeUtil.timeStampToFormattedTime(levelInfo.time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A";
 	}
 }

@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.HPPTimeUtil;
+import hpp.util.TimeUtil;
 import mmx.assets.Fonts;
 
 /**
@@ -45,6 +45,6 @@ class TimeCounter extends FlxSpriteGroup
 			text.color = 0xFF26FF92;
 		}
 		
-		text.text = HPPTimeUtil.timeStampToFormattedTime(value, HPPTimeUtil.TIME_FORMAT_MM_SS);
+		text.text = TimeUtil.timeStampToFormattedTime(value, TimeUtil.TIME_FORMAT_MM_SS);
 	}
 }

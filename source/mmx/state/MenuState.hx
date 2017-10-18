@@ -7,6 +7,7 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
+import hpp.util.DeviceData;
 import js.Browser;
 import mmx.game.Background;
 import mmx.menu.substate.AboutUsPage;
@@ -76,12 +77,17 @@ class MenuState extends FlxState
 			case MenuSubStateType.NEWS_PAGE:
 				openNewsPage();
 		}
-		
-		#if html5
-		Browser.window.addEventListener( 'devicemotion', accelerometerMove, true );
-		#end
 
-		stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+		if(DeviceData.isMobile())
+		{
+			#if html5
+				Browser.window.addEventListener( 'devicemotion', accelerometerMove, true );
+			#end
+		}
+		else
+		{
+			stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+		}
 	}
 	
 	function loadAssets():Void

@@ -1,12 +1,12 @@
 Needed for v1.0
 =================================================
-Check world 0 levels
 Mobile controller
-Fix menu background on mobile
-Level preloader - maybe it's not needed
-World 0 tutorial
-Switchable control - up/W to accerelate or right/D
+Fix font positions in safari
 Fix background position after start game
+Check world 0 levels
+World 0 tutorial
+Switchable control - up/W to accerelate or right/D (only in desktop)
+Level preloader - maybe it's not needed
 Publish to main site
 
 

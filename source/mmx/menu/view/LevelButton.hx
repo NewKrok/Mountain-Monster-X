@@ -7,7 +7,7 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPExtendableButton;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.HPPNumberUtil;
+import hpp.util.NumberUtil;
 import mmx.assets.Fonts;
 import mmx.state.GameState;
 import mmx.util.SavedDataUtil.LevelInfo;
@@ -47,7 +47,7 @@ class LevelButton extends HPPExtendableButton
 			container.add( levelStarView = new LevelStarView() );
 			levelStarView.setStarCount( levelInfo.starCount );
 			
-			score = new FlxText( 0, 0, title.width, HPPNumberUtil.formatNumber( levelInfo.score ), 25 );
+			score = new FlxText( 0, 0, title.width, NumberUtil.formatNumber( levelInfo.score ), 25 );
 			score.font = Fonts.AACHEN_MEDIUM;
 			score.color = FlxColor.YELLOW;
 			score.alignment = "center";

@@ -7,7 +7,7 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.HPPNumberUtil;
+import hpp.util.NumberUtil;
 import mmx.assets.Fonts;
 
 /**
@@ -29,7 +29,7 @@ class StarRequirementView extends HPPHUIBox
 		
 		textContainer.add(new PlaceHolder(0, 10));
 		
-		var text:FlxText = new FlxText(0, 0, 0, "EARN " + HPPNumberUtil.formatNumber(requirement) + " SCORE", 33);
+		var text:FlxText = new FlxText(0, 0, 0, "EARN " + NumberUtil.formatNumber(requirement) + " SCORE", 33);
 		text.autoSize = true;
 		text.color = FlxColor.WHITE;
 		text.alignment = "left";

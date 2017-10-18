@@ -11,8 +11,8 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.HPPNumberUtil;
-import hpp.util.HPPTimeUtil;
+import hpp.util.NumberUtil;
+import hpp.util.TimeUtil;
 import mmx.assets.Fonts;
 import mmx.common.view.LongButton;
 import mmx.game.view.StarRequirementView;
@@ -129,7 +129,7 @@ class StartLevelPanel extends FlxSubState
 		bestScoreLabelText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestScoreLabelText);
 		
-		var bestScoreText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPNumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
+		var bestScoreText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 25);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
@@ -145,7 +145,7 @@ class StartLevelPanel extends FlxSubState
 		bestTimeLabelText.font = Fonts.AACHEN_MEDIUM;
 		footer.add(bestTimeLabelText);
 		
-		var bestTimeText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? HPPTimeUtil.timeStampToFormattedTime(levelInfo.time, HPPTimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 25);
+		var bestTimeText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? TimeUtil.timeStampToFormattedTime(levelInfo.time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 25);
 		bestTimeText.autoSize = true;
 		bestTimeText.color = FlxColor.YELLOW;
 		bestTimeText.alignment = "left";
