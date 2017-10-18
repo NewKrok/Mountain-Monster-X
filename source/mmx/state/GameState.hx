@@ -79,10 +79,6 @@ class GameState extends FlxState
 
 	var gameObjects:Array<FlxSprite>;
 
-	/*var controlLeft:Image;
-	var controlRight:Image;
-	var controlUp:Image;
-	var controlDown:Image;*/
 	var car:Car;
 	var snow:Snow;
 	/*
@@ -238,38 +234,13 @@ class GameState extends FlxState
 
 		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
 
-		/*
-				
-
-				// add control buttons
-				addChild( _controlLeft = new Image( StaticAssetManager.instance.getTexture( "control_left" ) ) );
-				_controlLeft.x = 10;
-				_controlLeft.y = stage.stageHeight - 10 - _controlLeft.height;
-				addChild( _controlRight = new Image( StaticAssetManager.instance.getTexture( "control_right" ) ) );
-				_controlRight.x = _controlLeft.x + _controlLeft.width + 10;
-				_controlRight.y = _controlLeft.y;
-				addChild( _controlUp = new Image( StaticAssetManager.instance.getTexture( "control_up" ) ) );
-				_controlUp.x = stage.stageWidth - 10 - _controlUp.width;
-				_controlUp.y = _controlLeft.y;
-				addChild( _controlDown = new Image( StaticAssetManager.instance.getTexture( "control_down" ) ) );
-				_controlDown.x = _controlUp.x - _controlUp.width - 10;
-				_controlDown.y = _controlLeft.y;
-		*/
 		switch ( worldId )
 		{
 			case 1:
 				snow = new Snow();
 				add( snow );
 		}
-		/*
-				_gameGui.addEventListener( GameGuiEvent.INGAME_RESTART_REQUEST, restartRequest );
-				_gameGui.addEventListener( GameGuiEvent.PAUSE_REQUEST, pauseRequest );
-				_gameGui.addEventListener( GameGuiEvent.RESUME_REQUEST, resumeRequest );
-				_gameGui.addEventListener( GameGuiEvent.GAME_END_REQUEST, gameEndRequest );
-				_gameGui.addEventListener( GameGuiEvent.NEXT_LEVEL_REQUEST, nextLevelRequest );
-
-				addEventListener( TouchEvent.TOUCH, onTouch );
-		*/
+		
 		add( gameGui = new GameGui( resume, pauseRequest ) );
 		
 		//cast( camera, HPPCamera ).addZoomResistanceToSprite( gameGui );
@@ -641,11 +612,10 @@ class GameState extends FlxState
 			return;
 		}
 		
-		up = FlxG.keys.anyPressed( [UP, W] );
-		down = FlxG.keys.anyPressed( [DOWN, S] );
-		right = FlxG.keys.anyPressed( [RIGHT, D] );
-		right = FlxG.keys.anyPressed( [RIGHT, D] );
-		left = FlxG.keys.anyPressed( [LEFT, A] );
+		up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
+		down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
+		right = FlxG.keys.anyPressed( [RIGHT, D] ) || gameGui.controlRightState;
+		left = FlxG.keys.anyPressed( [LEFT, A] ) || gameGui.controlLeftState;
 		
 		calculateGameTime();
 		if (!isLost)

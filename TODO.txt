@@ -1,27 +1,27 @@
 Needed for v1.0
 =================================================
-Mobile controller
-Fix font positions in safari
 Fix background position after start game
 Check world 0 levels
 World 0 tutorial
-Switchable control - up/W to accerelate or right/D (only in desktop)
 Level preloader - maybe it's not needed
-Publish to main site
+Publish to main site (don't forget to minify)
 
 
 Needed for v1.1
 =================================================
 Sound + Music
 Sound + Music checkbox in menu
+Fix font positions in safari
+Effect handling - for example for air time or backflip
 Flip + Air time detection + give bonus + show info
-Set all car properties
 Advertisement for the mobile version
-full screen from settings and from pause menu
+Switchable control - up/W to accerelate or right/D (only in desktop)
 
 
 Needed for v1.2
 =================================================
+full screen from settings and from pause menu
+Set all car properties
 Enable world 1
 World 1 tutorial
 Check world 1 levels
