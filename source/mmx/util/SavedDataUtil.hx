@@ -17,7 +17,16 @@ class SavedDataUtil
 		
 		if (gameSave.data.baseInfo == null)
 		{
-			gameSave.data.baseInfo = {gameName: AppConfig.GAME_NAME, version: AppConfig.GAME_VERSION}
+			gameSave.data.baseInfo = {gameName: AppConfig.GAME_NAME, version: AppConfig.GAME_VERSION};
+		}
+		
+		if (gameSave.data.helpInfos == null)
+		{
+			gameSave.data.helpInfos = [];
+		}
+		
+		if (gameSave.data.levelInfos == null)
+		{
 			gameSave.data.levelInfos = [{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true}];
 		}
 	}
@@ -64,11 +73,37 @@ class SavedDataUtil
 			levelInfo.isLastPlayed = false;
 		}
 	}
+	
+	public static function getHelpInfo(worldId:UInt):HelpInfo
+	{
+		for (i in 0...gameSave.data.helpInfos.length)
+		{
+			if (gameSave.data.helpInfos[i].worldId == worldId)
+			{
+				return gameSave.data.helpInfos[i];
+			}
+		}
+		
+		var newEntry:HelpInfo = {worldId:worldId, isShowed: false}
+		gameSave.data.helpInfos.push(newEntry);
+		
+		return newEntry;
+	}
+	
+	public static function setHelpInfo(worldId:UInt, isShowed:Bool):Void
+	{
+		getHelpInfo( worldId ).isShowed = isShowed;
+	}
 }
 
 typedef BaseAppInfo = {
 	var gameName:String;
 	var version:String;
+}
+
+typedef HelpInfo = {
+	var worldId:UInt;
+	var isShowed:Bool;
 }
 
 typedef LevelInfo = {

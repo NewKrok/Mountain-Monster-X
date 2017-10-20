@@ -1,17 +1,17 @@
 Needed for v1.0
 =================================================
+Update tutorial images
 Check world 0 1-12 levels
 Check world 0 13-24 levels
-World 0 tutorial
-Level preloader - maybe it's not needed (maybe state change effect)
-Fill latest news with the first info
 Set all car properties
 Fix FPS position in mobile
+Fill latest news with the first info
 Publish to main site (don't forget to minify)
 
 
 Needed for v1.1
 =================================================
+Level preloader - maybe it's not needed (maybe state change effect)
 Sound + Music
 Sound + Music checkbox in menu
 Fix font positions in safari

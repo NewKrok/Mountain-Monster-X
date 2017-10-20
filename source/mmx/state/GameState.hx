@@ -32,6 +32,7 @@ import mmx.game.library.crate.SmallLongCrate;
 import mmx.game.library.crate.SmallRampCrate;
 import mmx.game.snow.Snow;
 import mmx.game.substate.EndLevelPanel;
+import mmx.game.substate.HelpPanel;
 import mmx.game.substate.PausePanel;
 import mmx.game.substate.StartLevelPanel;
 import mmx.game.terrain.BrushTerrain;
@@ -57,6 +58,7 @@ class GameState extends FlxState
 	var startLevelPanel:StartLevelPanel;
 	var endLevelPanel:EndLevelPanel;
 	var pausePanel:PausePanel;
+	var helpPanel:HelpPanel;
 	var gameGui:GameGui;
 	var background:Background;
 
@@ -247,6 +249,17 @@ class GameState extends FlxState
 		//cast( camera, HPPCamera ).addZoomResistanceToSprite( background );
 
 		reset();
+		
+		if (levelId == 0 && !SavedDataUtil.getHelpInfo(worldId).isShowed)
+		{
+			helpPanel = new HelpPanel( worldId, openStartLevelPanelRequest );
+			openSubState( helpPanel );
+		}
+	}
+	
+	function openStartLevelPanelRequest(target:HPPButton):Void
+	{
+		openSubState( startLevelPanel );
 	}
 
 	function reset():Void
