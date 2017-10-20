@@ -1,9 +1,8 @@
 Needed for v1.0
 =================================================
-Fix background position after start game
 Check world 0 levels
 World 0 tutorial
-Level preloader - maybe it's not needed
+Level preloader - maybe it's not needed (maybe state change effect)
 Publish to main site (don't forget to minify)
 
 

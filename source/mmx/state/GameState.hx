@@ -286,6 +286,7 @@ class GameState extends FlxState
 
 		cast( camera, HPPCamera ).resetPosition();
 		camera.focusOn( car.carBodyGraphics.getPosition() );
+		background.update( 1 );
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 
 		resetCrates();
@@ -314,6 +315,7 @@ class GameState extends FlxState
 		resumeRequest();
 		
 		isPhysicsEnabled = true;
+		persistentUpdate = true;
 	}
 
 	function resumeRequest( target:HPPButton = null ):Void
@@ -330,9 +332,11 @@ class GameState extends FlxState
 	
 	function pauseRequest( target:HPPButton ):Void
 	{
-		openSubState( pausePanel );
-		
-		pause();
+		if (subState == null)
+		{
+			openSubState( pausePanel );
+			pause();
+		}
 	}
 
 	function resume():Void
@@ -612,15 +616,20 @@ class GameState extends FlxState
 			return;
 		}
 		
-		up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
-		down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
-		right = FlxG.keys.anyPressed( [RIGHT, D] ) || gameGui.controlRightState;
-		left = FlxG.keys.anyPressed( [LEFT, A] ) || gameGui.controlLeftState;
-		
 		calculateGameTime();
+		
 		if (!isLost)
 		{
 			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
+			
+			up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
+			down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
+			right = FlxG.keys.anyPressed( [RIGHT, D] ) || gameGui.controlRightState;
+			left = FlxG.keys.anyPressed( [LEFT, A] ) || gameGui.controlLeftState;
+		}
+		else
+		{
+			up = down = right = left = false;
 		}
 		
 		if ( up )
@@ -772,6 +781,7 @@ class GameState extends FlxState
 			
 			SavedDataUtil.save();
 			
+			persistentUpdate = false;
 			openSubState( endLevelPanel );
 			endLevelPanel.updateView(score, gameTime, collectedCoin, starCount);
 		}
