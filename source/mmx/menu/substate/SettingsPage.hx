@@ -58,7 +58,7 @@ class SettingsPage extends FlxSubState
 		container.add( createAlphaAnimationSetting() );
 		
 		container.x = FlxG.width / 2 - container.width / 2;
-		container.y = 40;
+		container.y = FlxG.height / 2 - container.height / 2;
 		add( container );
 		
 		add( backButton = new LongButton( "BACK", openWelcomePage ) );

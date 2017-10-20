@@ -1,8 +1,12 @@
 Needed for v1.0
 =================================================
-Check world 0 levels
+Check world 0 1-12 levels
+Check world 0 13-24 levels
 World 0 tutorial
 Level preloader - maybe it's not needed (maybe state change effect)
+Fill latest news with the first info
+Set all car properties
+Fix FPS position in mobile
 Publish to main site (don't forget to minify)
 
 
@@ -15,19 +19,21 @@ Effect handling - for example for air time or backflip
 Flip + Air time detection + give bonus + show info
 Advertisement for the mobile version
 Switchable control - up/W to accerelate or right/D (only in desktop)
+Fix safari font offsets
 
 
 Needed for v1.2
 =================================================
 full screen from settings and from pause menu
-Set all car properties
 Enable world 1
 World 1 tutorial
-Check world 1 levels
+Check world 1 1-12 levels
+Check world 1 13-24 levels
 Car selector
 Show stars by world
 Show all star
 Show new highscore
+Improve coin pick up effect
 
 
 Needed for v1.3
@@ -42,7 +48,8 @@ Needed for v1.4
 =================================================
 Check world 2 levels
 Enable World 2
-World 2 tutorial
+Check world 2 1-12 levels
+Check world 2 13-24 levels
 Check praticle system possibilities
 Check is it possible to add some advertisement to game
 

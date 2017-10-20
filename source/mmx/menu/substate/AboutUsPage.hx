@@ -90,7 +90,7 @@ class AboutUsPage extends FlxSubState
 		container.add(poweredByContainer);
 		
 		container.x = FlxG.width / 2 - container.width / 2;
-		container.y = 40;
+		container.y = FlxG.height / 2 - container.height / 2;
 		developerInfoText.fieldWidth = container.width;
 		add( container );
 		
