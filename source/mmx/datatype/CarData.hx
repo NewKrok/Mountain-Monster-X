@@ -16,9 +16,9 @@ typedef CarData =
 	var elasticity( default, default ):Float;
 	
 	@:optional var starRequired( default, default ):UInt;
-	@:optional var carBodyXOffset( default, default ):UInt;
-	@:optional var carBodyYOffset( default, default ):UInt;
-	@:optional var carBodyGraphicXOffset( default, default ):UInt;
-	@:optional var carBodyGraphicYOffset( default, default ):UInt;
+	@:optional var firstWheelXOffset( default, default ):UInt;
+	@:optional var firstWheelYOffset( default, default ):UInt;
+	@:optional var backWheelXOffset( default, default ):UInt;
+	@:optional var backWheelYOffset( default, default ):UInt;
 	@:optional var unlockInformation( default, default ):String;
 }

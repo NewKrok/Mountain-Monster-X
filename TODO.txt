@@ -1,7 +1,5 @@
 Needed for v1.0
 =================================================
-Save settings
-Set all car properties
 Check world 0 1-12 levels
 Check world 0 13-24 levels
 Fill latest news with the first info
@@ -10,6 +8,7 @@ Publish to main site (don't forget to minify)
 
 Needed for v1.1
 =================================================
+Add elasticity joint to the car body
 Level preloader - maybe it's not needed (maybe state change effect)
 Sound + Music
 Sound + Music checkbox in menu

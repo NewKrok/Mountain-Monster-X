@@ -62,10 +62,10 @@ class Car extends FlxSpriteGroup
 		this.space = space;
 		this.carData = carData;
 		
-		firstWheelXOffset += Math.isNaN( carData.carBodyXOffset ) ? 0 : carData.carBodyXOffset;
-		firstWheelYOffset += Math.isNaN( carData.carBodyYOffset ) ? 0 : carData.carBodyYOffset;
-		backWheelXOffset += Math.isNaN( carData.carBodyXOffset ) ? 0 : carData.carBodyXOffset;
-		backWheelYOffset += Math.isNaN( carData.carBodyYOffset ) ? 0 : carData.carBodyYOffset;
+		firstWheelXOffset += Math.isNaN( carData.firstWheelXOffset ) ? 0 : carData.firstWheelXOffset;
+		firstWheelYOffset += Math.isNaN( carData.firstWheelYOffset ) ? 0 : carData.firstWheelYOffset;
+		backWheelXOffset += Math.isNaN( carData.backWheelXOffset ) ? 0 : carData.backWheelXOffset;
+		backWheelYOffset += Math.isNaN( carData.backWheelYOffset ) ? 0 : carData.backWheelYOffset;
 		
 		firstWheelXOffset *= scale;
 		firstWheelYOffset *= scale;
