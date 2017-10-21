@@ -1,6 +1,5 @@
 Needed for v1.0
 =================================================
-Check world 0 1-12 levels
 Check world 0 13-24 levels
 Fill latest news with the first info
 Publish to main site (don't forget to minify)
@@ -42,6 +41,7 @@ Fix terrain graphic
 Extra car if the player play on our site
 Add Task system
 Add Language system
+Hotkeys
 
 Needed for v1.4
 =================================================

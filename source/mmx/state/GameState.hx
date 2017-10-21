@@ -303,6 +303,7 @@ class GameState extends FlxState
 		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
 
 		resetCrates();
+		updateBridges();
 
 		start();
 		
