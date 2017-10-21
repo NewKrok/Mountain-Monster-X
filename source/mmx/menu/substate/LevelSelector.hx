@@ -14,6 +14,7 @@ import hpp.flixel.ui.HPPUIGrid;
 import mmx.common.view.LongButton;
 import mmx.menu.view.LevelButton;
 import mmx.menu.view.LevelSelectorPage;
+import mmx.util.SavedDataUtil;
 
 /**
  * ...
@@ -57,6 +58,11 @@ class LevelSelector extends FlxSubState
 		container.add( new LevelSelectorPage( worldId, 12, 24 ) );
 		
 		levelButtonsContainer.add( container );
+		
+		if (SavedDataUtil.getLastPlayedLevel(worldId) > 11)
+		{
+			levelButtonsContainer.currentPage = 2;
+		}
 	}
 	
 	function createControlButtons()

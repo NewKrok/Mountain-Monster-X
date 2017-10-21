@@ -54,7 +54,7 @@ class NewsPage extends FlxSubState
 		scrollContainerConfig.direction = HPPScrollDirection.VERTICAL;
 		var scrollContainer:HPPTouchScrollContainer = new HPPTouchScrollContainer(FlxG.width, 400, scrollContainerConfig);*/
 		
-		container.add(createEntry("- 0.1 -", "This is the First version with version number. The game currently is under development."));
+		container.add(createEntry("Version 1.0", "Hi, finally here is the first offical release of the HTML5 version of Mountain Monster. In the future I will try to add all missing features what already exists in the mobile version.\nDon't forget to give feedback about this version!"));
 		
 		//container.add(scrollContainer);
 		
@@ -100,7 +100,10 @@ class NewsPage extends FlxSubState
 		descText.alignment = "center";
 		descText.size = 25;
 		descText.font = Fonts.AACHEN_MEDIUM;
+		versionText.borderStyle = FlxTextBorderStyle.OUTLINE;
 		descText.text = description;
+		descText.wordWrap = true;
+		descText.fieldWidth = FlxG.width - 50;
 		entryContainer.add(descText);
 		
 		return entryContainer;

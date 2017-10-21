@@ -79,6 +79,20 @@ class SavedDataUtil
 		}
 	}
 	
+	
+	static public function getLastPlayedLevel(worldId:UInt):UInt
+	{
+		for (i in 0...gameSave.data.levelInfos.length)
+		{
+			if (gameSave.data.levelInfos[i].worldId == worldId && gameSave.data.levelInfos[i].isLastPlayed)
+			{
+				return gameSave.data.levelInfos[i].levelId;
+			}
+		}
+		
+		return 0;
+	}
+	
 	public static function getHelpInfo(worldId:UInt):HelpInfo
 	{
 		for (i in 0...gameSave.data.helpInfos.length)
