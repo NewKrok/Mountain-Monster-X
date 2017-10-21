@@ -13,6 +13,7 @@ import hpp.flixel.ui.HPPVUIBox;
 import mmx.AppConfig;
 import mmx.assets.Fonts;
 import mmx.common.view.LongButton;
+import mmx.util.SavedDataUtil;
 
 /**
  * ...
@@ -61,9 +62,19 @@ class SettingsPage extends FlxSubState
 		container.y = FlxG.height / 2 - container.height / 2;
 		add( container );
 		
-		add( backButton = new LongButton( "BACK", openWelcomePage ) );
+		add( backButton = new LongButton( "BACK", saveAndClose ) );
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
+	}
+	
+	function saveAndClose(target:HPPButton) 
+	{
+		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
+		settingsInfo.enableAlphaAnimation = AppConfig.IS_ALPHA_ANIMATION_ENABLED;
+		settingsInfo.showFPS = AppConfig.SHOW_FPS;
+		SavedDataUtil.save();
+		
+		openWelcomePage(target);
 	}
 	
 	function setFPS( target:HPPToggleButton ):Void

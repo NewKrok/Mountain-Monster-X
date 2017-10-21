@@ -20,6 +20,11 @@ class SavedDataUtil
 			gameSave.data.baseInfo = {gameName: AppConfig.GAME_NAME, version: AppConfig.GAME_VERSION};
 		}
 		
+		if (gameSave.data.settings == null)
+		{
+			gameSave.data.settings = {showFPS: false, enableAlphaAnimation:false};
+		}
+		
 		if (gameSave.data.helpInfos == null)
 		{
 			gameSave.data.helpInfos = [];
@@ -94,11 +99,21 @@ class SavedDataUtil
 	{
 		getHelpInfo( worldId ).isShowed = isShowed;
 	}
+	
+	public static function getSettingsInfo():SettingsInfo
+	{
+		return gameSave.data.settings;
+	}
 }
 
 typedef BaseAppInfo = {
 	var gameName:String;
 	var version:String;
+}
+
+typedef SettingsInfo = {
+	var showFPS:Bool;
+	var enableAlphaAnimation:Bool;
 }
 
 typedef HelpInfo = {
