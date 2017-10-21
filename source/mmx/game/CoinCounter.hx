@@ -33,6 +33,9 @@ class CoinCounter extends FlxSpriteGroup
 		text.color = FlxColor.YELLOW;
 		text.alignment = "center";
 		text.font = Fonts.AACHEN_MEDIUM;
+		text.borderStyle = FlxTextBorderStyle.OUTLINE;
+		text.borderSize = 2;
+		text.borderColor = 0xAA6F6F00;
 		text.y = 12;
 		defaultTextScale = text.scale.x;
 		

@@ -142,7 +142,8 @@ class HelpPanel extends FlxSubState
 	{
 		helpIconContainer.remove(helpIconContainer.getFirstExisting());
 		
-		helpIconContainer.add(HPPAssetManager.getSprite("help_icon_" + worldId + "_" + helpIndex));
+		// TODO: remove index hack after back + front flip added
+		helpIconContainer.add(HPPAssetManager.getSprite("help_icon_" + worldId + "_" + (helpIndex == 3 ? 4 : helpIndex)));
 	}
 	
 	function updateHelpText()

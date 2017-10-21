@@ -22,12 +22,15 @@ class TimeCounter extends FlxSpriteGroup
 
 		add( background = HPPAssetManager.getSprite("gui_time_back"));
 
-		text = new FlxText( 40, 0, cast width - 40, "00:00", 33 );
+		text = new FlxText( 40, 0, cast width - 40, "00:00", 30 );
 		text.autoSize = false;
 		text.color = 0xFF26FF92;
 		text.alignment = "center";
 		text.font = Fonts.AACHEN_MEDIUM;
-		text.y = 12;
+		text.borderStyle = FlxTextBorderStyle.OUTLINE;
+		text.borderSize = 2;
+		text.borderColor = 0xAA006A35;
+		text.y = 14;
 		
 		add(text);
 		

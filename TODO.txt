@@ -1,10 +1,9 @@
 Needed for v1.0
 =================================================
-Update tutorial images
+Save settings
+Set all car properties
 Check world 0 1-12 levels
 Check world 0 13-24 levels
-Set all car properties
-Fix FPS position in mobile
 Fill latest news with the first info
 Publish to main site (don't forget to minify)
 
@@ -27,6 +26,7 @@ Needed for v1.2
 full screen from settings and from pause menu
 Enable world 1
 World 1 tutorial
+Update tutorial images
 Check world 1 1-12 levels
 Check world 1 13-24 levels
 Car selector
@@ -46,17 +46,20 @@ Add Language system
 
 Needed for v1.4
 =================================================
-Check world 2 levels
 Enable World 2
 Check world 2 1-12 levels
 Check world 2 13-24 levels
+World 2 tutorial
+Update tutorial images
 Check praticle system possibilities
 Check is it possible to add some advertisement to game
 
 
 Needed for v1.5
 =================================================
-Add world 3
+Enable world 3
+Add world 3 1-12 levels
+Add world 3 13-24 levels
 World 3 tutorial
 Check toplist possibilities
 Redesign world selector

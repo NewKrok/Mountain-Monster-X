@@ -666,9 +666,12 @@ class GameState extends FlxState
 		updateBridges();
 		updateSmallRocks();
 
-		checkCoinPickUp();
-		checkLoose();
-		checkWin();
+		if (!isLost)
+		{
+			checkCoinPickUp();
+			checkLoose();
+			checkWin();
+		}
 	}
 
 	function calculateGameTime():Void

@@ -51,19 +51,28 @@ class GameGui extends FlxSpriteGroup
 		timeCounter.x = FlxG.width / 2 - timeCounter.width / 2;
 		timeCounter.y = 10;
 		
-		if ( AppConfig.SHOW_FPS )
-		{
-			add( fpsCounter = new FPSCounter() );
-			fpsCounter.x = FlxG.width - fpsCounter.width - 10;
-			fpsCounter.y = FlxG.height - fpsCounter.height - 10;
-		}
-		
 		add( startCounter = new StartCounter( resumeGameCallBack ) );
 		
 		add( pauseButton = new HPPButton( "", pauseGameCallBack, "pause_button" ) );
 		pauseButton.overScale = .98;
 		pauseButton.x = FlxG.stage.stageWidth - pauseButton.width - 10;
 		pauseButton.y = 10;
+		
+		if (AppConfig.SHOW_FPS)
+		{
+			add(fpsCounter = new FPSCounter());
+			
+			if (DeviceData.isMobile())
+			{
+				fpsCounter.x = pauseButton.x - fpsCounter.width - 10;
+				fpsCounter.y = 10;
+			}
+			else
+			{
+				fpsCounter.x = FlxG.width - fpsCounter.width - 10;
+				fpsCounter.y = FlxG.height - fpsCounter.height - 10;
+			}
+		}
 		
 		if (DeviceData.isMobile())
 		{
