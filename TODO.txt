@@ -10,6 +10,9 @@ Flip + Air time detection + give bonus + show info
 Advertisement for the mobile version
 Switchable control - up/W to accerelate or right/D (only in desktop)
 Fix safari font offsets
+Increase car speeds
+Hotkeys to the pause menu
+Check missing next button after restart on end page
 
 
 Needed for v1.2
@@ -25,6 +28,7 @@ Show stars by world
 Show all star
 Show new highscore
 Improve coin pick up effect
+detect focus lost and pause the game
 
 
 Needed for v1.3

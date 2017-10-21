@@ -2,7 +2,8 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="FlxProject" file="FlxProject" main="Main" version="0.0.1" company="Flash++" />
+	<meta title="Mountain Monster" description="The HTML5 version of Mountain Monster 2d physics based car game." version="1.0" company="Flash++" />
+	<app title="Mountain Monster" file="mountain_monster" main="Main" version="1.0" company="Flash++" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
