@@ -1,6 +1,5 @@
 Needed for v1.0
 =================================================
-Hotkey to start level
 Auto select last level page
 Fill latest news with the first info
 Publish to main site (don't forget to minify)

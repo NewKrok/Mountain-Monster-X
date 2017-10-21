@@ -344,7 +344,7 @@ class GameState extends FlxState
 		gameGui.resumeGameRequest();
 	}
 	
-	function pauseRequest( target:HPPButton ):Void
+	function pauseRequest(target:HPPButton = null):Void
 	{
 		if (subState == null)
 		{
@@ -672,6 +672,11 @@ class GameState extends FlxState
 			checkCoinPickUp();
 			checkLoose();
 			checkWin();
+			
+			if (FlxG.keys.justPressed.ESCAPE)
+			{
+				pauseRequest(null);
+			}
 		}
 	}
 

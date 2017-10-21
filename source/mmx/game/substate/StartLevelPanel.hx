@@ -159,8 +159,8 @@ class StartLevelPanel extends FlxSubState
 	{
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
 		
-		buttonContainer.add(exitButton = new LongButton("EXIT", exitRequest));
-		buttonContainer.add(startButton = new LongButton("START GAME", startRequest));
+		buttonContainer.add(exitButton = new LongButton("E(X)IT", exitRequest));
+		buttonContainer.add(startButton = new LongButton("(S)TART GAME", startRequest));
 		
 		content.add(buttonContainer);
 		
@@ -174,11 +174,11 @@ class StartLevelPanel extends FlxSubState
 		}
 		if (_canStartPrevLevel)
 		{
-			subButtonContainer.add(prevButton = new LongButton("PREVIOUS LEVEL", prevLevelRequest));
+			subButtonContainer.add(prevButton = new LongButton("(P)REVIOUS LEVEL", prevLevelRequest));
 		}
 		if (_canStartNextLevel)
 		{
-			subButtonContainer.add(nextButton = new LongButton("NEXT LEVEL", nextLevelRequest));
+			subButtonContainer.add(nextButton = new LongButton("(N)EXT LEVEL", nextLevelRequest));
 		}
 		content.add(subButtonContainer);
 	}
@@ -191,5 +191,30 @@ class StartLevelPanel extends FlxSubState
 	function canStartNextLevel():Bool
 	{
 		return levelInfo.isCompleted && levelInfo.levelId != 23;
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		super.update(elapsed);
+		
+		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.S)
+		{
+			startRequest(null);
+		}
+		
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.X)
+		{
+			exitRequest(null);
+		}
+		
+		if (FlxG.keys.justPressed.P && canStartPrevLevel())
+		{
+			prevLevelRequest(null);
+		}
+		
+		if (FlxG.keys.justPressed.N && canStartNextLevel())
+		{
+			nextLevelRequest(null);
+		}
 	}
 }

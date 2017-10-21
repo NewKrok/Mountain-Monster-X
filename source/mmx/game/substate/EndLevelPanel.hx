@@ -196,8 +196,8 @@ class EndLevelPanel extends FlxSubState
 	{
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
 		
-		buttonContainer.add(exitButton = new LongButton("EXIT", exitRequest));
-		buttonContainer.add(startButton = new LongButton("RESTART GAME", restartRequest));
+		buttonContainer.add(exitButton = new LongButton("E(X)IT", exitRequest));
+		buttonContainer.add(startButton = new LongButton("(R)ESTART GAME", restartRequest));
 		
 		content.add(buttonContainer);
 		
@@ -211,11 +211,11 @@ class EndLevelPanel extends FlxSubState
 		}
 		if (_canStartPrevLevel)
 		{
-			subButtonContainer.add(prevButton = new LongButton("PREVIOUS LEVEL", prevLevelRequest));
+			subButtonContainer.add(prevButton = new LongButton("(P)REVIOUS LEVEL", prevLevelRequest));
 		}
 		if (_canStartNextLevel)
 		{
-			subButtonContainer.add(nextButton = new LongButton("NEXT LEVEL", nextLevelRequest));
+			subButtonContainer.add(nextButton = new LongButton("(N)EXT LEVEL", nextLevelRequest));
 		}
 		content.add(subButtonContainer);
 	}
@@ -250,5 +250,30 @@ class EndLevelPanel extends FlxSubState
 		
 		bestScoreText.text = levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A";
 		bestTimeText.text = levelInfo.isCompleted ? TimeUtil.timeStampToFormattedTime(levelInfo.time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A";
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		super.update(elapsed);
+		
+		if (FlxG.keys.justPressed.R)
+		{
+			restartRequest(null);
+		}
+		
+		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.X)
+		{
+			exitRequest(null);
+		}
+		
+		if (FlxG.keys.justPressed.P && canStartPrevLevel())
+		{
+			prevLevelRequest(null);
+		}
+		
+		if ((FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.N) && canStartNextLevel())
+		{
+			nextLevelRequest(null);
+		}
 	}
 }
