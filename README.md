@@ -2,7 +2,7 @@
 Haxe port of the Mountain Monster mobile game
 
 ## Try it now
-- http://flashplusplus.net/haxe/mountainmonster/index.html
+- http://flashplusplus.net/html-game/mountain-monster-html5
 
 ## Dependencies
 - **HaxeFlixel 4.3.0** Cross Platform Game Engine. http://haxeflixel.com/
