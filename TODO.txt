@@ -1,6 +1,5 @@
 Needed for v1.1
 =================================================
-Add elasticity joint to the car body
 Level preloader - maybe it's not needed (maybe state change effect)
 Sound + Music
 Sound + Music checkbox in menu
@@ -10,8 +9,8 @@ Flip + Air time detection + give bonus + show info
 Advertisement for the mobile version
 Switchable control - up/W to accerelate or right/D (only in desktop)
 Fix safari font offsets
-Increase car speeds
 Hotkeys to the pause menu
+Remove hotkeys in mobile
 Check missing next button after restart on end page
 
 

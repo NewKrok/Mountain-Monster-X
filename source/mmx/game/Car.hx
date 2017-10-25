@@ -25,7 +25,8 @@ import nape.space.Space;
  */
 class Car extends FlxSpriteGroup
 {	
-	var graphicJoinHertz:Float = 20;
+	var wheelJoinDamping:Float = .5;
+	var wheelJoinHertz:Float = 5;
 	
 	var firstWheelXOffset:Float = 55;
 	var firstWheelYOffset:Float = 35;
@@ -146,16 +147,18 @@ class Car extends FlxSpriteGroup
 		var hitJoin:WeldJoint = new WeldJoint( carBodyPhysics, hitArea, carBodyPhysics.localCOM, hitAreaAnchor );
 		hitJoin.space = space;
 		
-		var bodyLeftAnchor:Vec2 = new Vec2( firstWheelXOffset, firstWheelYOffset );
+		var bodyLeftAnchor:Vec2 = new Vec2( backWheelXOffset, backWheelYOffset );
 		var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint( wheelLeftPhysics, carBodyPhysics, wheelLeftPhysics.localCOM, bodyLeftAnchor );
-		pivotJointLeftLeftWheel.damping = 1;
-		pivotJointLeftLeftWheel.frequency = graphicJoinHertz;
+		pivotJointLeftLeftWheel.stiff = false;
+		pivotJointLeftLeftWheel.damping = wheelJoinDamping;
+		pivotJointLeftLeftWheel.frequency = wheelJoinHertz;
 		pivotJointLeftLeftWheel.space = space;
 		
-		var bodyRightAnchor:Vec2 = new Vec2( backWheelXOffset, backWheelYOffset );
+		var bodyRightAnchor:Vec2 = new Vec2( firstWheelXOffset, firstWheelYOffset );
 		var pivotJointRightRightWheel:PivotJoint = new PivotJoint( wheelRightPhysics, carBodyPhysics, wheelRightPhysics.localCOM, bodyRightAnchor );
-		pivotJointRightRightWheel.damping = 1;
-		pivotJointRightRightWheel.frequency = graphicJoinHertz;
+		pivotJointRightRightWheel.stiff = false;
+		pivotJointRightRightWheel.damping = wheelJoinDamping;
+		pivotJointRightRightWheel.frequency = wheelJoinHertz;
 		pivotJointRightRightWheel.space = space;
 	}
 	
