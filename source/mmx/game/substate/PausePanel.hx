@@ -70,19 +70,22 @@ class PausePanel extends FlxSubState
 	{
 		super.update(elapsed);
 		
-		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P)
+		if (AppConfig.IS_DESKTOP_DEVICE)
 		{
-			resumeRequest(null);
-		}
-		
-		if (FlxG.keys.justPressed.R)
-		{
-			restartRequest(null);
-		}
-		
-		if (FlxG.keys.justPressed.X)
-		{
-			exitRequest(null);
+			if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P)
+			{
+				resumeRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.R)
+			{
+				restartRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.X)
+			{
+				exitRequest(null);
+			}
 		}
 	}
 }

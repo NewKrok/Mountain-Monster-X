@@ -50,16 +50,18 @@ class LevelSelector extends FlxSubState
 	
 	function createLevelButtons() 
 	{
-		add( levelButtonsContainer = new HPPTouchScrollContainer( FlxG.width, FlxG.height, new HPPTouchScrollContainerConfig( { snapToPages: true } ) ) );
+		add(levelButtonsContainer = new HPPTouchScrollContainer(FlxG.width, FlxG.height, new HPPTouchScrollContainerConfig({ snapToPages: true })));
 		levelButtonsContainer.scrollFactor.set();
 		
 		var container:HPPHUIBox = new HPPHUIBox();
-		container.add( new LevelSelectorPage( worldId, 0, 12 ) );
-		container.add( new LevelSelectorPage( worldId, 12, 24 ) );
+		container.add(new LevelSelectorPage(worldId, 0, 12));
+		container.add(new LevelSelectorPage(worldId, 12, 24));
 		
-		levelButtonsContainer.add( container );
+		levelButtonsContainer.add(container);
 		
-		if (SavedDataUtil.getLastPlayedLevel(worldId) > 11)
+		var lastPlayedLevel:UInt = SavedDataUtil.getLastPlayedLevel(worldId);
+		var isNextLevelEnabled:Bool = lastPlayedLevel == 23 ? false : SavedDataUtil.getLevelInfo(worldId, lastPlayedLevel + 1).isEnabled;
+		if (lastPlayedLevel + (isNextLevelEnabled ? 1 : 0) > 11)
 		{
 			levelButtonsContainer.currentPage = 2;
 		}

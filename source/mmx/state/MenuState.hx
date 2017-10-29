@@ -7,7 +7,6 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.misc.VarTween;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.DeviceData;
 import js.Browser;
 import mmx.game.Background;
 import mmx.menu.substate.AboutUsPage;
@@ -78,7 +77,7 @@ class MenuState extends FlxState
 				openNewsPage();
 		}
 
-		if(DeviceData.isMobile())
+		if(AppConfig.IS_MOBILE_DEVICE)
 		{
 			#if html5
 				Browser.window.addEventListener( 'devicemotion', accelerometerMove, true );

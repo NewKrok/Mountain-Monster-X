@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import hpp.flixel.system.HPPFlxMain;
+import hpp.util.DeviceData;
 import mmx.AppConfig;
 import mmx.assets.Fonts;
 import mmx.state.MenuState;
@@ -20,6 +21,7 @@ class Main extends Sprite
 		SavedDataUtil.load( "MountainMonsterSavedData" );
 		AppConfig.IS_ALPHA_ANIMATION_ENABLED = SavedDataUtil.getSettingsInfo().enableAlphaAnimation;
 		AppConfig.SHOW_FPS = SavedDataUtil.getSettingsInfo().showFPS;
+		AppConfig.IS_MOBILE_DEVICE = DeviceData.isMobile();
 		
 		Fonts.init();
 		

@@ -11,7 +11,6 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.DeviceData;
 import mmx.assets.Fonts;
 import mmx.common.view.LongButton;
 import mmx.util.SavedDataUtil;
@@ -118,10 +117,10 @@ class HelpPanel extends FlxSubState
 		
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(20);
 		
-		buttonContainer.add( prevButton = new LongButton("BACK", onPrevRequest));
+		buttonContainer.add( prevButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(B)ACK" : "BACK", onPrevRequest));
 		prevButton.overScale = .98;
 		
-		buttonContainer.add( nextButton = new LongButton("NEXT", onNextRequest));
+		buttonContainer.add( nextButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(N)EXT" : "NEXT", onNextRequest));
 		nextButton.overScale = .98;
 		
 		content.add(buttonContainer);
@@ -148,9 +147,7 @@ class HelpPanel extends FlxSubState
 	
 	function updateHelpText()
 	{
-		var isMobile:Bool = DeviceData.isMobile();
-
-		helpDescription.text = ( isMobile && HELP_TEXTS[worldId][helpIndex].mobile != null ) ? HELP_TEXTS[worldId][helpIndex].mobile : HELP_TEXTS[worldId][helpIndex].desktop;
+		helpDescription.text = ( AppConfig.IS_MOBILE_DEVICE && HELP_TEXTS[worldId][helpIndex].mobile != null ) ? HELP_TEXTS[worldId][helpIndex].mobile : HELP_TEXTS[worldId][helpIndex].desktop;
 		
 		helpDataContainer.rePosition();
 	}
@@ -161,15 +158,15 @@ class HelpPanel extends FlxSubState
 
 		if (helpIndex == HELP_TEXTS[worldId].length - 1)
 		{
-			nextButton.label.text = "CLOSE";
+			nextButton.label.text = AppConfig.IS_DESKTOP_DEVICE ? "(C)LOSE" : "CLOSE";
 		}
 		else
 		{
-			nextButton.label.text = "NEXT";
+			nextButton.label.text = AppConfig.IS_DESKTOP_DEVICE ? "(N)EXT" : "NEXT";
 		}
 	}
 	
-	function onNextRequest(target:HPPButton) 
+	function onNextRequest(target:HPPButton = null) 
 	{
 		helpIndex++;
 		
@@ -186,12 +183,30 @@ class HelpPanel extends FlxSubState
 		}
 	}
 	
-	function onPrevRequest(target:HPPButton) 
+	function onPrevRequest(target:HPPButton = null) 
 	{
 		if (helpIndex == 0) return;
 		
 		helpIndex--;
 		updateView();
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		super.update(elapsed);
+		
+		if (AppConfig.IS_DESKTOP_DEVICE)
+		{
+			if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.RIGHT || (FlxG.keys.justPressed.N && helpIndex < HELP_TEXTS[worldId].length - 1) || (FlxG.keys.justPressed.C && helpIndex == HELP_TEXTS[worldId].length - 1 ))
+			{
+				onNextRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.B)
+			{
+				onPrevRequest(null);
+			}
+		}
 	}
 }
 

@@ -215,7 +215,6 @@ class GameState extends FlxState
 		destroySubStates = false;
 		
 		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
-		startLevelPanel = new StartLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 		endLevelPanel = new EndLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 		
 		lastCameraStepOffset = new FlxPoint();
@@ -257,8 +256,15 @@ class GameState extends FlxState
 		}
 	}
 	
-	function openStartLevelPanelRequest(target:HPPButton):Void
+	function openStartLevelPanelRequest(target:HPPButton = null):Void
 	{
+		if (startLevelPanel != null)
+		{
+			startLevelPanel.destroy();
+			startLevelPanel = null;
+		}
+		
+		startLevelPanel = new StartLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 		openSubState( startLevelPanel );
 	}
 
@@ -307,7 +313,7 @@ class GameState extends FlxState
 
 		start();
 		
-		openSubState( startLevelPanel );
+		openStartLevelPanelRequest();
 		pause();
 		isPhysicsEnabled = true;
 	}
@@ -673,7 +679,7 @@ class GameState extends FlxState
 			checkLoose();
 			checkWin();
 			
-			if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P)
+			if (AppConfig.IS_DESKTOP_DEVICE && (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P))
 			{
 				pauseRequest(null);
 			}

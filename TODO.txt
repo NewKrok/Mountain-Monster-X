@@ -1,9 +1,16 @@
 Needed for v1.1
 =================================================
+[RDY] Add elasticity to the car
+[RDY] Increase car speeds
+[RDY] Pause with hotkey P
+[RDY] Add hotkeys to pause menu
+[RDY] Add hotkeys to help panel
+[RDY] Remove hotkeys in mobile
+[RDY] Fix missing next button after restart on end page
+[RDY] Fix auto level page select when the last finished level is 12
 Fix font positions in safari
-Remove hotkeys in mobile
 Advertisement for the mobile version
-Check missing next button after restart on end page
+detect focus lost and pause the game
 
 
 Needed for ??
@@ -29,7 +36,6 @@ Show stars by world
 Show all star
 Show new highscore
 Improve coin pick up effect
-detect focus lost and pause the game
 
 
 Needed for ??

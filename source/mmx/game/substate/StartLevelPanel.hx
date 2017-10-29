@@ -159,8 +159,8 @@ class StartLevelPanel extends FlxSubState
 	{
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
 		
-		buttonContainer.add(exitButton = new LongButton("E(X)IT", exitRequest));
-		buttonContainer.add(startButton = new LongButton("(S)TART GAME", startRequest));
+		buttonContainer.add(exitButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "E(X)IT" : "EXIT", exitRequest));
+		buttonContainer.add(startButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(S)TART GAME" : "START GAME", startRequest));
 		
 		content.add(buttonContainer);
 		
@@ -174,11 +174,11 @@ class StartLevelPanel extends FlxSubState
 		}
 		if (_canStartPrevLevel)
 		{
-			subButtonContainer.add(prevButton = new LongButton("(P)REVIOUS LEVEL", prevLevelRequest));
+			subButtonContainer.add(prevButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(P)REVIOUS LEVEL" : "PREVIOUS LEVEL", prevLevelRequest));
 		}
 		if (_canStartNextLevel)
 		{
-			subButtonContainer.add(nextButton = new LongButton("(N)EXT LEVEL", nextLevelRequest));
+			subButtonContainer.add(nextButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(N)EXT LEVEL" : "NEXT LEVEL", nextLevelRequest));
 		}
 		content.add(subButtonContainer);
 	}
@@ -197,24 +197,27 @@ class StartLevelPanel extends FlxSubState
 	{
 		super.update(elapsed);
 		
-		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.S)
+		if (AppConfig.IS_DESKTOP_DEVICE)
 		{
-			startRequest(null);
-		}
-		
-		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.X)
-		{
-			exitRequest(null);
-		}
-		
-		if (FlxG.keys.justPressed.P && canStartPrevLevel())
-		{
-			prevLevelRequest(null);
-		}
-		
-		if (FlxG.keys.justPressed.N && canStartNextLevel())
-		{
-			nextLevelRequest(null);
+			if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.S)
+			{
+				startRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.X)
+			{
+				exitRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.P && canStartPrevLevel())
+			{
+				prevLevelRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.N && canStartNextLevel())
+			{
+				nextLevelRequest(null);
+			}
 		}
 	}
 }

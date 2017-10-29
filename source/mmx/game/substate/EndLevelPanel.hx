@@ -196,8 +196,8 @@ class EndLevelPanel extends FlxSubState
 	{
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
 		
-		buttonContainer.add(exitButton = new LongButton("E(X)IT", exitRequest));
-		buttonContainer.add(startButton = new LongButton("(R)ESTART GAME", restartRequest));
+		buttonContainer.add(exitButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "E(X)IT" : "EXIT", exitRequest));
+		buttonContainer.add(startButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(R)ESTART GAME" : "RESTART GAME", restartRequest));
 		
 		content.add(buttonContainer);
 		
@@ -211,11 +211,11 @@ class EndLevelPanel extends FlxSubState
 		}
 		if (_canStartPrevLevel)
 		{
-			subButtonContainer.add(prevButton = new LongButton("(P)REVIOUS LEVEL", prevLevelRequest));
+			subButtonContainer.add(prevButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(P)REVIOUS LEVEL" : "PREVIOUS LEVEL", prevLevelRequest));
 		}
 		if (_canStartNextLevel)
 		{
-			subButtonContainer.add(nextButton = new LongButton("(N)EXT LEVEL", nextLevelRequest));
+			subButtonContainer.add(nextButton = new LongButton(AppConfig.IS_DESKTOP_DEVICE ? "(N)EXT LEVEL" : "NEXT LEVEL", nextLevelRequest));
 		}
 		content.add(subButtonContainer);
 	}
@@ -256,24 +256,27 @@ class EndLevelPanel extends FlxSubState
 	{
 		super.update(elapsed);
 		
-		if (FlxG.keys.justPressed.R)
+		if (AppConfig.IS_DESKTOP_DEVICE)
 		{
-			restartRequest(null);
-		}
-		
-		if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.X)
-		{
-			exitRequest(null);
-		}
-		
-		if (FlxG.keys.justPressed.P && canStartPrevLevel())
-		{
-			prevLevelRequest(null);
-		}
-		
-		if ((FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.N) && canStartNextLevel())
-		{
-			nextLevelRequest(null);
+			if (FlxG.keys.justPressed.R)
+			{
+				restartRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.X)
+			{
+				exitRequest(null);
+			}
+			
+			if (FlxG.keys.justPressed.P && canStartPrevLevel())
+			{
+				prevLevelRequest(null);
+			}
+			
+			if ((FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.N) && canStartNextLevel())
+			{
+				nextLevelRequest(null);
+			}
 		}
 	}
 }

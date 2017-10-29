@@ -7,7 +7,6 @@ import flixel.math.FlxPoint;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.DeviceData;
 import mmx.AppConfig;
 import mmx.game.TimeCounter;
 import openfl.events.TouchEvent;
@@ -62,7 +61,7 @@ class GameGui extends FlxSpriteGroup
 		{
 			add(fpsCounter = new FPSCounter());
 			
-			if (DeviceData.isMobile())
+			if (AppConfig.IS_MOBILE_DEVICE)
 			{
 				fpsCounter.x = pauseButton.x - fpsCounter.width - 10;
 				fpsCounter.y = 10;
@@ -74,7 +73,7 @@ class GameGui extends FlxSpriteGroup
 			}
 		}
 		
-		if (DeviceData.isMobile())
+		if (AppConfig.IS_MOBILE_DEVICE)
 		{
 			createControlButtons();
 		}

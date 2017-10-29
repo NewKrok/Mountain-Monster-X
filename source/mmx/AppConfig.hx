@@ -14,4 +14,12 @@ class AppConfig
 	
 	public static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
 	public static var SHOW_FPS:Bool = false;
+	
+	public static var IS_MOBILE_DEVICE:Bool = false;
+	public static var IS_DESKTOP_DEVICE(get, null):Bool;
+	
+	static function get_IS_DESKTOP_DEVICE():Bool 
+	{
+		return !IS_MOBILE_DEVICE;
+	}
 }
