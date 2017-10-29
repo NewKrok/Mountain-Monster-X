@@ -20,6 +20,7 @@ class WelcomePage extends FlxSubState
 	var aboutUsButton:HPPButton;
 	var gitHubButton:HPPButton;
 	var newsButton:HPPButton;
+	var appStoreButton:HPPButton;
 	
 	var logo:FlxSprite;
 	
@@ -53,10 +54,16 @@ class WelcomePage extends FlxSubState
 		logo.scrollFactor.set();
 		add( logo );
 		
+		appStoreButton = new HPPButton( "", openAppStore, "app_store_logo" );
+		appStoreButton.overScale = 1.05;
+		appStoreButton.x = FlxG.stage.stageWidth / 2 - appStoreButton.width / 2;
+		appStoreButton.y = logo.y + logo.height;
+		add( appStoreButton );
+		
 		startButton = new HPPButton( "", openWorldSelector, "play_game_button" );
 		startButton.overScale = .98;
 		startButton.x = FlxG.stage.stageWidth / 2 - startButton.width / 2;
-		startButton.y = FlxG.stage.stageHeight / 2 - startButton.height / 2 + 50;
+		startButton.y = FlxG.stage.stageHeight / 2 - startButton.height / 2 + 70;
 		add( startButton );
 		
 		homeButton = new HPPButton( "", goToHome, "home_button" );
@@ -96,21 +103,27 @@ class WelcomePage extends FlxSubState
 		add( newsButton );
 	}
 	
-	function goToHome( target:HPPButton ):Void
+	function goToHome(target:HPPButton):Void
 	{
 		var homeURL:URLRequest = new URLRequest( "http://flashplusplus.net/?utm_source=Mountain-Monster-HTML5&utm_medium=welcome-page&utm_campaign=HTML5-Games" );
 		openfl.Lib.getURL( homeURL, "_blank" );
 	}
 	
-	function goToFacebook( target:HPPButton ):Void
+	function goToFacebook(target:HPPButton):Void
 	{
 		var facebookURL:URLRequest = new URLRequest( "https://www.facebook.com/flashplusplus" );
 		openfl.Lib.getURL( facebookURL, "_blank" );
 	}
 	
-	function goToGithub( target:HPPButton ):Void
+	function goToGithub(target:HPPButton):Void
 	{
 		var githubURL:URLRequest = new URLRequest( "https://github.com/NewKrok/Mountain-Monster-X" );
 		openfl.Lib.getURL( githubURL, "_blank" );
+	}
+	
+	function openAppStore(target:HPPButton):Void
+	{
+		var appStoreURL:URLRequest = new URLRequest("https://itunes.apple.com/us/app/mountain-monster/id1041815415");
+		openfl.Lib.getURL(appStoreURL, "_blank");
 	}
 }

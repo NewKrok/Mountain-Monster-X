@@ -54,6 +54,7 @@ class NewsPage extends FlxSubState
 		scrollContainerConfig.direction = HPPScrollDirection.VERTICAL;
 		var scrollContainer:HPPTouchScrollContainer = new HPPTouchScrollContainer(FlxG.width, 400, scrollContainerConfig);*/
 		
+		container.add(createEntry("Version 1.1.0", "Car physics improvement, New hotkeys added, Hotkey texts removed from the mobile view, Some minor bugfix"));
 		container.add(createEntry("Version 1.0", "Hi, finally here is the first offical release of the HTML5 version of Mountain Monster. In the future I will try to add all missing features what already exists in the mobile version.\nDon't forget to give feedback about this version!"));
 		
 		//container.add(scrollContainer);

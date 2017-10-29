@@ -22,4 +22,5 @@
 	<SubTexture name="nape_logo" x="653" y="1880" width="84" height="109" pivotX="0" pivotY="0"/>
 	<SubTexture name="haxe_plus_plus_logo" x="747" y="1880" width="124" height="64" pivotX="0" pivotY="0"/>
 	<SubTexture name="about_us_button" x="885" y="1875" width="114" height="132" pivotX="0" pivotY="0"/>
+	<SubTexture name="app_store_logo" x="465" y="1970" width="151" height="46" pivotX="0" pivotY="0"/>
 </TextureAtlas>
