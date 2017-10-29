@@ -8,9 +8,9 @@ Needed for v1.1
 [RDY] Remove hotkeys in mobile
 [RDY] Fix missing next button after restart on end page
 [RDY] Fix auto level page select when the last finished level is 12
+[RDY] detect focus lost and pause the game
 Fix font positions in safari
 Advertisement for the mobile version
-detect focus lost and pause the game
 
 
 Needed for ??

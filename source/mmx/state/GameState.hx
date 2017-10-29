@@ -869,6 +869,16 @@ class GameState extends FlxState
 		FlxG.switchState( new GameState(worldId, levelId - 1));
 	}
 	
+	override public function onFocusLost():Void 
+	{
+		if (isGameStarted)
+		{
+			pauseRequest();
+		}
+		
+		super.onFocusLost();
+	}
+	
 	override public function destroy():Void
 	{
 		HPPAssetManager.clear();
