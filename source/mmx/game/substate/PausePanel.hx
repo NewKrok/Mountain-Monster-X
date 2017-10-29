@@ -26,7 +26,7 @@ class PausePanel extends FlxSubState
 	var restartRequest:HPPButton->Void;
 	var exitRequest:HPPButton->Void;
 	
-	function new( resumeRequest:HPPButton->Void, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void ):Void
+	function new(resumeRequest:HPPButton->Void, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void):Void
 	{
 		super();
 		
@@ -64,5 +64,25 @@ class PausePanel extends FlxSubState
 		
 		buttonContainer.x = FlxG.stage.stageWidth / 2 - buttonContainer.width / 2;
 		buttonContainer.y = FlxG.stage.stageHeight / 2 - buttonContainer.height / 2;
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		super.update(elapsed);
+		
+		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P)
+		{
+			resumeRequest(null);
+		}
+		
+		if (FlxG.keys.justPressed.R)
+		{
+			restartRequest(null);
+		}
+		
+		if (FlxG.keys.justPressed.X)
+		{
+			exitRequest(null);
+		}
 	}
 }

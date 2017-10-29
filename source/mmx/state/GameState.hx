@@ -673,7 +673,7 @@ class GameState extends FlxState
 			checkLoose();
 			checkWin();
 			
-			if (FlxG.keys.justPressed.ESCAPE)
+			if (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P)
 			{
 				pauseRequest(null);
 			}

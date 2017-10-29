@@ -1,20 +1,22 @@
 Needed for v1.1
 =================================================
-Level preloader - maybe it's not needed (maybe state change effect)
-Sound + Music
-Sound + Music checkbox in menu
 Fix font positions in safari
-Effect handling - for example for air time or backflip
-Flip + Air time detection + give bonus + show info
-Advertisement for the mobile version
-Switchable control - up/W to accerelate or right/D (only in desktop)
-Fix safari font offsets
-Hotkeys to the pause menu
 Remove hotkeys in mobile
+Advertisement for the mobile version
 Check missing next button after restart on end page
 
 
-Needed for v1.2
+Needed for ??
+=================================================
+Level preloader - maybe it's not needed (maybe state change effect)
+Sound + Music
+Sound + Music checkbox in menu
+Effect handling - for example for air time or backflip
+Flip + Air time detection + give bonus + show info
+Switchable control - up/W to accerelate or right/D (only in desktop)
+
+
+Needed for ??
 =================================================
 full screen from settings and from pause menu
 Enable world 1
@@ -30,7 +32,7 @@ Improve coin pick up effect
 detect focus lost and pause the game
 
 
-Needed for v1.3
+Needed for ??
 =================================================
 End photo if its possible
 Fix terrain graphic
@@ -39,7 +41,7 @@ Add Task system
 Add Language system
 Hotkeys
 
-Needed for v1.4
+Needed for v1.5
 =================================================
 Enable World 2
 Check world 2 1-12 levels
@@ -50,7 +52,7 @@ Check praticle system possibilities
 Check is it possible to add some advertisement to game
 
 
-Needed for v1.5
+Needed for ??
 =================================================
 Enable world 3
 Add world 3 1-12 levels
@@ -61,7 +63,7 @@ Redesign world selector
 Check code minify possibilities
 
 
-Needed for v1.6
+Needed for ??
 =================================================
 Check shadow player possibilities
 Check how can I remove the basic Flixel assets

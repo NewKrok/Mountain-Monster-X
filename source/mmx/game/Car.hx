@@ -8,6 +8,7 @@ import hpp.flixel.util.HPPAssetManager;
 import mmx.datatype.CarData;
 import mmx.game.constant.CPhysicsValue;
 import nape.callbacks.InteractionType;
+import nape.constraint.DistanceJoint;
 import nape.constraint.PivotJoint;
 import nape.constraint.WeldJoint;
 import nape.dynamics.InteractionFilter;
@@ -160,6 +161,10 @@ class Car extends FlxSpriteGroup
 		pivotJointRightRightWheel.damping = wheelJoinDamping;
 		pivotJointRightRightWheel.frequency = wheelJoinHertz;
 		pivotJointRightRightWheel.space = space;
+		
+		var distance:Float = firstWheelXOffset + Math.abs(backWheelXOffset);
+		var wheelJoin:DistanceJoint = new DistanceJoint( wheelRightPhysics, wheelLeftPhysics, wheelRightPhysics.localCOM, wheelLeftPhysics.localCOM, distance, distance );
+		wheelJoin.space = space;
 	}
 	
 	public function getMidXPosition():Float
