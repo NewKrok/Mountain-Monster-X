@@ -8,6 +8,7 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Timer;
 import hpp.flixel.HPPCamera;
@@ -83,12 +84,12 @@ class GameState extends FlxState
 
 	var car:Car;
 	var snow:Snow;
+	
 	/*
-
-		var achievementManager:AchievementManager;
-
-		var effects:Vector.<Image> = new Vector.<Image>;
+		var achievementManager:AchievementManager;	
 	*/
+		
+	var effects:Array<FlxSprite> = [];
 	var crates:Array<AbstractCrate> = [];
 
 	var levelData:LevelData;
@@ -775,9 +776,17 @@ class GameState extends FlxState
 		{
 			isLost = true;
 			
-			if (car.isCarCrashed) camera.shake( .02, .2 );
+			if (car.isCarCrashed)
+			{
+				camera.shake( .02, .2 );
+				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_CRUSHED);
+			}
+			else
+			{
+				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_TIME_OUT);
+			}
 			
-			Timer.delay(restartRutin, 1000);
+			Timer.delay(restartRutin, 1500);
 		}
 	}
 
@@ -785,34 +794,43 @@ class GameState extends FlxState
 	{
 		if (!isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x)
 		{
-			var score:UInt = calculateScore();
+			isWon = true;
 			
-			var starCount:UInt = coinsToStarCount(score);
-			var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
-			levelInfo.time = ( gameTime < levelInfo.time || levelInfo.time == 0 ) ? gameTime : levelInfo.time;
+			addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_LEVEL_COMPLETED);
 			
-			levelInfo.score = score > levelInfo.score ? score : levelInfo.score;
-			levelInfo.isCompleted = true;
-			levelInfo.starCount = starCount > levelInfo.starCount ? starCount : levelInfo.starCount;
-			levelInfo.collectedCoins = collectedCoin > levelInfo.collectedCoins ? collectedCoin : levelInfo.collectedCoins;
-			
-			if (levelId < 23)
-			{
-				levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
-				levelInfo.isEnabled = true;
-			}
-			if (levelId == 23)
-			{
-				levelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
-				levelInfo.isEnabled = true;
-			}
-			
-			SavedDataUtil.save();
-			
-			persistentUpdate = false;
-			openSubState( endLevelPanel );
-			endLevelPanel.updateView(score, gameTime, collectedCoin, starCount);
+			Timer.delay(winRutin, 1000);
 		}
+	}
+	
+	function winRutin():Void 
+	{
+		var score:UInt = calculateScore();
+		
+		var starCount:UInt = coinsToStarCount(score);
+		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
+		levelInfo.time = ( gameTime < levelInfo.time || levelInfo.time == 0 ) ? gameTime : levelInfo.time;
+		
+		levelInfo.score = score > levelInfo.score ? score : levelInfo.score;
+		levelInfo.isCompleted = true;
+		levelInfo.starCount = starCount > levelInfo.starCount ? starCount : levelInfo.starCount;
+		levelInfo.collectedCoins = collectedCoin > levelInfo.collectedCoins ? collectedCoin : levelInfo.collectedCoins;
+		
+		if (levelId < 23)
+		{
+			levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
+			levelInfo.isEnabled = true;
+		}
+		if (levelId == 23)
+		{
+			levelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
+			levelInfo.isEnabled = true;
+		}
+		
+		SavedDataUtil.save();
+		
+		persistentUpdate = false;
+		openSubState( endLevelPanel );
+		endLevelPanel.updateView(score, gameTime, collectedCoin, starCount);
 	}
 	
 	function calculateScore():UInt
@@ -842,6 +860,113 @@ class GameState extends FlxState
 		}
 
 		return starCount;
+	}
+	
+	/*function startFrontFlipRutin():Void
+	{
+		_countOfFrontFlip++;
+
+		_collectedExtraCoins += CScore.SCORE_FRONT_FLIP;
+
+		checkFrontFlipTasks();
+
+		_gameGui.addNotification( CNotification.FRONT_FLIP );
+	}
+
+	function startBackFlipRutin():Void
+	{
+		_countOfBackFlip++;
+
+		_collectedExtraCoins += CScore.SCORE_BACK_FLIP;
+
+		checkBackFlipTasks();
+
+		_gameGui.addNotification( CNotification.BACK_FLIP );
+	}
+
+	function startNiceAirTimeRutin():Void
+	{
+		_countOfNiceAirTime++;
+
+		_collectedExtraCoins += CScore.SCORE_NICE_AIR_TIME;
+
+		checkNiceAirTimeTasks();
+
+		_gameGui.addNotification( CNotification.NICE_AIR );
+	}
+
+	function startNiceWheelieTimeRutin():Void
+	{
+		_countOfNiceWheelie++;
+
+		_collectedExtraCoins += CScore.SCORE_NICE_WHEELIE_TIME;
+
+		checkNiceWheelieTimeTasks();
+
+		_gameGui.addNotification( CNotification.NICE_WHEELIE );
+	}*/
+
+	function addEffect(x:Float, y:Float, effectType:GameEffect):Void
+	{
+		var effect:FlxSprite = HPPAssetManager.getSprite(cast effectType);
+
+		effect.origin.set(effect.width / 2, effect.height / 2);
+		effect.x = x;
+		effect.y = y;
+		effect.scale.set(.5, .5);
+		effect.alpha = AppConfig.IS_ALPHA_ANIMATION_ENABLED ? 0 : 1;
+
+		if (AppConfig.IS_ALPHA_ANIMATION_ENABLED)
+		{
+			FlxTween.tween(
+				effect,
+				{ alpha: 1 },
+				.5
+			);
+			FlxTween.tween(
+				effect,
+				{ alpha: 0 },
+				.3,
+				{ startDelay: 1 }
+			);
+		}
+		
+		FlxTween.tween(
+			effect.scale,
+			{ 
+				x: 1,
+				y: 1,
+			},
+			.3
+		);
+		
+		FlxTween.tween(
+			effect.scale,
+			{ 
+				x: 0,
+				y: 0,
+			},
+			.2,
+			{ startDelay: 1, onComplete: function(_) { disposeEffect(effect); } }
+		);
+		
+		container.add(effect);
+		effects.push(effect);
+	}
+
+	function disposeEffect(target:FlxSprite):Void
+	{
+		for (effect in effects)
+		{
+			if (effect == target)
+			{
+				effects.remove(effect);
+				effect.destroy();
+				effect = null;
+				
+				return;
+			}
+		}
 	}
 
 	function restartRutin():Void
@@ -885,4 +1010,11 @@ class GameState extends FlxState
 		
 		super.destroy();
 	}
+}
+
+@:enum
+abstract GameEffect(String) {
+	var TYPE_LEVEL_COMPLETED = "effect_level_completed";
+	var TYPE_CRUSHED = "effect_crushed";
+	var TYPE_TIME_OUT = "effect_time_out";
 }

@@ -1,15 +1,14 @@
-Needed for v1.1
+Needed for v1.2.0
 =================================================
-[RDY] Add elasticity to the car
-[RDY] Increase car speeds
-[RDY] Pause with hotkey P
-[RDY] Add hotkeys to pause menu
-[RDY] Add hotkeys to help panel
-[RDY] Remove hotkeys in mobile
-[RDY] Fix missing next button after restart on end page
-[RDY] Fix auto level page select when the last finished level is 12
-[RDY] detect focus lost and pause the game
-[RDY] Advertisement for the mobile version
+[RDY] Fix keyboard problem on other websites
+[RDY] Effect handling - for crush, time left, win
+Flip + Air time detection + give bonus + show info
+full screen from settings and from pause menu
+Enable world 1 - with first 12 level
+Check world 1 1-12 levels
+World 1 tutorial
+Update tutorial images for world 1
+Show new highscore
 
 
 Needed for ??
@@ -18,23 +17,15 @@ Fix font positions in safari
 Level preloader - maybe it's not needed (maybe state change effect)
 Sound + Music
 Sound + Music checkbox in menu
-Effect handling - for example for air time or backflip
-Flip + Air time detection + give bonus + show info
 Switchable control - up/W to accerelate or right/D (only in desktop)
 
 
 Needed for ??
 =================================================
-full screen from settings and from pause menu
-Enable world 1
-World 1 tutorial
-Update tutorial images
-Check world 1 1-12 levels
 Check world 1 13-24 levels
 Car selector
 Show stars by world
 Show all star
-Show new highscore
 Improve coin pick up effect
 
 
@@ -45,9 +36,8 @@ Fix terrain graphic
 Extra car if the player play on our site
 Add Task system
 Add Language system
-Hotkeys
 
-Needed for v1.5
+Needed for ??
 =================================================
 Enable World 2
 Check world 2 1-12 levels
@@ -73,4 +63,3 @@ Needed for ??
 =================================================
 Check shadow player possibilities
 Check how can I remove the basic Flixel assets
-Publish it on other sites - Kongregate, Newgrounds, Facebook

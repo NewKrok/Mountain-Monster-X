@@ -12,17 +12,18 @@
     <movie minorVersion="0" />
     <movie platform="Lime" />
     <movie background="#000000" />
+    <movie preferredSDK="Haxe 3.4.3;3.4.3;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
-    <class path="C:\HaxeToolkit\haxe\lib\flixel\4,3,0" />
-    <class path="C:\HaxeToolkit\haxe\lib\openfl\3,6,1" />
-    <class path="C:\HaxeToolkit\haxe\lib\lime\2,9,1" />
-    <class path="C:\HaxeToolkit\haxe\lib\nape\2,0,20" />
-    <class path="C:\HaxeToolkit\haxe\lib\flixel-ui\2,2,0" />
-    <class path="C:\HaxeToolkit\haxe\lib\hpp\git" />
+    <class path="C:\work\sdk\haxe\haxe-3.4.3-win\lib\flixel\4,3,0" />
+    <class path="C:\work\sdk\haxe\haxe-3.4.3-win\lib\openfl\3,6,1" />
+    <class path="C:\work\sdk\haxe\haxe-3.4.3-win\lib\lime\2,9,1" />
+    <class path="C:\work\sdk\haxe\haxe-3.4.3-win\lib\nape\2,0,20" />
+    <class path="C:\work\sdk\haxe\haxe-3.4.3-win\lib\flixel-ui\2,2,0" />
+    <class path="C:\work\sdk\haxe\haxe-3.4.3-win\lib\hpp\git" />
     <class path="source" />
-    <class path="C:\HaxeToolkit\haxe\lib\openfl\3,6,1\extern" />
+    <class path="C:\work\sdk\haxe\haxe-3.4.3-win\lib\openfl\3,6,1\extern" />
     <class path="export\html5\haxe" />
   </classpaths>
   <!-- Build options -->
