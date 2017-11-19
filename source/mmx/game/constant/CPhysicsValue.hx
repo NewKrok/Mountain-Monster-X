@@ -25,7 +25,7 @@ class CPhysicsValue
 	public static var MATERIAL_WHEEL( get, never ):Material;
 	
 	static function get_MATERIAL_NORMAL_GROUND():Material { return Material.wood(); }
-	static function get_MATERIAL_SNOWY_GROUND():Material { return Material.ice(); }
+	static function get_MATERIAL_SNOWY_GROUND():Material { return new Material(0.2, 0.04, 0.12, 5, 0.0005); } // Based on wood material
 	static function get_MATERIAL_BRIDGE():Material { return Material.wood(); }
-	static function get_MATERIAL_WHEEL():Material { return new Material( 0.8, 12, 12, 1.5, 0.01 ); } // Based on rubber material
+	static function get_MATERIAL_WHEEL():Material { return new Material(0.8, 12, 12, 1.5, 0.01); } // Based on rubber material
 }

@@ -33,8 +33,7 @@ class HelpPanel extends FlxSubState
 				mobile: "Touch left arrows to lean back or to lean front with the car.".toUpperCase()
 			},
 			{ desktop: "Collect Coins to earn more score.".toUpperCase() },
-			// TODO: Add back after if these are implemented
-			//{ desktop: "Do back flip, front flip, wheelie or nice air time to earn more score.".toUpperCase() },
+			{ desktop: "Do back flip, front flip, wheelie or nice air time to earn more score.".toUpperCase() },
 			{ desktop: "Good luck, have a nice ride!".toUpperCase() },
 		],
 		[
@@ -141,8 +140,7 @@ class HelpPanel extends FlxSubState
 	{
 		helpIconContainer.remove(helpIconContainer.getFirstExisting());
 		
-		// TODO: remove index hack after back + front flip added
-		helpIconContainer.add(HPPAssetManager.getSprite("help_icon_" + worldId + "_" + (helpIndex == 3 ? 4 : helpIndex)));
+		helpIconContainer.add(HPPAssetManager.getSprite("help_icon_" + worldId + "_" + helpIndex));
 	}
 	
 	function updateHelpText()

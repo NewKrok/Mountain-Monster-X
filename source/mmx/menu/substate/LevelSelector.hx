@@ -55,7 +55,8 @@ class LevelSelector extends FlxSubState
 		
 		var container:HPPHUIBox = new HPPHUIBox();
 		container.add(new LevelSelectorPage(worldId, 0, 12));
-		container.add(new LevelSelectorPage(worldId, 12, 24));
+		// TODO remove this hack after the whole world playable
+		if (worldId != 1) container.add(new LevelSelectorPage(worldId, 12, 24));
 		
 		levelButtonsContainer.add(container);
 		
@@ -63,7 +64,8 @@ class LevelSelector extends FlxSubState
 		var isNextLevelEnabled:Bool = lastPlayedLevel == 23 ? false : SavedDataUtil.getLevelInfo(worldId, lastPlayedLevel + 1).isEnabled;
 		if (lastPlayedLevel + (isNextLevelEnabled ? 1 : 0) > 11)
 		{
-			levelButtonsContainer.currentPage = 2;
+			// TODO remove this hack after the whole world playable
+			if (worldId != 1) levelButtonsContainer.currentPage = 2;
 		}
 	}
 	

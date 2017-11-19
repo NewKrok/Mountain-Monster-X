@@ -450,7 +450,7 @@ class GameState extends FlxState
 			var body:Body = new Body( BodyType.STATIC );
 
 			body.shapes.add( new Polygon( Polygon.box( distance, 1 ) ) );
-			body.setShapeMaterials( worldId == 1 ? CPhysicsValue.MATERIAL_NORMAL_GROUND : CPhysicsValue.MATERIAL_SNOWY_GROUND );
+			body.setShapeMaterials( worldId == 1 ? CPhysicsValue.MATERIAL_SNOWY_GROUND : CPhysicsValue.MATERIAL_NORMAL_GROUND );
 			body.setShapeFilters( filter );
 			body.position.x = levelData.groundPoints[ i ].x + ( levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x ) / 2;
 			body.position.y = levelData.groundPoints[ i ].y + ( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y ) / 2;
@@ -535,7 +535,8 @@ class GameState extends FlxState
 
 	function createCar():Void
 	{
-		car = new Car( space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( 0 ), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK );
+		// TODO remove this hack after car selector added
+		car = new Car( space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( worldId == 0 ? 0 : 1 ), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK );
 		container.add( car );
 	}
 	

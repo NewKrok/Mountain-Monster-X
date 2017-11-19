@@ -3,12 +3,13 @@ Needed for v1.2.0
 [RDY] Fix keyboard problem on other websites
 [RDY] Effect handling - for crush, time left, win
 [RDY] Flip + Air time detection + give bonus + show info
-World 0 tutorial
-World 1 tutorial
+[RDY] Extend World 0 tutorial
+[RDY] Enable world 1 - with first 12 level
+[RDY] World 1 tutorial
 full screen from settings and from pause menu
-Enable world 1 - with first 12 level
 Check world 1 1-12 levels
 Show new highscore
+Fix terrain graphic
 
 
 Needed for ??
@@ -32,7 +33,6 @@ Improve coin pick up effect
 Needed for ??
 =================================================
 End photo if its possible
-Fix terrain graphic
 Extra car if the player play on our site
 Add Task system
 Add Language system
