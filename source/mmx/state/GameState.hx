@@ -24,6 +24,7 @@ import mmx.game.SmallRock;
 import mmx.game.constant.CGameTimeValue;
 import mmx.game.constant.CLibraryElement;
 import mmx.game.constant.CPhysicsValue;
+import mmx.game.constant.CScore;
 import mmx.game.library.crate.AbstractCrate;
 import mmx.game.library.crate.Crate;
 import mmx.game.library.crate.LongCrate;
@@ -37,6 +38,7 @@ import mmx.game.substate.HelpPanel;
 import mmx.game.substate.PausePanel;
 import mmx.game.substate.StartLevelPanel;
 import mmx.game.terrain.BrushTerrain;
+import mmx.game.NotificationHandler.Notification;
 import mmx.state.MenuState.MenuSubStateType;
 import mmx.util.LevelUtil;
 import mmx.util.SavedDataUtil;
@@ -642,6 +644,7 @@ class GameState extends FlxState
 		if (!isLost)
 		{
 			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
+			gameGui.updateCoinCount(collectedCoin + collectedExtraCoins);
 			
 			up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
 			down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
@@ -677,6 +680,7 @@ class GameState extends FlxState
 		if (!isLost)
 		{
 			checkCoinPickUp();
+			checkWheelieState();
 			checkLoose();
 			checkWin();
 			
@@ -765,9 +769,26 @@ class GameState extends FlxState
 			{
 				coin.collect();
 				collectedCoin++;
-				gameGui.updateCoinCount( collectedCoin );
 			}
 		}
+	}
+	
+	function checkWheelieState():Void
+	{
+		var now:Float = Date.now().getTime();
+		var isWheelieInProgress:Bool = (car.rightWheelOnAir && !car.leftWheelOnAir) || (!car.rightWheelOnAir && car.leftWheelOnAir);
+
+		if(!isWheelieInProgress && car.isOnWheelie && now - car.onWheelieStartGameTime > CGameTimeValue.MINIMUM_TIME_TO_NICE_WHEELIE_IN_MS)
+		{
+			startNiceWheelieTimeRutin();
+		}
+
+		if(isWheelieInProgress && !car.isOnWheelie)
+		{
+			car.onWheelieStartGameTime = now;
+		}
+
+		car.isOnWheelie = isWheelieInProgress;
 	}
 
 	function checkLoose():Void
@@ -804,6 +825,8 @@ class GameState extends FlxState
 	
 	function winRutin():Void 
 	{
+		collectedCoin += collectedExtraCoins;
+		
 		var score:UInt = calculateScore();
 		
 		var starCount:UInt = coinsToStarCount(score);
@@ -893,19 +916,20 @@ class GameState extends FlxState
 		checkNiceAirTimeTasks();
 
 		_gameGui.addNotification( CNotification.NICE_AIR );
-	}
+	}*/
+
 
 	function startNiceWheelieTimeRutin():Void
 	{
-		_countOfNiceWheelie++;
+		countOfNiceWheelie++;
 
-		_collectedExtraCoins += CScore.SCORE_NICE_WHEELIE_TIME;
+		collectedExtraCoins += CScore.SCORE_NICE_WHEELIE_TIME;
 
-		checkNiceWheelieTimeTasks();
+		//checkNiceWheelieTimeTasks();
 
-		_gameGui.addNotification( CNotification.NICE_WHEELIE );
-	}*/
-
+		gameGui.addNotification(Notification.NICE_WHEELIE);
+	}
+	
 	function addEffect(x:Float, y:Float, effectType:GameEffect):Void
 	{
 		var effect:FlxSprite = HPPAssetManager.getSprite(cast effectType);

@@ -8,6 +8,7 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.AppConfig;
+import mmx.game.NotificationHandler.Notification;
 import mmx.game.TimeCounter;
 import openfl.events.TouchEvent;
 
@@ -21,6 +22,8 @@ class GameGui extends FlxSpriteGroup
 	public var controlRightState(default, null):Bool;
 	public var controlUpState(default, null):Bool;
 	public var controlDownState(default, null):Bool;
+	
+	var notificationHandler:NotificationHandler;
 	
 	var touches:Map<Int, FlxSprite>;
 	
@@ -50,12 +53,14 @@ class GameGui extends FlxSpriteGroup
 		timeCounter.x = FlxG.width / 2 - timeCounter.width / 2;
 		timeCounter.y = 10;
 		
-		add( startCounter = new StartCounter( resumeGameCallBack ) );
+		add(startCounter = new StartCounter(resumeGameCallBack));
 		
-		add( pauseButton = new HPPButton( "", pauseGameCallBack, "pause_button" ) );
+		add(pauseButton = new HPPButton("", pauseGameCallBack, "pause_button"));
 		pauseButton.overScale = .98;
 		pauseButton.x = FlxG.stage.stageWidth - pauseButton.width - 10;
 		pauseButton.y = 10;
+		
+		add(notificationHandler = new NotificationHandler());
 		
 		if (AppConfig.SHOW_FPS)
 		{
@@ -191,6 +196,11 @@ class GameGui extends FlxSpriteGroup
 			touchSprite.scale.set(1, 1);
 			touches.remove(e.touchPointID);
 		}
+	}
+	
+	public function addNotification(type:Notification):Void
+	{
+		notificationHandler.addEntry(type);
 	}
 	
 	public function updateCoinCount( value:UInt ):Void
