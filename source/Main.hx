@@ -3,6 +3,8 @@ package;
 import flixel.FlxG;
 import hpp.flixel.system.HPPFlxMain;
 import hpp.util.DeviceData;
+import hpp.util.JsFullScreenUtil;
+import js.Browser;
 import mmx.AppConfig;
 import mmx.assets.Fonts;
 import mmx.state.MenuState;
@@ -23,6 +25,7 @@ class Main extends Sprite
 		AppConfig.SHOW_FPS = SavedDataUtil.getSettingsInfo().showFPS;
 		AppConfig.IS_MOBILE_DEVICE = DeviceData.isMobile();
 		
+		JsFullScreenUtil.init("openfl-content");
 		Fonts.init();
 		
 		addChild( new HPPFlxMain( 0, 0, MenuState ) );

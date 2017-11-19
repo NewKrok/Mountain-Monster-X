@@ -10,6 +10,7 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPToggleButton;
 import hpp.flixel.ui.HPPVUIBox;
+import hpp.util.JsFullScreenUtil;
 import mmx.AppConfig;
 import mmx.assets.Fonts;
 import mmx.common.view.LongButton;
@@ -28,6 +29,9 @@ class SettingsPage extends FlxSubState
 	
 	var alphaAnimationCheckBox:HPPToggleButton;
 	var alphaAnimationsText:FlxText;
+	
+	var fullScreenCheckBox:HPPToggleButton;
+	var fullScreenText:FlxText;
 	
 	var backButton:HPPButton;
 	
@@ -55,6 +59,8 @@ class SettingsPage extends FlxSubState
 		var container:HPPVUIBox = new HPPVUIBox( 20, HPPVUIBoxAlign.LEFT );
 		container.scrollFactor.set();
 		
+		
+		if (AppConfig.IS_DESKTOP_DEVICE) container.add(createFullscreenSetting());
 		container.add( createFpsSetting() );
 		container.add( createAlphaAnimationSetting() );
 		
@@ -75,6 +81,57 @@ class SettingsPage extends FlxSubState
 		SavedDataUtil.save();
 		
 		openWelcomePage(target);
+	}
+	
+	function createFullscreenSetting():FlxSpriteGroup 
+	{
+		var settingContainer:HPPHUIBox = new HPPHUIBox(20);
+		
+		fullScreenCheckBox = new HPPToggleButton("", "", setFullscreen, "checkbox_off", "checkbox_on");
+		fullScreenCheckBox.isSelected = JsFullScreenUtil.isFullScreen();
+		settingContainer.add( fullScreenCheckBox );
+		
+		fullScreenText = new FlxText();
+		fullScreenText.color = FlxColor.WHITE;
+		fullScreenText.alignment = "left";
+		fullScreenText.size = 35;
+		fullScreenText.font = Fonts.AACHEN_MEDIUM;
+		fullScreenText.borderStyle = FlxTextBorderStyle.SHADOW;
+		fullScreenText.fieldWidth = 650;
+		
+		updateFullScreenText();
+		settingContainer.add(fullScreenText);
+		
+		#if js
+			untyped __js__('window.addEventListener("resize", ()=>this.updateFullScreenState())');
+		#end
+		
+		return cast settingContainer;
+	}
+	
+	function setFullscreen(target:HPPToggleButton):Void
+	{
+		updateFullScreenText();
+		
+		if (JsFullScreenUtil.isFullScreen())
+		{
+			JsFullScreenUtil.cancelFullScreen();
+		}
+		else
+		{
+			JsFullScreenUtil.requestFullScreen();
+		}
+	}
+	
+	function updateFullScreenState()
+	{
+		fullScreenCheckBox.isSelected = JsFullScreenUtil.isFullScreen();
+		updateFullScreenText();
+	}
+	
+	function updateFullScreenText():Void
+	{
+		fullScreenText.text = "Change to full screen mode (" + ( fullScreenCheckBox.isSelected ? "TURNED ON" : "TURNED OFF" ) + ") Note: On some site this feature is not available";
 	}
 	
 	function setFPS( target:HPPToggleButton ):Void
