@@ -651,7 +651,7 @@ class GameState extends FlxState
 		
 		calculateGameTime();
 		
-		if (!isLost)
+		if (!isLost && !isWon)
 		{
 			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
 			gameGui.updateCoinCount(collectedCoin + collectedExtraCoins);
