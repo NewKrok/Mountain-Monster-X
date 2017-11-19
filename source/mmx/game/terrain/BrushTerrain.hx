@@ -3,6 +3,7 @@ package mmx.game.terrain;
 import flash.geom.Matrix;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
+import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
@@ -12,7 +13,7 @@ import openfl.geom.Rectangle;
  * ...
  * @author Krisztian Somoracz
  */
-class BrushTerrain extends FlxSprite
+class BrushTerrain extends FlxSpriteGroup
 {
 	var linePointsInput:Array<BrushArea> = [];
 	var linePoints:Array<BrushArea>;
@@ -24,24 +25,20 @@ class BrushTerrain extends FlxSprite
 	var segLength:Float = 0;
 	var groundBaseXOffset:Float;
 	
-	public function new ( levelSize:Rectangle, groundPoints:Array<FlxPoint>, brushTexture:FlxGraphic, terrainContentTexture:FlxGraphic, textureMaxWidth:Float, textureHeight:Float, scaleGroundSize:Float = 1, groundBaseHeight:Float = 700 )
+	public function new ( levelSize:Rectangle, groundPoints:Array<FlxPoint>, brushTexture:FlxGraphic, terrainContentTexture:FlxGraphic, textureMaxWidth:Float, textureHeight:Float, groundBaseHeight:Float = 700 )
 	{
 		super();
 		
-		groundBaseXOffset = groundPoints[0].x < 0 ? -groundPoints[0].x / 2 : 0;
+		groundBaseXOffset = groundPoints[0].x < 0 ? -groundPoints[0].x : 0;
 		groundPoints = optimizeGroundPointsToGraphics( groundPoints, brushTexture.width, textureMaxWidth );
-		textureMaxWidth *= scaleGroundSize;
-		textureHeight *= scaleGroundSize;
 		BrushArea.lw = textureHeight;
 		
 		var graphicContainer:Sprite = new Sprite();
-		var scaleMatrix:Matrix = new Matrix();
-		scaleMatrix.scale( scaleGroundSize, scaleGroundSize );
-		graphicContainer.graphics.beginBitmapFill( terrainContentTexture.bitmap, scaleMatrix );
+		graphicContainer.graphics.beginBitmapFill( terrainContentTexture.bitmap );
 		
 		for ( point in groundPoints )
 		{
-			graphicContainer.graphics.lineTo( point.x * scaleGroundSize, point.y * scaleGroundSize );
+			graphicContainer.graphics.lineTo( point.x, point.y );
 		}
 		
 		var brushArea:BrushArea;
@@ -49,21 +46,21 @@ class BrushTerrain extends FlxSprite
 		
 		for ( i in 0...cast groundPoints.length )
 		{
-			graphicContainer.graphics.lineTo( groundPoints[index].x * scaleGroundSize, groundPoints[index].y * scaleGroundSize + groundBaseHeight );
+			graphicContainer.graphics.lineTo( groundPoints[index].x, groundPoints[index].y + groundBaseHeight );
 		
 			if ( i == 0 )
 			{
-				brushArea = new BrushArea( groundPoints[i].x * scaleGroundSize, groundPoints[i].y * scaleGroundSize );
+				brushArea = new BrushArea( groundPoints[i].x, groundPoints[i].y );
 				linePointsInput.push( brushArea );
 			}
 			else
 			{
-				brushArea = new BrushArea( groundPoints[i].x * scaleGroundSize, groundPoints[i].y * scaleGroundSize, linePointsInput[linePointsInput.length - 1] );
+				brushArea = new BrushArea( groundPoints[i].x, groundPoints[i].y, linePointsInput[linePointsInput.length - 1] );
 				linePointsInput.push( brushArea );
 			}
 			if ( i == groundPoints.length - 2 )
 			{
-				brushArea = new BrushArea( groundPoints[i + 1].x * scaleGroundSize, groundPoints[i + 1].y * scaleGroundSize, linePointsInput[linePointsInput.length - 1] );
+				brushArea = new BrushArea( groundPoints[i + 1].x, groundPoints[i + 1].y, linePointsInput[linePointsInput.length - 1] );
 				linePointsInput.push( brushArea );
 			}
 			
@@ -73,14 +70,27 @@ class BrushTerrain extends FlxSprite
 		
 		calculateGraphicTriangles();
 		
-		var brushBitmapData = new BitmapData( cast brushTexture.bitmap.width / 2, cast brushTexture.bitmap.height / 2, true, 0x60 );
-		brushBitmapData.draw( brushTexture.bitmap, scaleMatrix );
+		var brushBitmapData = new BitmapData( cast brushTexture.bitmap.width, cast brushTexture.bitmap.height, true, 0x60 );
+		brushBitmapData.draw( brushTexture.bitmap );
 		renderTriangles( graphicContainer, brushBitmapData );
 		
-		var graphicBitmap:BitmapData = new BitmapData( cast levelSize.width * scaleGroundSize, cast levelSize.height * scaleGroundSize, true, 0x60 );
+		var graphicBitmap:BitmapData = new BitmapData( cast levelSize.width, cast levelSize.height, true, 0x60 );
 		graphicBitmap.draw( graphicContainer );
 		
-		loadGraphic( graphicBitmap );
+		var maxBlockSize:UInt = 2048;
+		var pieces:UInt = Math.ceil(graphicContainer.width / maxBlockSize);
+		for (i in 0...pieces )
+		{
+			var tmpBitmapData:BitmapData = new BitmapData(maxBlockSize, maxBlockSize, true, 0x60);
+			var offsetMatrix:Matrix = new Matrix();
+			offsetMatrix.tx = -i * maxBlockSize;
+			tmpBitmapData.draw(graphicContainer, offsetMatrix);
+			
+			var container:FlxSprite = new FlxSprite();
+			container.loadGraphic(tmpBitmapData);
+			container.x = i * maxBlockSize;
+			add(container);
+		}
 	}
 	
 	function optimizeGroundPointsToGraphics( groundPoints:Array<FlxPoint>, textureWidth:Float, textureMaxWidth:Float ):Array<FlxPoint>

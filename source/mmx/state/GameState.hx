@@ -423,12 +423,9 @@ class GameState extends FlxState
 			HPPAssetManager.getGraphic( "terrain_ground_texture_" + worldId + "0000" ),
 			HPPAssetManager.getGraphic( "terrain_fill_texture_" + worldId + "0000" ),
 			64,
-			24,
-			.5
+			24
 		);
-		generatedTerrain.origin.set( 0, 0 );
-		generatedTerrain.scale.set( 2, 2 );
-
+		
 		terrainContainer.add( generatedTerrain );
 	}
 

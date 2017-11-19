@@ -10,7 +10,7 @@ Needed for v1.2.0
 [RDY] Check world 1 1-12 levels
 [RDY] Show new highscore
 [RDY] Start menu with the last played background
-Fix terrain graphic
+[RDY] Fix terrain graphic
 
 
 Needed for ??
