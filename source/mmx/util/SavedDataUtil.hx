@@ -32,13 +32,19 @@ class SavedDataUtil
 		
 		if (gameSave.data.levelInfos == null)
 		{
-			gameSave.data.levelInfos = [{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true}];
+			gameSave.data.levelInfos = [
+				{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true},
+				{worldId:1, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true}
+			];
 		}
 		
 		if (gameSave.data.lastPlayedWorldId == null)
 		{
 			gameSave.data.lastPlayedWorldId = 0;
 		}
+		
+		// Hotfix for version 1.2.0
+		getLevelInfo(1, 0).isEnabled = true;
 	}
 	
 	public static function save():Void
