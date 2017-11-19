@@ -34,6 +34,11 @@ class SavedDataUtil
 		{
 			gameSave.data.levelInfos = [{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true}];
 		}
+		
+		if (gameSave.data.lastPlayedWorldId == null)
+		{
+			gameSave.data.lastPlayedWorldId = 0;
+		}
 	}
 	
 	public static function save():Void
@@ -79,6 +84,15 @@ class SavedDataUtil
 		}
 	}
 	
+	public static function setLastPlayedWorldId(value:UInt):Void
+	{
+		gameSave.data.lastPlayedWorldId = value;
+	}
+	
+	public static function getLastPlayedWorldId():UInt
+	{
+		return gameSave.data.lastPlayedWorldId;
+	}
 	
 	static public function getLastPlayedLevel(worldId:UInt):UInt
 	{

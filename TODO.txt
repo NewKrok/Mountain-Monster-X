@@ -8,9 +8,9 @@ Needed for v1.2.0
 [RDY] World 1 tutorial
 [RDY] full screen from settings and from pause menu - only for desktop
 [RDY] Check world 1 1-12 levels
-Show new highscore
+[RDY] Show new highscore
+[RDY] Start menu with the last played background
 Fix terrain graphic
-Start menu with the last played background
 
 
 Needed for ??

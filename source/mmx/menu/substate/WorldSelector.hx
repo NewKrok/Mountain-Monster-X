@@ -7,6 +7,7 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPUIGrid;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.common.view.LongButton;
+import mmx.util.SavedDataUtil;
 
 /**
  * ...
@@ -64,24 +65,24 @@ class WorldSelector extends FlxSubState
 		levelPackButtonContainer.y = FlxG.height / 2 - levelPackButtonContainer.height / 2 - 50;
 	}
 	
-	function loadWorld0( target:HPPButton ):Void
+	function loadWorld0(target:HPPButton):Void
 	{
-		onWorldSelected( 0 );
+		onWorldSelected(0);
 	}
 
 	function loadWorld1( target:HPPButton ):Void
 	{
-		onWorldSelected( 1 );
+		onWorldSelected(1);
 	}
 
 	function loadWorld2( target:HPPButton ):Void
 	{
-		//onWorldSelected( 2 );
+		//onWorldSelected(2);
 	}
 	
 	function loadWorld3( target:HPPButton ):Void
 	{
-		//onWorldSelected( 3 );
+		//onWorldSelected(3);
 	}
 	
 	function createControlButtons() 

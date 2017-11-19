@@ -15,6 +15,7 @@ import mmx.menu.substate.NewsPage;
 import mmx.menu.substate.SettingsPage;
 import mmx.menu.substate.WelcomePage;
 import mmx.menu.substate.WorldSelector;
+import mmx.util.SavedDataUtil;
 import openfl.Lib;
 import openfl.display.Stage;
 import openfl.events.MouseEvent;
@@ -102,7 +103,7 @@ class MenuState extends FlxState
 		
 		stage = Lib.current.stage;
 
-		add( background = new Background( 0 ) );
+		add(background = new Background(SavedDataUtil.getLastPlayedWorldId()));
 		
 		destroySubStates = false;
 		welcomePage = new WelcomePage( openSettingsPage, openAboutUsPage, openNewsPage, openWorldSelector );

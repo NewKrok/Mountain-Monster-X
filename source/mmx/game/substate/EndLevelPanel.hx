@@ -8,6 +8,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
+import hpp.flixel.ui.HPPUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
@@ -42,6 +43,7 @@ class EndLevelPanel extends FlxSubState
 	var earnedStarContainer:FlxSpriteGroup;
 	var bestScoreText:FlxText;
 	var bestTimeText:FlxText;
+	var newHighScoreText:FlxText;
 	var coinCounter:CoinCounter;
 	var timeCounter:TimeCounter;
 	
@@ -137,12 +139,26 @@ class EndLevelPanel extends FlxSubState
 	
 	function createScoreView()
 	{
+		var row:HPPHUIBox = new HPPHUIBox(10);
+		
 		scoreText = new FlxText(0, 0, 0, "SCORE: " + NumberUtil.formatNumber(currentScore), 35);
 		scoreText.autoSize = true;
 		scoreText.color = FlxColor.YELLOW;
 		scoreText.alignment = "center";
 		scoreText.font = Fonts.AACHEN_MEDIUM;
-		content.add(scoreText);
+		
+		if (currentScore > levelInfo.score)
+		{
+			newHighScoreText = new FlxText(0, 0, 0, "NEW HIGHSCORE!", 19);
+			newHighScoreText.autoSize = true;
+			newHighScoreText.color = FlxColor.YELLOW;
+			newHighScoreText.alignment = "center";
+			newHighScoreText.font = Fonts.AACHEN_MEDIUM;
+			row.add(newHighScoreText);
+		}
+		
+		row.add(scoreText);
+		content.add(row);
 	}
 	
 	function createResultView()

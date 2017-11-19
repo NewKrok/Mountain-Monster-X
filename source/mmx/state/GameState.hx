@@ -133,6 +133,7 @@ class GameState extends FlxState
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		SavedDataUtil.resetLastPlayedInfo();
 		levelInfo.isLastPlayed = true;
+		SavedDataUtil.setLastPlayedWorldId(worldId);
 		SavedDataUtil.save();
 		
 		super();
@@ -890,7 +891,7 @@ class GameState extends FlxState
 			
 			addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_LEVEL_COMPLETED);
 			
-			Timer.delay(winRutin, 1000);
+			Timer.delay(winRutin, 500);
 		}
 	}
 	
