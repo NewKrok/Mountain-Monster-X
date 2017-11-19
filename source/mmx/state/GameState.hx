@@ -122,6 +122,8 @@ class GameState extends FlxState
 	var isGameStarted:Bool;
 	var isGamePaused:Bool;
 	var isPhysicsEnabled:Bool;
+	
+	var now:Float;
 
 	public function new( worldId:UInt, levelId:UInt ):Void
 	{
@@ -290,6 +292,11 @@ class GameState extends FlxState
 		countOfNiceWheelie = 0;
 		gameTime = 0;
 		totalPausedTime = 0;
+		
+		car.isOnWheelie = false;
+		car.isOnAir = false;
+		car.jumpAngle = 0;
+		car.lastAngleOnGround = 0;
 
 		gameGui.updateCoinCount( collectedCoin );
 		gameGui.updateRemainingTime( CGameTimeValue.MAXIMUM_GAME_TIME );
@@ -333,7 +340,7 @@ class GameState extends FlxState
 	{
 		isGameStarted = true;
 
-		gameStartTime = Date.now().getTime();
+		now = gameStartTime = Date.now().getTime();
 
 		resumeRequest();
 		
@@ -367,7 +374,7 @@ class GameState extends FlxState
 		isGamePaused = false;
 		isPhysicsEnabled = true;
 		
-		totalPausedTime += Date.now().getTime() - pauseStartTime;
+		totalPausedTime += now - pauseStartTime;
 	}
 
 	function pause():Void
@@ -376,7 +383,7 @@ class GameState extends FlxState
 		isPhysicsEnabled = false;
 		
 		gameGui.pause();
-		pauseStartTime = Date.now().getTime();
+		pauseStartTime = now;
 	}
 	
 	function createCamera():Void
@@ -627,6 +634,8 @@ class GameState extends FlxState
 
 	override public function update( elapsed:Float ):Void
 	{
+		now = Date.now().getTime();
+		
 		super.update( elapsed );
 		
 		if ( isPhysicsEnabled )
@@ -681,6 +690,7 @@ class GameState extends FlxState
 		{
 			checkCoinPickUp();
 			checkWheelieState();
+			checkFlipAndNiceAirTimeState();
 			checkLoose();
 			checkWin();
 			
@@ -695,7 +705,6 @@ class GameState extends FlxState
 	{
 		if ( isGameStarted )
 		{
-			var now:Float = Date.now().getTime();
 			gameTime = now - gameStartTime - totalPausedTime;
 		}
 		else
@@ -775,20 +784,81 @@ class GameState extends FlxState
 	
 	function checkWheelieState():Void
 	{
-		var now:Float = Date.now().getTime();
 		var isWheelieInProgress:Bool = (car.rightWheelOnAir && !car.leftWheelOnAir) || (!car.rightWheelOnAir && car.leftWheelOnAir);
 
-		if(!isWheelieInProgress && car.isOnWheelie && now - car.onWheelieStartGameTime > CGameTimeValue.MINIMUM_TIME_TO_NICE_WHEELIE_IN_MS)
+		if(!isWheelieInProgress && car.isOnWheelie && gameTime - car.onWheelieStartGameTime > CGameTimeValue.MINIMUM_TIME_TO_NICE_WHEELIE_IN_MS)
 		{
 			startNiceWheelieTimeRutin();
 		}
 
 		if(isWheelieInProgress && !car.isOnWheelie)
 		{
-			car.onWheelieStartGameTime = now;
+			car.onWheelieStartGameTime = gameTime;
 		}
 
 		car.isOnWheelie = isWheelieInProgress;
+	}
+	
+	function checkFlipAndNiceAirTimeState():Void
+	{
+		var newIsOnAirValue:Bool = car.leftWheelOnAir && car.rightWheelOnAir;
+		
+		if(car.leftWheelOnAir && car.rightWheelOnAir)
+		{
+			var currentAngle:Float = Math.atan2(car.wheelLeftGraphics.y - car.wheelRightGraphics.y, car.wheelLeftGraphics.x - car.wheelRightGraphics.x);
+			currentAngle = car.wheelLeftGraphics.x - car.wheelRightGraphics.x < 0 ? (Math.PI * 2 + currentAngle) : currentAngle;
+
+			while(currentAngle > Math.PI * 2)
+			{
+				currentAngle -= Math.PI * 2;
+			}
+			
+			if(!car.isOnAir)
+			{
+				car.onAirStartGameTime = gameTime;
+				car.isOnAir = true;
+				car.jumpAngle = 0;
+				car.lastAngleOnGround = currentAngle;
+			}
+			
+			var angleDiff:Float = currentAngle - car.lastAngleOnGround;
+
+			if(angleDiff < -Math.PI)
+			{
+				angleDiff += Math.PI * 2;
+				angleDiff *= -1;
+			}
+			else if(angleDiff > Math.PI)
+			{
+				angleDiff -= Math.PI * 2;
+				angleDiff *= -1;
+			}
+			
+			car.lastAngleOnGround = currentAngle;
+			car.jumpAngle += angleDiff;
+		}
+		else if(car.isOnAir)
+		{
+			var angleInDeg:Float = car.jumpAngle * ( 180 / Math.PI );
+			
+			car.isOnAir = false;
+			car.jumpAngle = 0;
+			car.lastAngleOnGround = 0;
+
+			if(angleInDeg > 200)
+			{
+				startFrontFlipRutin();
+			}
+			else if(angleInDeg < -200)
+			{
+				startBackFlipRutin();
+			}
+
+			if(gameTime - car.onAirStartGameTime > CGameTimeValue.MINIMUM_TIME_TO_NICE_AIR_IN_MS)
+			{
+				startNiceAirTimeRutin();
+			}
+		}
 	}
 
 	function checkLoose():Void
@@ -885,38 +955,38 @@ class GameState extends FlxState
 		return starCount;
 	}
 	
-	/*function startFrontFlipRutin():Void
+	function startFrontFlipRutin():Void
 	{
-		_countOfFrontFlip++;
+		countOfFrontFlip++;
 
-		_collectedExtraCoins += CScore.SCORE_FRONT_FLIP;
+		collectedExtraCoins += CScore.SCORE_FRONT_FLIP;
 
-		checkFrontFlipTasks();
+		//checkFrontFlipTasks();
 
-		_gameGui.addNotification( CNotification.FRONT_FLIP );
+		gameGui.addNotification(Notification.FRONT_FLIP);
 	}
 
 	function startBackFlipRutin():Void
 	{
-		_countOfBackFlip++;
+		countOfBackFlip++;
 
-		_collectedExtraCoins += CScore.SCORE_BACK_FLIP;
+		collectedExtraCoins += CScore.SCORE_BACK_FLIP;
 
-		checkBackFlipTasks();
+		//checkBackFlipTasks();
 
-		_gameGui.addNotification( CNotification.BACK_FLIP );
+		gameGui.addNotification(Notification.BACK_FLIP);
 	}
 
 	function startNiceAirTimeRutin():Void
 	{
-		_countOfNiceAirTime++;
+		countOfNiceAirTime++;
 
-		_collectedExtraCoins += CScore.SCORE_NICE_AIR_TIME;
+		collectedExtraCoins += CScore.SCORE_NICE_AIR_TIME;
 
-		checkNiceAirTimeTasks();
+		//checkNiceAirTimeTasks();
 
-		_gameGui.addNotification( CNotification.NICE_AIR );
-	}*/
+		gameGui.addNotification(Notification.NICE_AIR);
+	}
 
 
 	function startNiceWheelieTimeRutin():Void

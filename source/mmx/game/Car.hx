@@ -50,8 +50,13 @@ class Car extends FlxSpriteGroup
 	public var wheelRightPhysics:Body;
 	public var wheelLeftPhysics:Body;
 	
-	public var onWheelieStartGameTime:Float;
 	public var isOnWheelie:Bool;
+	public var onWheelieStartGameTime:Float;
+	
+	public var isOnAir:Bool;
+	public var onAirStartGameTime:Float;
+	public var jumpAngle:Float = 0;
+	public var lastAngleOnGround:Float = 0;
 	
 	public var leftWheelOnAir( default, null ):Bool;
 	public var rightWheelOnAir( default, null ):Bool;

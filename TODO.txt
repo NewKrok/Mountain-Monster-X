@@ -2,12 +2,12 @@ Needed for v1.2.0
 =================================================
 [RDY] Fix keyboard problem on other websites
 [RDY] Effect handling - for crush, time left, win
-Flip + Air time detection + give bonus + show info
+[RDY] Flip + Air time detection + give bonus + show info
+World 0 tutorial
+World 1 tutorial
 full screen from settings and from pause menu
 Enable world 1 - with first 12 level
 Check world 1 1-12 levels
-World 1 tutorial
-Update tutorial images for world 1
 Show new highscore
 
 
