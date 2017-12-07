@@ -10,6 +10,7 @@ import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPToggleButton;
 import hpp.flixel.ui.HPPVUIBox;
+import hpp.ui.HAlign;
 import hpp.util.JsFullScreenUtil;
 import mmx.AppConfig;
 import mmx.assets.Fonts;
@@ -56,7 +57,7 @@ class SettingsPage extends FlxSubState
 		baseBack.scrollFactor.set();
 		add( baseBack );
 		
-		var container:HPPVUIBox = new HPPVUIBox( 20, HPPVUIBoxAlign.LEFT );
+		var container:HPPVUIBox = new HPPVUIBox( 20, HAlign.LEFT );
 		container.scrollFactor.set();
 		
 		

@@ -11,6 +11,7 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
+import hpp.ui.HAlign;
 import hpp.util.NumberUtil;
 import hpp.util.TimeUtil;
 import mmx.assets.Fonts;
@@ -111,7 +112,7 @@ class StartLevelPanel extends FlxSubState
 	
 	function createStarRequirementView():Void 
 	{
-		var starInfoContainer:HPPVUIBox = new HPPVUIBox(10, HPPVUIBoxAlign.LEFT);
+		var starInfoContainer:HPPVUIBox = new HPPVUIBox(10, HAlign.LEFT);
 		
 		for (i in 0...3) starInfoContainer.add(new StarRequirementView(3 - i, starRequirements[2 - i]));
 		
