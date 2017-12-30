@@ -1,18 +1,13 @@
 package mmx.menu.substate;
 
-import flash.display.BitmapData;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
-import flixel.math.FlxPoint;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPPager;
 import hpp.flixel.ui.HPPTouchScrollContainer;
-import hpp.flixel.ui.HPPUIGrid;
 import mmx.common.view.LongButton;
-import mmx.menu.view.LevelButton;
 import mmx.menu.view.LevelSelectorPage;
 import mmx.util.SavedDataUtil;
 
@@ -47,28 +42,28 @@ class LevelSelector extends FlxSubState
 		createControlButtons();
 		createPager();
 	}
-	
-	function createLevelButtons() 
+
+	function createLevelButtons()
 	{
 		add(levelButtonsContainer = new HPPTouchScrollContainer(FlxG.width, FlxG.height, new HPPTouchScrollContainerConfig({ snapToPages: true })));
 		levelButtonsContainer.scrollFactor.set();
-		
+
 		var container:HPPHUIBox = new HPPHUIBox();
 		container.add(new LevelSelectorPage(worldId, 0, 12));
-		// TODO remove this hack after the whole world playable
-		if (worldId != 1) container.add(new LevelSelectorPage(worldId, 12, 24));
-		
+		container.add(new LevelSelectorPage(worldId, 12, 24));
+
 		levelButtonsContainer.add(container);
-		
+
 		var lastPlayedLevel:UInt = SavedDataUtil.getLastPlayedLevel(worldId);
 		var isNextLevelEnabled:Bool = lastPlayedLevel == 23 ? false : SavedDataUtil.getLevelInfo(worldId, lastPlayedLevel + 1).isEnabled;
 		if (lastPlayedLevel + (isNextLevelEnabled ? 1 : 0) > 11)
 		{
-			// TODO remove this hack after the whole world playable
-			if (worldId != 1) levelButtonsContainer.currentPage = 2;
+			levelButtonsContainer.currentPage = 2;
 		}
+
+		openCallback = levelButtonsContainer.makeActive;
 	}
-	
+
 	function createControlButtons()
 	{
 		add( controlButtonContainer = new FlxSpriteGroup() );
@@ -78,8 +73,8 @@ class LevelSelector extends FlxSubState
 		backButton.x = FlxG.width / 2 - backButton.width / 2;
 		backButton.y = FlxG.height - 40 - backButton.height;
 	}
-	
-	function createPager():Void 
+
+	function createPager():Void
 	{
 		add( pager = new HPPPager( levelButtonsContainer, "pager_page", "pager_selected", 10 ) );
 		pager.x = FlxG.width / 2 - pager.width / 2;
