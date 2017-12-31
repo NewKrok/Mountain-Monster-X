@@ -14,20 +14,6 @@ class GhostCar extends AbstractCar implements IPlaybackPerformer
 		alpha = 0.5;
 	}
 	
-	public function sync(car:AbstractCar):Void
-	{
-		syncSprite( carBodyGraphics, car.carBodyGraphics );
-		syncSprite( wheelRightGraphics, car.wheelRightGraphics );
-		syncSprite( wheelLeftGraphics, car.wheelLeftGraphics );
-	}
-	
-	private function syncSprite( from:FlxSprite, to:FlxSprite ):Void
-	{
-		to.x = from.x;
-		to.y = from.y;
-		to.angle = from.angle;
-	}
-	
 	public function unserializeWithTransition( from:Unserializer, to:Unserializer, percent:Float ):Void 
 	{
 		unserializeSprite( from, to, percent, carBodyGraphics );

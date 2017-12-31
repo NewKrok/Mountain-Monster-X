@@ -18,6 +18,7 @@ typedef LevelData =
 	var groundPoints( default, default ):Array<FlxPoint>;
 	var starPoints( default, default ):Array<FlxPoint>;
 	
+	@:optional var replay( default, default ):String;
 	@:optional var bridgePoints( default, default ):Array<BridgeData>;
 	@:optional var gameObjects( default, default ):Array<GameObject>;
 	@:optional var libraryElements( default, default ):Array<LibraryElement>;
