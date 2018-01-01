@@ -358,9 +358,9 @@ class GameState extends FlxState
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo( worldId, levelId );
 		var replayData:String = levelInfo.replay == null ? levelData.replay : levelInfo.replay;
 		
-		ghostCar.visible = levelInfo.replay != null;
+		ghostCar.visible = false;
 		
-		if ( ghostCar.visible )
+		if ( levelInfo.replay != null )
 		{
 			playback = new Playback( ghostCar, replayData );
 			playback.showSnapshot( 0 );
@@ -701,12 +701,14 @@ class GameState extends FlxState
 			return;
 		}
 		
+		ghostCar.visible = playback != null;
+		
 		calculateGameTime();
 		
-		if (!isLost && !isWon)
+		if ( !isLost && !isWon )
 		{
-			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
-			gameGui.updateCoinCount(collectedCoin + collectedExtraCoins);
+			gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
+			gameGui.updateCoinCount( collectedCoin + collectedExtraCoins );
 			
 			up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
 			down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
@@ -739,7 +741,7 @@ class GameState extends FlxState
 		updateBridges();
 		updateSmallRocks();
 
-		if (!isLost)
+		if ( !isLost )
 		{
 			checkCoinPickUp();
 			checkWheelieState();
@@ -1159,7 +1161,7 @@ class GameState extends FlxState
 	
 	override public function onFocusLost():Void 
 	{
-		if (isGameStarted)
+		if ( isGameStarted )
 		{
 			pauseRequest();
 		}
@@ -1176,7 +1178,8 @@ class GameState extends FlxState
 }
 
 @:enum
-abstract GameEffect(String) {
+abstract GameEffect( String )
+{
 	var TYPE_LEVEL_COMPLETED = "effect_level_completed";
 	var TYPE_CRUSHED = "effect_crushed";
 	var TYPE_TIME_OUT = "effect_time_out";
