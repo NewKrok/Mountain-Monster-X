@@ -1,10 +1,9 @@
 package mmx.game;
 
+import apostx.replaykit.IRecorderPerformer;
 import flixel.FlxSprite;
-import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxAngle;
-import flixel.math.FlxPoint;
-import hpp.flixel.util.HPPAssetManager;
+import haxe.Serializer;
 import mmx.datatype.CarData;
 import mmx.game.constant.CPhysicsValue;
 import nape.callbacks.InteractionType;
@@ -24,7 +23,7 @@ import nape.space.Space;
  * ...
  * @author Krisztian Somoracz
  */
-class Car extends FlxSpriteGroup
+class Car extends AbstractCar implements IRecorderPerformer
 {	
 	var wheelJoinDamping:Float = .5;
 	var wheelJoinHertz:Float = 5;
@@ -38,12 +37,6 @@ class Car extends FlxSpriteGroup
 	var bodyWidth:Float = 150;
 	var bodyHeight:Float = 30;
 	var hitAreaHeight:Float = 10;
-	
-	var carData:CarData;
-	
-	public var carBodyGraphics:FlxSprite;
-	public var wheelRightGraphics:FlxSprite;
-	public var wheelLeftGraphics:FlxSprite;
 	
 	var hitArea:Body;
 	public var carBodyPhysics:Body;
@@ -67,10 +60,9 @@ class Car extends FlxSpriteGroup
 	
 	public function new( space:Space, x:Float, y:Float, carData:CarData, scale:Float = 1, filterCategory:UInt = 0, filterMask:UInt = 0 )
 	{
-		super();
+		super(carData, scale);
 		
 		this.space = space;
-		this.carData = carData;
 		
 		firstWheelXOffset += Math.isNaN( carData.firstWheelXOffset ) ? 0 : carData.firstWheelXOffset;
 		firstWheelYOffset += Math.isNaN( carData.firstWheelYOffset ) ? 0 : carData.firstWheelYOffset;
@@ -87,24 +79,7 @@ class Car extends FlxSpriteGroup
 		bodyHeight *= scale;
 		hitAreaHeight *= scale;
 		
-		buildGraphics();
 		buildPhysics( x, y, filterCategory, filterMask );
-		
-		carBodyGraphics.scale = new FlxPoint( scale, scale );
-		wheelRightGraphics.scale = new FlxPoint( scale, scale );
-		wheelLeftGraphics.scale = new FlxPoint( scale, scale );
-	}
-	
-	function buildGraphics():Void
-	{
-		add( carBodyGraphics = HPPAssetManager.getSprite( "car_body_" + carData.graphicId ) );
-		carBodyGraphics.antialiasing = true;
-		
-		add( wheelRightGraphics = HPPAssetManager.getSprite( "wheel_" + carData.graphicId ) );
-		wheelRightGraphics.antialiasing = true;
-		
-		add( wheelLeftGraphics = HPPAssetManager.getSprite( "wheel_" + carData.graphicId ) );
-		wheelLeftGraphics.antialiasing = true;
 	}
 	
 	function buildPhysics( x:Float, y:Float, filterCategory:Int = 0, filterMask:Int = 0 ):Void
@@ -299,5 +274,19 @@ class Car extends FlxSpriteGroup
 		hitArea.angularVel = 0;
 		
 		update( 0 );
+	}
+	
+	public function serialize( s:Serializer ):Void 
+	{
+		serializeSprite( s, carBodyGraphics );
+		serializeSprite( s, wheelRightGraphics );
+		serializeSprite( s, wheelLeftGraphics );
+	}
+	
+	private function serializeSprite( s:Serializer, sprite:FlxSprite ):Void
+	{
+		s.serialize( sprite.x );
+		s.serialize( sprite.y );
+		s.serialize( sprite.angle );
 	}
 }

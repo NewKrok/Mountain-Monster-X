@@ -33,8 +33,8 @@ class SavedDataUtil
 		if (gameSave.data.levelInfos == null)
 		{
 			gameSave.data.levelInfos = [
-				{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true},
-				{worldId:1, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true}
+				{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true, replay:null},
+				{worldId:1, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true, replay:null}
 			];
 		}
 		
@@ -75,7 +75,7 @@ class SavedDataUtil
 			}
 		}
 		
-		var newEntry:LevelInfo = {worldId:worldId, levelId:levelId, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:false, isCompleted:false, isLastPlayed:false};
+		var newEntry:LevelInfo = {worldId:worldId, levelId:levelId, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:false, isCompleted:false, isLastPlayed:false, replay:null};
 		gameSave.data.levelInfos.push(newEntry);
 		
 		return newEntry;
@@ -165,4 +165,5 @@ typedef LevelInfo = {
 	var isEnabled:Bool;
 	var isCompleted:Bool;
 	var isLastPlayed:Bool;
+	var replay:String;
 }

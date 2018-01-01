@@ -1,5 +1,7 @@
 package mmx.state;
 
+import apostx.replaykit.Playback;
+import apostx.replaykit.Recorder;
 import flixel.FlxCamera;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
@@ -20,6 +22,7 @@ import mmx.game.Background;
 import mmx.game.Car;
 import mmx.game.Coin;
 import mmx.game.GameGui;
+import mmx.game.GhostCar;
 import mmx.game.SmallRock;
 import mmx.game.constant.CGameTimeValue;
 import mmx.game.constant.CLibraryElement;
@@ -83,8 +86,12 @@ class GameState extends FlxState
 	var coins:Array<Coin>;
 
 	var gameObjects:Array<FlxSprite>;
-
+	
+	var recorder:Recorder;
+	var playback:Playback;
+	
 	var car:Car;
+	var ghostCar:GhostCar;
 	var snow:Snow;
 	
 	/*
@@ -147,7 +154,7 @@ class GameState extends FlxState
 		
 		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json" ) );
 		setLevelDataScale();
-
+		
 		build();
 	}
 	
@@ -232,6 +239,7 @@ class GameState extends FlxState
 		createPhysicsWorld();
 		createGroundPhysics();
 		createCar();
+		createGhostCar();
 		createGameObjects();
 		createBridges();
 		createGroundGraphics();
@@ -321,12 +329,42 @@ class GameState extends FlxState
 
 		resetCrates();
 		updateBridges();
-
+		
 		start();
+
+		resetReplayKit();
 		
 		openStartLevelPanelRequest();
 		pause();
 		isPhysicsEnabled = true;
+	}
+	
+	function resetReplayKit():Void
+	{
+		if ( recorder != null )
+		{
+			recorder.dispose();
+		}
+
+		recorder = new Recorder( car );
+		
+		recorder.enableAutoRecording( 250 );
+		
+		if ( playback != null )
+		{
+			playback.dispose();
+		}
+		
+		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo( worldId, levelId );
+		var replayData:String = levelInfo.replay == null ? levelData.replay : levelInfo.replay;
+		
+		ghostCar.visible = false;
+		
+		if ( levelInfo.replay != null )
+		{
+			playback = new Playback( ghostCar, replayData );
+			playback.showSnapshot( 0 );
+		}
 	}
 	
 	function resetCrates():Void
@@ -376,6 +414,11 @@ class GameState extends FlxState
 		isPhysicsEnabled = true;
 		
 		totalPausedTime += now - pauseStartTime;
+		
+		if ( recorder != null )
+		{
+			recorder.resume();
+		}
 	}
 
 	function pause():Void
@@ -385,6 +428,11 @@ class GameState extends FlxState
 		
 		gameGui.pause();
 		pauseStartTime = now;
+		
+		if ( recorder != null )
+		{
+			recorder.pause();
+		}
 	}
 	
 	function createCamera():Void
@@ -538,6 +586,12 @@ class GameState extends FlxState
 		container.add( car );
 	}
 	
+	function createGhostCar():Void
+	{
+		ghostCar = new GhostCar( CarDatas.getData( worldId == 0 ? 0 : 1 ), 1 );
+		container.add( ghostCar );
+	}
+	
 	function createGameObjects():Void
 	{
 		gameObjects = [];
@@ -647,12 +701,14 @@ class GameState extends FlxState
 			return;
 		}
 		
+		ghostCar.visible = playback != null;
+		
 		calculateGameTime();
 		
-		if (!isLost && !isWon)
+		if ( !isLost && !isWon )
 		{
-			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
-			gameGui.updateCoinCount(collectedCoin + collectedExtraCoins);
+			gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
+			gameGui.updateCoinCount( collectedCoin + collectedExtraCoins );
 			
 			up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
 			down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
@@ -685,7 +741,7 @@ class GameState extends FlxState
 		updateBridges();
 		updateSmallRocks();
 
-		if (!isLost)
+		if ( !isLost )
 		{
 			checkCoinPickUp();
 			checkWheelieState();
@@ -695,8 +751,13 @@ class GameState extends FlxState
 			
 			if (AppConfig.IS_DESKTOP_DEVICE && (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P))
 			{
-				pauseRequest(null);
+				pauseRequest( null );
 			}
+		}
+		
+		if ( playback != null )
+		{
+			playback.showSnapshot( recorder.getElapsedTime() );
 		}
 	}
 
@@ -894,18 +955,29 @@ class GameState extends FlxState
 	
 	function winRutin():Void 
 	{
+		recorder.takeSnapshot();
+		
 		collectedCoin += collectedExtraCoins;
 		
 		var score:UInt = calculateScore();
 		
 		var starCount:UInt = coinsToStarCount(score);
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
-		levelInfo.time = ( gameTime < levelInfo.time || levelInfo.time == 0 ) ? gameTime : levelInfo.time;
 		
-		levelInfo.score = score > levelInfo.score ? score : levelInfo.score;
+		if ( gameTime < levelInfo.time || levelInfo.time == 0 )
+		{
+			levelInfo.time = gameTime;
+			levelInfo.replay = recorder.toString();
+		}
+		else if ( levelInfo.replay == null )
+		{
+			levelInfo.replay = recorder.toString();
+		}
+		
+		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;
 		levelInfo.isCompleted = true;
-		levelInfo.starCount = starCount > levelInfo.starCount ? starCount : levelInfo.starCount;
-		levelInfo.collectedCoins = collectedCoin > levelInfo.collectedCoins ? collectedCoin : levelInfo.collectedCoins;
+		levelInfo.starCount = levelInfo.starCount < starCount ? starCount : levelInfo.starCount;
+		levelInfo.collectedCoins = levelInfo.collectedCoins < collectedCoin ? collectedCoin : levelInfo.collectedCoins;
 		
 		if (levelId < 23)
 		{
@@ -1089,7 +1161,7 @@ class GameState extends FlxState
 	
 	override public function onFocusLost():Void 
 	{
-		if (isGameStarted)
+		if ( isGameStarted )
 		{
 			pauseRequest();
 		}
@@ -1106,7 +1178,8 @@ class GameState extends FlxState
 }
 
 @:enum
-abstract GameEffect(String) {
+abstract GameEffect( String )
+{
 	var TYPE_LEVEL_COMPLETED = "effect_level_completed";
 	var TYPE_CRUSHED = "effect_crushed";
 	var TYPE_TIME_OUT = "effect_time_out";
