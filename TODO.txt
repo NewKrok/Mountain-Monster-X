@@ -3,14 +3,29 @@ Needed for 1.3.0
 [RDY] Check world 1 13-24 levels
 [RDY] Fix news page scroll container
 Fix highscore not visible problem
-Show stars by world
-Show all star
+Show stars by world in level selector
+Show all earned star in world selector
+Add ghost cars
+
+
+Selected for next release
+=================================================
+Add End photo
+Improve coin pick up effect
+Check world 2 1-12 levels
+Enable World 2
+World 2 tutorial
+Update world 2 tutorial images
+Lock world 1 before the user reach X star
+Lock world 2 before the user reach X star
+Enable Car for world 2
 
 
 Needed for ??
 =================================================
+Car selector for start game panel
 Car selector
-Improve coin pick up effect
+Add just watch replay
 Add pick up all coin in a level bonus multiplier
 Fix ground problem on ios
 Fix font positions in safari
@@ -18,39 +33,17 @@ Level preloader - maybe it's not needed (maybe state change effect)
 Sound + Music
 Sound + Music checkbox in menu
 Switchable control - up/W to accerelate or right/D (only in desktop)
-
-
-Needed for ??
-=================================================
-End photo if its possible
 Extra car if the player play on our site
 Add Task system
 Add Language system
-
-Needed for ??
-=================================================
-Enable World 2
-Lock world 2 before the user reach X star
-Check world 2 1-12 levels
 Check world 2 13-24 levels
-World 2 tutorial
-Update tutorial images
 Check praticle system possibilities
 Check is it possible to add some advertisement to game
-
-
-Needed for ??
-=================================================
 Enable world 3
 Add world 3 1-12 levels
 Add world 3 13-24 levels
 World 3 tutorial
-Check toplist possibilities
+Add toplist
 Redesign world selector
-Check code minify possibilities
-
-
-Needed for ??
-=================================================
-Check shadow player possibilities
+Minify code
 Check how can I remove the basic Flixel assets

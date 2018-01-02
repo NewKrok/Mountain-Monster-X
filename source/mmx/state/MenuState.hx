@@ -1,5 +1,6 @@
 package mmx.state;
 
+import flixel.FlxG;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
@@ -31,25 +32,25 @@ class MenuState extends FlxState
 	var background:Background;
 	var backgroundTween:VarTween;
 	var offsetPercent:FlxPoint = new FlxPoint();
-	
+
 	var welcomePage:WelcomePage;
 	var settingsPage:SettingsPage;
 	var aboutUsPage:AboutUsPage;
 	var newsPage:NewsPage;
 	var worldSelector:WorldSelector;
 	var levelSelector:LevelSelector;
-	
+
 	var startState:MenuSubStateType;
 	var config:MenuStateConfig;
-	
+
 	function new( startState:MenuSubStateType = MenuSubStateType.WELCOME_PAGE, config:MenuStateConfig )
 	{
 		super();
-		
+
 		this.startState = startState;
 		this.config = config;
 	}
-	
+
 	override public function create():Void
 	{
 		super.create();
@@ -61,19 +62,19 @@ class MenuState extends FlxState
 		{
 			case MenuSubStateType.WELCOME_PAGE:
 				openWelcomePage();
-				
+
 			case MenuSubStateType.WORLD_SELECTOR:
 				openWorldSelector();
-				
+
 			case MenuSubStateType.LEVEL_SELECTOR:
 				openLevelSelector( config.worldId );
-				
+
 			case MenuSubStateType.SETTINGS_PAGE:
 				openSettingsPage();
-				
+
 			case MenuSubStateType.ABOUT_US_PAGE:
 				openAboutUsPage();
-				
+
 			case MenuSubStateType.NEWS_PAGE:
 				openNewsPage();
 		}
@@ -89,7 +90,7 @@ class MenuState extends FlxState
 			stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
 		}
 	}
-	
+
 	function loadAssets():Void
 	{
 		HPPAssetManager.loadXMLAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
@@ -100,11 +101,11 @@ class MenuState extends FlxState
 	function build():Void
 	{
 		persistentUpdate = true;
-		
+
 		stage = Lib.current.stage;
 
 		add(background = new Background(SavedDataUtil.getLastPlayedWorldId()));
-		
+
 		destroySubStates = false;
 		welcomePage = new WelcomePage( openSettingsPage, openAboutUsPage, openNewsPage, openWorldSelector );
 		settingsPage = new SettingsPage( openWelcomePage );
@@ -113,32 +114,35 @@ class MenuState extends FlxState
 		worldSelector = new WorldSelector( openWelcomePage, openLevelSelector );
 
 		camera.scroll.set( stage.stageWidth / 2, stage.stageHeight / 2 );
+
+		// TEMP
+		FlxG.switchState( new GameState( 0, 0 ) );
 	}
-	
+
 	function openWelcomePage( target:HPPButton = null ):Void
 	{
 		openSubState( welcomePage );
 	}
-	
+
 	function openSettingsPage( target:HPPButton = null ):Void
 	{
 		openSubState( settingsPage );
 	}
-	
+
 	function openAboutUsPage( target:HPPButton = null ):Void
 	{
 		openSubState( aboutUsPage );
 	}
-	
+
 	function openNewsPage( target:HPPButton = null ):Void
 	{
 		openSubState( newsPage );
 	}
-	
+
 	function openLevelSelector( worldId:UInt ):Void
 	{
 		var needCreateNewLevelSelector:Bool = true;
-		
+
 		if ( levelSelector != null )
 		{
 			if ( levelSelector.worldId != worldId )
@@ -151,30 +155,30 @@ class MenuState extends FlxState
 				needCreateNewLevelSelector = false;
 			}
 		}
-		
+
 		if ( needCreateNewLevelSelector )
 		{
 			levelSelector = new LevelSelector( openWorldSelector );
 			levelSelector.worldId = worldId;
 		}
-		
+
 		background.worldId = worldId;
-		
+
 		openSubState( levelSelector );
 	}
-	
+
 	function openWorldSelector( target:HPPButton = null ):Void
 	{
 		openSubState( worldSelector );
 	}
-	
+
 	#if html5
 	function accelerometerMove( e ):Void
 	{
 		offsetPercent.set( stage.stageWidth / 2 + e.accelerationIncludingGravity.y * 15, stage.stageHeight / 2 + e.accelerationIncludingGravity.x * 15 );
 
 		removeBackgroundTween();
-		backgroundTween = FlxTween.tween( 
+		backgroundTween = FlxTween.tween(
 			camera.scroll,
 			{ x: offsetPercent.x, y: offsetPercent.y },
 			.4,
@@ -197,14 +201,14 @@ class MenuState extends FlxState
 		offsetPercent.set( stage.stageWidth / 2 - xRatio * 50, stage.stageHeight / 2 + yRatio * 50 );
 
 		removeBackgroundTween();
-		backgroundTween = FlxTween.tween( 
+		backgroundTween = FlxTween.tween(
 			camera.scroll,
 			{ x: offsetPercent.x, y: offsetPercent.y },
 			.4,
 			{ ease: FlxEase.expoOut }
 		);
 	}
-	
+
 	function removeBackgroundTween():Void
 	{
 		if ( backgroundTween != null )
@@ -218,7 +222,7 @@ class MenuState extends FlxState
 	override public function destroy():Void
 	{
 		HPPAssetManager.clear();
-		
+
 		#if html5
 		Browser.window.removeEventListener( 'devicemotion', accelerometerMove, true );
 		#end

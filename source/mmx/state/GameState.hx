@@ -17,6 +17,7 @@ import hpp.flixel.HPPCamera;
 import hpp.flixel.ui.HPPButton;
 import hpp.flixel.util.HPPAssetManager;
 import mmx.assets.CarDatas;
+import mmx.common.PlayerInfo;
 import mmx.datatype.LevelData;
 import mmx.game.Background;
 import mmx.game.Car;
@@ -60,7 +61,7 @@ class GameState extends FlxState
 	inline static var LEVEL_DATA_SCALE:Float = 2;
 
 	var space:Space;
-	
+
 	var startLevelPanel:StartLevelPanel;
 	var endLevelPanel:EndLevelPanel;
 	var pausePanel:PausePanel;
@@ -86,18 +87,18 @@ class GameState extends FlxState
 	var coins:Array<Coin>;
 
 	var gameObjects:Array<FlxSprite>;
-	
+
 	var recorder:Recorder;
 	var playback:Playback;
-	
+
 	var car:Car;
 	var ghostCar:GhostCar;
 	var snow:Snow;
-	
+
 	/*
-		var achievementManager:AchievementManager;	
+		var achievementManager:AchievementManager;
 	*/
-		
+
 	var effects:Array<FlxSprite> = [];
 	var crates:Array<AbstractCrate> = [];
 
@@ -129,43 +130,46 @@ class GameState extends FlxState
 	var isGameStarted:Bool;
 	var isGamePaused:Bool;
 	var isPhysicsEnabled:Bool;
-	
+
 	var now:Float;
 
-	public function new( worldId:UInt, levelId:UInt ):Void
+	public function new(worldId:UInt, levelId:UInt):Void
 	{
 		this.worldId = worldId;
 		this.levelId = levelId;
-		
+
+		// TODO remove this hack after car selector added
+		PlayerInfo.selectedCarId = worldId == 0 ? 0 : 1;
+
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		SavedDataUtil.resetLastPlayedInfo();
 		levelInfo.isLastPlayed = true;
 		SavedDataUtil.setLastPlayedWorldId(worldId);
 		SavedDataUtil.save();
-		
+
 		super();
 	}
-	
+
 	override public function create():Void
 	{
 		super.create();
 
 		loadAssets();
-		
+
 		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json" ) );
 		setLevelDataScale();
-		
+
 		build();
 	}
-	
+
 	function loadAssets():Void
 	{
 		CarDatas.loadData( Assets.getText( "assets/data/car_datas.json" ) );
-		
+
 		HPPAssetManager.loadXMLAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
 		HPPAssetManager.loadXMLAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
 		HPPAssetManager.loadXMLAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
-		
+
 		HPPAssetManager.loadJsonAtlas( "assets/images/terrain_textures.png", "assets/images/terrain_textures.json" );
 	}
 
@@ -191,7 +195,7 @@ class GameState extends FlxState
 				levelData.bridgePoints[i].bridgeBY *= LEVEL_DATA_SCALE;
 			}
 		}
-		
+
 		if ( levelData.gameObjects != null )
 		{
 			for ( i in 0...levelData.gameObjects.length )
@@ -202,7 +206,7 @@ class GameState extends FlxState
 				levelData.gameObjects[i].pivotY *= LEVEL_DATA_SCALE;
 			}
 		}
-		
+
 		if ( levelData.libraryElements != null )
 		{
 			for ( i in 0...levelData.libraryElements.length )
@@ -211,7 +215,7 @@ class GameState extends FlxState
 				levelData.libraryElements[i].y *= LEVEL_DATA_SCALE;
 			}
 		}
-		
+
 		levelData.startPoint = new FlxPoint( levelData.startPoint.x * LEVEL_DATA_SCALE, levelData.startPoint.y * LEVEL_DATA_SCALE );
 		levelData.finishPoint = new FlxPoint( levelData.finishPoint.x * LEVEL_DATA_SCALE, levelData.finishPoint.y * LEVEL_DATA_SCALE );
 
@@ -226,15 +230,15 @@ class GameState extends FlxState
 	function build():Void
 	{
 		destroySubStates = false;
-		
+
 		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
 		endLevelPanel = new EndLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
-		
+
 		lastCameraStepOffset = new FlxPoint();
 
 		add( background = new Background( worldId ) );
 		add( container = new FlxSpriteGroup() );
-		
+
 		createCamera();
 		createPhysicsWorld();
 		createGroundPhysics();
@@ -255,21 +259,21 @@ class GameState extends FlxState
 				snow = new Snow();
 				add( snow );
 		}
-		
+
 		add( gameGui = new GameGui( resume, pauseRequest ) );
-		
+
 		//cast( camera, HPPCamera ).addZoomResistanceToSprite( gameGui );
 		//cast( camera, HPPCamera ).addZoomResistanceToSprite( background );
 
 		reset();
-		
+
 		if (levelId == 0 && !SavedDataUtil.getHelpInfo(worldId).isShowed)
 		{
 			helpPanel = new HelpPanel( worldId, openStartLevelPanelRequest );
 			openSubState( helpPanel );
 		}
 	}
-	
+
 	function openStartLevelPanelRequest(target:HPPButton = null):Void
 	{
 		if (startLevelPanel != null)
@@ -277,7 +281,7 @@ class GameState extends FlxState
 			startLevelPanel.destroy();
 			startLevelPanel = null;
 		}
-		
+
 		startLevelPanel = new StartLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 		openSubState( startLevelPanel );
 	}
@@ -301,7 +305,7 @@ class GameState extends FlxState
 		countOfNiceWheelie = 0;
 		gameTime = 0;
 		totalPausedTime = 0;
-		
+
 		car.isOnWheelie = false;
 		car.isOnAir = false;
 		car.jumpAngle = 0;
@@ -329,16 +333,16 @@ class GameState extends FlxState
 
 		resetCrates();
 		updateBridges();
-		
+
 		start();
 
 		resetReplayKit();
-		
+
 		openStartLevelPanelRequest();
 		pause();
 		isPhysicsEnabled = true;
 	}
-	
+
 	function resetReplayKit():Void
 	{
 		if ( recorder != null )
@@ -347,26 +351,26 @@ class GameState extends FlxState
 		}
 
 		recorder = new Recorder( car );
-		
+
 		recorder.enableAutoRecording( 250 );
-		
+
 		if ( playback != null )
 		{
 			playback.dispose();
 		}
-		
+
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo( worldId, levelId );
 		var replayData:String = levelInfo.replay == null ? levelData.replay : levelInfo.replay;
-		
+
 		ghostCar.visible = false;
-		
+
 		if ( levelInfo.replay != null )
 		{
 			playback = new Playback( ghostCar, replayData );
 			playback.showSnapshot( 0 );
 		}
 	}
-	
+
 	function resetCrates():Void
 	{
 		for( i in 0...crates.length )
@@ -382,7 +386,7 @@ class GameState extends FlxState
 		now = gameStartTime = Date.now().getTime();
 
 		resumeRequest();
-		
+
 		isPhysicsEnabled = true;
 		persistentUpdate = true;
 	}
@@ -390,7 +394,7 @@ class GameState extends FlxState
 	function resumeRequest( target:HPPButton = null ):Void
 	{
 		closeSubState();
-		
+
 		if ( !isGamePaused )
 		{
 			pause();
@@ -398,7 +402,7 @@ class GameState extends FlxState
 
 		gameGui.resumeGameRequest();
 	}
-	
+
 	function pauseRequest(target:HPPButton = null):Void
 	{
 		if (subState == null)
@@ -412,9 +416,9 @@ class GameState extends FlxState
 	{
 		isGamePaused = false;
 		isPhysicsEnabled = true;
-		
+
 		totalPausedTime += now - pauseStartTime;
-		
+
 		if ( recorder != null )
 		{
 			recorder.resume();
@@ -425,16 +429,16 @@ class GameState extends FlxState
 	{
 		isGamePaused = true;
 		isPhysicsEnabled = false;
-		
+
 		gameGui.pause();
 		pauseStartTime = now;
-		
+
 		if ( recorder != null )
 		{
 			recorder.pause();
 		}
 	}
-	
+
 	function createCamera():Void
 	{
 		camera = new HPPCamera();
@@ -454,7 +458,7 @@ class GameState extends FlxState
 	function createPhysicsWorld():Void
 	{
 		space = new Space( new Vec2( 0, CPhysicsValue.GRAVITY ) );
-		
+
 		var walls:Body = new Body( BodyType.STATIC );
 		walls.shapes.add( new Polygon( Polygon.rect( 0, 0, 1, levelData.cameraBounds.height ) ) );
 		walls.shapes.add( new Polygon( Polygon.rect( levelData.cameraBounds.width, 0, 1, levelData.cameraBounds.height ) ) );
@@ -473,7 +477,7 @@ class GameState extends FlxState
 			64,
 			24
 		);
-		
+
 		terrainContainer.add( generatedTerrain );
 	}
 
@@ -581,17 +585,16 @@ class GameState extends FlxState
 
 	function createCar():Void
 	{
-		// TODO remove this hack after car selector added
-		car = new Car( space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData( worldId == 0 ? 0 : 1 ), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK );
-		container.add( car );
+		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
+		container.add(car);
 	}
-	
+
 	function createGhostCar():Void
 	{
 		ghostCar = new GhostCar( CarDatas.getData( worldId == 0 ? 0 : 1 ), 1 );
 		container.add( ghostCar );
 	}
-	
+
 	function createGameObjects():Void
 	{
 		gameObjects = [];
@@ -648,7 +651,7 @@ class GameState extends FlxState
 			{
 				var libraryElement:LibraryElement = levelData.libraryElements[ i ];
 				var crate:AbstractCrate;
-				
+
 				switch( libraryElement.className )
 				{
 					case CLibraryElement.CRATE_0:
@@ -688,28 +691,28 @@ class GameState extends FlxState
 	override public function update( elapsed:Float ):Void
 	{
 		now = Date.now().getTime();
-		
+
 		super.update( elapsed );
-		
+
 		if ( isPhysicsEnabled )
 		{
 			space.step( CPhysicsValue.STEP );
 		}
-		
+
 		if ( isGamePaused )
 		{
 			return;
 		}
-		
+
 		ghostCar.visible = playback != null;
-		
+
 		calculateGameTime();
-		
+
 		if ( !isLost && !isWon )
 		{
 			gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
 			gameGui.updateCoinCount( collectedCoin + collectedExtraCoins );
-			
+
 			up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
 			down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
 			right = FlxG.keys.anyPressed( [RIGHT, D] ) || gameGui.controlRightState;
@@ -719,7 +722,7 @@ class GameState extends FlxState
 		{
 			up = down = right = left = false;
 		}
-		
+
 		if ( up )
 		{
 			car.accelerateToRight();
@@ -728,7 +731,7 @@ class GameState extends FlxState
 		{
 			car.accelerateToLeft();
 		}
-		
+
 		if ( right )
 		{
 			car.rotateRight();
@@ -748,13 +751,13 @@ class GameState extends FlxState
 			checkFlipAndNiceAirTimeState();
 			checkLoose();
 			checkWin();
-			
+
 			if (AppConfig.IS_DESKTOP_DEVICE && (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P))
 			{
 				pauseRequest( null );
 			}
 		}
-		
+
 		if ( playback != null )
 		{
 			playback.showSnapshot( recorder.getElapsedTime() );
@@ -841,7 +844,7 @@ class GameState extends FlxState
 			}
 		}
 	}
-	
+
 	function checkWheelieState():Void
 	{
 		var isWheelieInProgress:Bool = (car.rightWheelOnAir && !car.leftWheelOnAir) || (!car.rightWheelOnAir && car.leftWheelOnAir);
@@ -858,11 +861,11 @@ class GameState extends FlxState
 
 		car.isOnWheelie = isWheelieInProgress;
 	}
-	
+
 	function checkFlipAndNiceAirTimeState():Void
 	{
 		var newIsOnAirValue:Bool = car.leftWheelOnAir && car.rightWheelOnAir;
-		
+
 		if(car.leftWheelOnAir && car.rightWheelOnAir)
 		{
 			var currentAngle:Float = Math.atan2(car.wheelLeftGraphics.y - car.wheelRightGraphics.y, car.wheelLeftGraphics.x - car.wheelRightGraphics.x);
@@ -872,7 +875,7 @@ class GameState extends FlxState
 			{
 				currentAngle -= Math.PI * 2;
 			}
-			
+
 			if(!car.isOnAir)
 			{
 				car.onAirStartGameTime = gameTime;
@@ -880,7 +883,7 @@ class GameState extends FlxState
 				car.jumpAngle = 0;
 				car.lastAngleOnGround = currentAngle;
 			}
-			
+
 			var angleDiff:Float = currentAngle - car.lastAngleOnGround;
 
 			if(angleDiff < -Math.PI)
@@ -893,14 +896,14 @@ class GameState extends FlxState
 				angleDiff -= Math.PI * 2;
 				angleDiff *= -1;
 			}
-			
+
 			car.lastAngleOnGround = currentAngle;
 			car.jumpAngle += angleDiff;
 		}
 		else if(car.isOnAir)
 		{
 			var angleInDeg:Float = car.jumpAngle * ( 180 / Math.PI );
-			
+
 			car.isOnAir = false;
 			car.jumpAngle = 0;
 			car.lastAngleOnGround = 0;
@@ -926,7 +929,7 @@ class GameState extends FlxState
 		if (!isLost && !isWon && (car.isCarCrashed || gameTime >= CGameTimeValue.MAXIMUM_GAME_TIME))
 		{
 			isLost = true;
-			
+
 			if (car.isCarCrashed)
 			{
 				camera.shake( .02, .2 );
@@ -936,7 +939,7 @@ class GameState extends FlxState
 			{
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_TIME_OUT);
 			}
-			
+
 			Timer.delay(restartRutin, 1500);
 		}
 	}
@@ -946,24 +949,24 @@ class GameState extends FlxState
 		if (!isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x)
 		{
 			isWon = true;
-			
+
 			addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_LEVEL_COMPLETED);
-			
+
 			Timer.delay(winRutin, 500);
 		}
 	}
-	
-	function winRutin():Void 
+
+	function winRutin():Void
 	{
 		recorder.takeSnapshot();
-		
+
 		collectedCoin += collectedExtraCoins;
-		
+
 		var score:UInt = calculateScore();
-		
+
 		var starCount:UInt = coinsToStarCount(score);
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
-		
+
 		if ( gameTime < levelInfo.time || levelInfo.time == 0 )
 		{
 			levelInfo.time = gameTime;
@@ -973,12 +976,12 @@ class GameState extends FlxState
 		{
 			levelInfo.replay = recorder.toString();
 		}
-		
+
 		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;
 		levelInfo.isCompleted = true;
 		levelInfo.starCount = levelInfo.starCount < starCount ? starCount : levelInfo.starCount;
 		levelInfo.collectedCoins = levelInfo.collectedCoins < collectedCoin ? collectedCoin : levelInfo.collectedCoins;
-		
+
 		if (levelId < 23)
 		{
 			levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
@@ -989,24 +992,24 @@ class GameState extends FlxState
 			levelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
 			levelInfo.isEnabled = true;
 		}
-		
+
 		SavedDataUtil.save();
-		
+
 		persistentUpdate = false;
 		openSubState( endLevelPanel );
 		endLevelPanel.updateView(score, gameTime, collectedCoin, starCount);
 	}
-	
+
 	function calculateScore():UInt
 	{
 		var result = 0;
-		
+
 		result = Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - gameTime / 10);
 		result += collectedCoin * AppConfig.COIN_SCORE_MULTIPLIER;
-		
+
 		return result;
 	}
-	
+
 	public function coinsToStarCount(value:UInt):UInt
 	{
 		var starCount:UInt = 0;
@@ -1025,7 +1028,7 @@ class GameState extends FlxState
 
 		return starCount;
 	}
-	
+
 	function startFrontFlipRutin():Void
 	{
 		countOfFrontFlip++;
@@ -1070,7 +1073,7 @@ class GameState extends FlxState
 
 		gameGui.addNotification(Notification.NICE_WHEELIE);
 	}
-	
+
 	function addEffect(x:Float, y:Float, effectType:GameEffect):Void
 	{
 		var effect:FlxSprite = HPPAssetManager.getSprite(cast effectType);
@@ -1095,26 +1098,26 @@ class GameState extends FlxState
 				{ startDelay: 1 }
 			);
 		}
-		
+
 		FlxTween.tween(
 			effect.scale,
-			{ 
+			{
 				x: 1,
 				y: 1,
 			},
 			.3
 		);
-		
+
 		FlxTween.tween(
 			effect.scale,
-			{ 
+			{
 				x: 0,
 				y: 0,
 			},
 			.2,
 			{ startDelay: 1, onComplete: function(_) { disposeEffect(effect); } }
 		);
-		
+
 		container.add(effect);
 		effects.push(effect);
 	}
@@ -1128,7 +1131,7 @@ class GameState extends FlxState
 				effects.remove(effect);
 				effect.destroy();
 				effect = null;
-				
+
 				return;
 			}
 		}
@@ -1138,41 +1141,41 @@ class GameState extends FlxState
 	{
 		reset();
 	}
-	
+
 	function restartRequest(target:HPPButton = null):Void
 	{
 		restartRutin();
 	}
-	
+
 	function exitRequest(target:HPPButton = null):Void
 	{
 		FlxG.switchState(new MenuState(MenuSubStateType.LEVEL_SELECTOR, {worldId: worldId}));
 	}
-	
+
 	function nextLevelRequest(target:HPPButton = null):Void
 	{
 		FlxG.switchState( new GameState(worldId, levelId + 1));
 	}
-	
+
 	function prevLevelRequest(target:HPPButton = null):Void
 	{
 		FlxG.switchState( new GameState(worldId, levelId - 1));
 	}
-	
-	override public function onFocusLost():Void 
+
+	override public function onFocusLost():Void
 	{
 		if ( isGameStarted )
 		{
 			pauseRequest();
 		}
-		
+
 		super.onFocusLost();
 	}
-	
+
 	override public function destroy():Void
 	{
 		HPPAssetManager.clear();
-		
+
 		super.destroy();
 	}
 }

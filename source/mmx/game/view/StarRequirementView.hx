@@ -21,21 +21,22 @@ class StarRequirementView extends HPPHUIBox
 
 	public function new(starCount:UInt, requirement:UInt)
 	{
-		super(20);
+		super(10);
 
-		add(starView = HPPAssetManager.getSprite("large_star_" + starCount));
+		starView = HPPAssetManager.getSprite("large_star_" + starCount);
+		add(starView);
 
 		var textContainer:HPPVUIBox = new HPPVUIBox();
-		
-		textContainer.add(new PlaceHolder(0, 10));
-		
-		var text:FlxText = new FlxText(0, 0, 0, "EARN " + NumberUtil.formatNumber(requirement) + " SCORE", 33);
+
+		textContainer.add(new PlaceHolder(0, 5));
+
+		var text:FlxText = new FlxText(0, 0, 0, NumberUtil.formatNumber(requirement), 15);
 		text.autoSize = true;
 		text.color = FlxColor.WHITE;
 		text.alignment = "left";
 		text.font = Fonts.AACHEN_MEDIUM;
 		textContainer.add(text);
-		
+
 		add(textContainer);
 	}
 }

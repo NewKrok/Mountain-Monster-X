@@ -56,6 +56,8 @@
 	<SubTexture name="large_star_1" x="1773" y="1940" width="146" height="47" pivotX="0" pivotY="0"/>
 	<SubTexture name="large_star_2" x="1172" y="1933" width="146" height="47" pivotX="0" pivotY="0"/>
 	<SubTexture name="large_star_3" x="1020" y="1933" width="149" height="47" pivotX="0" pivotY="0"/>
+	<SubTexture name="small_star_normal" x="35" y="2000" width="24" height="22" pivotX="0" pivotY="0"/>
+	<SubTexture name="small_star_reached" x="5" y="2000" width="24" height="22" pivotX="0" pivotY="0"/>
 	<SubTexture name="level_button_base" x="1879" y="289" width="154" height="138" pivotX="0" pivotY="0"/>
 	<SubTexture name="level_button_locked" x="1879" y="430" width="154" height="138" pivotX="0" pivotY="0"/>
 	<SubTexture name="level_button_perfect" x="993" y="905" width="154" height="124" pivotX="0" pivotY="0"/>
