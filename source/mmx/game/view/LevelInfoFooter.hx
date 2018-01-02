@@ -16,6 +16,8 @@ import mmx.assets.Fonts;
 class LevelInfoFooter extends FlxSpriteGroup
 {
 	var container:HPPHUIBox = new HPPHUIBox();
+	var bestScoreText:FlxText;
+	var bestTimeText:FlxText;
 
 	public function new(isCompleted:Bool, score:Float, time:Float)
 	{
@@ -30,7 +32,7 @@ class LevelInfoFooter extends FlxSpriteGroup
 		bestScoreLabelText.font = Fonts.AACHEN_MEDIUM;
 		container.add(bestScoreLabelText);
 
-		var bestScoreText:FlxText = new FlxText(0, 0, 0, isCompleted ? NumberUtil.formatNumber(score) : "N/A", 20);
+		bestScoreText = new FlxText(0, 0, 0, isCompleted ? NumberUtil.formatNumber(score) : "N/A", 20);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
@@ -46,7 +48,7 @@ class LevelInfoFooter extends FlxSpriteGroup
 		bestTimeLabelText.font = Fonts.AACHEN_MEDIUM;
 		container.add(bestTimeLabelText);
 
-		var bestTimeText:FlxText = new FlxText(0, 0, 0, isCompleted ? TimeUtil.timeStampToFormattedTime(time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 20);
+		bestTimeText = new FlxText(0, 0, 0, isCompleted ? TimeUtil.timeStampToFormattedTime(time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 20);
 		bestTimeText.autoSize = true;
 		bestTimeText.color = FlxColor.YELLOW;
 		bestTimeText.alignment = "left";
@@ -58,5 +60,11 @@ class LevelInfoFooter extends FlxSpriteGroup
 
 		container.x = width / 2 - container.width / 2;
 		container.y = height / 2 - container.height / 2;
+	}
+
+	public function updateData(isCompleted:Bool, score:Float, time:Float):Void
+	{
+		bestScoreText.text = isCompleted ? NumberUtil.formatNumber(score) : "N/A";
+		bestTimeText.text = isCompleted ? TimeUtil.timeStampToFormattedTime(time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A";
 	}
 }

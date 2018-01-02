@@ -11,8 +11,6 @@ import hpp.flixel.ui.HPPHUIBox;
 import hpp.flixel.ui.HPPVUIBox;
 import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
-import hpp.util.NumberUtil;
-import hpp.util.TimeUtil;
 import mmx.assets.CarDatas;
 import mmx.assets.Fonts;
 import mmx.common.PlayerInfo;
@@ -21,7 +19,6 @@ import mmx.game.view.CarInfoBlock;
 import mmx.game.view.LevelInfoFooter;
 import mmx.game.view.ReplayBlock;
 import mmx.game.view.StarRequirementBlock;
-import mmx.game.view.StarRequirementView;
 import mmx.util.LevelUtil;
 import mmx.util.SavedDataUtil.LevelInfo;
 
@@ -81,10 +78,6 @@ class StartLevelPanel extends FlxSubState
 		container.add(panelBack);
 		panelBack.x = container.width / 2 - panelBack.width / 2;
 		panelBack.y = container.height / 2 - panelBack.height / 2 - 40 - (canStartPrevLevel() || canStartNextLevel() ? 47 : 0);
-
-		var footerBackground:PlaceHolder = new PlaceHolder(573, 35, 0x44000000);
-		footerBackground.scrollFactor.set();
-		add(footerBackground);
 
 		content = new HPPVUIBox();
 		container.add(content);
