@@ -21,8 +21,12 @@ class Main extends Sprite
 		super();
 
 		SavedDataUtil.load( "MountainMonsterSavedData" );
-		AppConfig.IS_ALPHA_ANIMATION_ENABLED = SavedDataUtil.getSettingsInfo().enableAlphaAnimation;
-		AppConfig.SHOW_FPS = SavedDataUtil.getSettingsInfo().showFPS;
+		var settingsInfo:SettingsInfo = SavedDataUtil.getSettingsInfo();
+
+		AppConfig.IS_ALPHA_ANIMATION_ENABLED = settingsInfo.enableAlphaAnimation;
+		AppConfig.SHOW_FPS = settingsInfo.showFPS;
+		AppConfig.SHOW_3_STAR_REPLAY = settingsInfo.show3StarsReplay;
+		AppConfig.SHOW_PLAYER_REPLAY = settingsInfo.showPlayersReplay;
 		AppConfig.IS_MOBILE_DEVICE = DeviceData.isMobile();
 
 		JsFullScreenUtil.init("openfl-content");

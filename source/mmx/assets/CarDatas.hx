@@ -9,17 +9,17 @@ import mmx.datatype.CarData;
  * ...
  * @author Krisztian Somoracz
  */
-class CarDatas 
+class CarDatas
 {
-	public static inline var MAX_SPEED:Float = 14;
-	public static inline var MIN_SPEED:Float = 9;
-	public static inline var MAX_ROTATION:Float = 9;
-	public static inline var MIN_ROTATION:Float = 5;
-	public static inline var MAX_DAMPING:Float = .9;
-	public static inline var MIN_DAMPING:Float = .4;
+	public static inline var MAX_SPEED:Float = 42;
+	public static inline var MIN_SPEED:Float = 32;
+	public static inline var MAX_ROTATION:Float = 2500;
+	public static inline var MIN_ROTATION:Float = 1500;
+	public static inline var MAX_ELASTICITY:Float = 0;
+	public static inline var MIN_ELASTICITY:Float = 1;
 
 	static var carDatas:Array<CarData>;
-	
+
 	public static function loadData( jsonData:String ):Void
 	{
 		try
@@ -32,7 +32,7 @@ class CarDatas
 			carDatas = null;
 		}
 	}
-	
+
 	public static function getData( carId:UInt ):CarData
 	{
 		for( i in 0...carDatas.length )

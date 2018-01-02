@@ -2,14 +2,22 @@ Needed for 1.3.0
 =================================================
 [RDY] Check world 1 13-24 levels
 [RDY] Fix news page scroll container
+[RDY] Redesign start level panel
+[RDY] Add ghost cars
 Fix highscore not visible problem
-Show stars by world in level selector
-Show all earned star in world selector
-Add ghost cars
+Add pick up all coin in a level bonus multiplier
+Add base replays to world 0 - 0-12
+Add base replays to world 0 - 13-34
+Add base replays to world 1 - 0-12
+Add base replays to world 1 - 13-34
+Recalculate reached stars for old players
+Minify code
 
 
 Selected for next release
 =================================================
+Show stars by world in level selector
+Show all earned star in world selector
 Add End photo
 Improve coin pick up effect
 Check world 2 1-12 levels
@@ -26,7 +34,6 @@ Needed for ??
 Car selector for start game panel
 Car selector
 Add just watch replay
-Add pick up all coin in a level bonus multiplier
 Fix ground problem on ios
 Fix font positions in safari
 Level preloader - maybe it's not needed (maybe state change effect)
@@ -45,5 +52,4 @@ Add world 3 13-24 levels
 World 3 tutorial
 Add toplist
 Redesign world selector
-Minify code
 Check how can I remove the basic Flixel assets

@@ -4,10 +4,10 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hpp.flixel.ui.HPPHUIBox;
-import hpp.flixel.ui.PlaceHolder;
 import hpp.flixel.util.HPPAssetManager;
 import hpp.ui.VAlign;
 import mmx.assets.Fonts;
+import mmx.common.view.CarDetails;
 import mmx.datatype.CarData;
 import openfl.display.BitmapData;
 import openfl.geom.Matrix;
@@ -20,11 +20,11 @@ class CarInfoBlock extends HPPHUIBox
 {
 	public function new(carData:CarData)
 	{
-		super(10, VAlign.TOP);
+		super(20, VAlign.TOP);
 
 		createCarName(carData.name);
-		add(new PlaceHolder(10, 1));
 		createCarPreview(carData.graphicId);
+		add(new CarDetails(carData));
 	}
 
 	function createCarName(carName:String)
@@ -33,6 +33,8 @@ class CarInfoBlock extends HPPHUIBox
 		checkboxLabel.color = FlxColor.YELLOW;
 		checkboxLabel.alignment = "left";
 		checkboxLabel.font = Fonts.AACHEN_MEDIUM;
+		checkboxLabel.wordWrap = true;
+		checkboxLabel.fieldWidth = 110;
 		add(checkboxLabel);
 	}
 

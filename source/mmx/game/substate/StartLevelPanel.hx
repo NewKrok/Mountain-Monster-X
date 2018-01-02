@@ -18,6 +18,7 @@ import mmx.assets.Fonts;
 import mmx.common.PlayerInfo;
 import mmx.common.view.LongButton;
 import mmx.game.view.CarInfoBlock;
+import mmx.game.view.LevelInfoFooter;
 import mmx.game.view.ReplayBlock;
 import mmx.game.view.StarRequirementBlock;
 import mmx.game.view.StarRequirementView;
@@ -81,6 +82,10 @@ class StartLevelPanel extends FlxSubState
 		panelBack.x = container.width / 2 - panelBack.width / 2;
 		panelBack.y = container.height / 2 - panelBack.height / 2 - 40 - (canStartPrevLevel() || canStartNextLevel() ? 47 : 0);
 
+		var footerBackground:PlaceHolder = new PlaceHolder(573, 35, 0x44000000);
+		footerBackground.scrollFactor.set();
+		add(footerBackground);
+
 		content = new HPPVUIBox();
 		container.add(content);
 
@@ -90,10 +95,10 @@ class StartLevelPanel extends FlxSubState
 		content.add(new StarRequirementBlock(starRequirements));
 		content.add(new PlaceHolder(0, 10));
 		content.add(new ReplayBlock());
-		content.add(new PlaceHolder(0, 20));
+		content.add(new PlaceHolder(0, 10));
 		content.add(new CarInfoBlock(CarDatas.getData(PlayerInfo.selectedCarId)));
-		content.add(new PlaceHolder(0, 20));
-		createFooter();
+		content.add(new PlaceHolder(0, 10));
+		content.add(new LevelInfoFooter(levelInfo.isCompleted, levelInfo.score, levelInfo.time));
 		content.add(new PlaceHolder(0,50));
 		createButtons();
 
@@ -122,43 +127,6 @@ class StartLevelPanel extends FlxSubState
 		subContainer.add(worldText);
 
 		content.add(subContainer);
-	}
-
-	function createFooter():Void
-	{
-		var footer:HPPHUIBox = new HPPHUIBox();
-
-		var bestScoreLabelText:FlxText = new FlxText(0, 0, 0, "Best score ", 20);
-		bestScoreLabelText.autoSize = true;
-		bestScoreLabelText.color = FlxColor.WHITE;
-		bestScoreLabelText.alignment = "left";
-		bestScoreLabelText.font = Fonts.AACHEN_MEDIUM;
-		footer.add(bestScoreLabelText);
-
-		var bestScoreText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? NumberUtil.formatNumber(levelInfo.score) : "N/A", 20);
-		bestScoreText.autoSize = true;
-		bestScoreText.color = FlxColor.YELLOW;
-		bestScoreText.alignment = "left";
-		bestScoreText.font = Fonts.AACHEN_MEDIUM;
-		footer.add(bestScoreText);
-
-		footer.add(new PlaceHolder(150,0));
-
-		var bestTimeLabelText:FlxText = new FlxText(0, 0, 0, "Best time ", 20);
-		bestTimeLabelText.autoSize = true;
-		bestTimeLabelText.color = FlxColor.WHITE;
-		bestTimeLabelText.alignment = "left";
-		bestTimeLabelText.font = Fonts.AACHEN_MEDIUM;
-		footer.add(bestTimeLabelText);
-
-		var bestTimeText:FlxText = new FlxText(0, 0, 0, levelInfo.isCompleted ? TimeUtil.timeStampToFormattedTime(levelInfo.time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 20);
-		bestTimeText.autoSize = true;
-		bestTimeText.color = FlxColor.YELLOW;
-		bestTimeText.alignment = "left";
-		bestTimeText.font = Fonts.AACHEN_MEDIUM;
-		footer.add(bestTimeText);
-
-		content.add(footer);
 	}
 
 	function createButtons():Void

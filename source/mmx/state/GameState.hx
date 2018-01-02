@@ -89,10 +89,13 @@ class GameState extends FlxState
 	var gameObjects:Array<FlxSprite>;
 
 	var recorder:Recorder;
-	var playback:Playback;
+	var basePlayback:Playback;
+	var playerPlayback:Playback;
+	var baseReplayData:String;
 
 	var car:Car;
-	var ghostCar:GhostCar;
+	var baseGhostCar:GhostCar;
+	var playerGhostCar:GhostCar;
 	var snow:Snow;
 
 	/*
@@ -144,6 +147,7 @@ class GameState extends FlxState
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		SavedDataUtil.resetLastPlayedInfo();
 		levelInfo.isLastPlayed = true;
+		//levelInfo.replay = null;
 		SavedDataUtil.setLastPlayedWorldId(worldId);
 		SavedDataUtil.save();
 
@@ -158,6 +162,11 @@ class GameState extends FlxState
 
 		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json" ) );
 		setLevelDataScale();
+
+		try {
+			baseReplayData = Assets.getText( "assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + ".txt" );
+		}
+		catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 
 		build();
 	}
@@ -242,8 +251,8 @@ class GameState extends FlxState
 		createCamera();
 		createPhysicsWorld();
 		createGroundPhysics();
-		createCar();
 		createGhostCar();
+		createCar();
 		createGameObjects();
 		createBridges();
 		createGroundGraphics();
@@ -345,29 +354,26 @@ class GameState extends FlxState
 
 	function resetReplayKit():Void
 	{
-		if ( recorder != null )
-		{
-			recorder.dispose();
-		}
+		if (recorder != null) recorder.dispose();
+		recorder = new Recorder(car);
+		recorder.enableAutoRecording(250);
 
-		recorder = new Recorder( car );
+		if (basePlayback != null) basePlayback.dispose();
+		if (playerPlayback != null) playerPlayback.dispose();
 
-		recorder.enableAutoRecording( 250 );
-
-		if ( playback != null )
-		{
-			playback.dispose();
-		}
-
-		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo( worldId, levelId );
+		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		var replayData:String = levelInfo.replay == null ? levelData.replay : levelInfo.replay;
 
-		ghostCar.visible = false;
-
-		if ( levelInfo.replay != null )
+		if (baseReplayData != null)
 		{
-			playback = new Playback( ghostCar, replayData );
-			playback.showSnapshot( 0 );
+			basePlayback = new Playback(baseGhostCar, baseReplayData);
+			basePlayback.showSnapshot(0);
+		}
+
+		if (levelInfo.replay != null)
+		{
+			playerPlayback = new Playback(playerGhostCar, levelInfo.replay);
+			playerPlayback.showSnapshot(0);
 		}
 	}
 
@@ -398,6 +404,11 @@ class GameState extends FlxState
 		if ( !isGamePaused )
 		{
 			pause();
+		}
+		else
+		{
+			baseGhostCar.visible = AppConfig.SHOW_3_STAR_REPLAY;
+			playerGhostCar.visible = AppConfig.SHOW_PLAYER_REPLAY;
 		}
 
 		gameGui.resumeGameRequest();
@@ -591,8 +602,14 @@ class GameState extends FlxState
 
 	function createGhostCar():Void
 	{
-		ghostCar = new GhostCar( CarDatas.getData( worldId == 0 ? 0 : 1 ), 1 );
-		container.add( ghostCar );
+		baseGhostCar = new GhostCar(CarDatas.getData(worldId == 0 ? 0 : 1), 1);
+		baseGhostCar.color = 0x00000000;
+		baseGhostCar.alpha = .3;
+		container.add(baseGhostCar);
+
+		playerGhostCar = new GhostCar(CarDatas.getData(worldId == 0 ? 0 : 1), 1);
+		playerGhostCar.alpha = .3;
+		container.add(playerGhostCar);
 	}
 
 	function createGameObjects():Void
@@ -704,8 +721,6 @@ class GameState extends FlxState
 			return;
 		}
 
-		ghostCar.visible = playback != null;
-
 		calculateGameTime();
 
 		if ( !isLost && !isWon )
@@ -744,7 +759,7 @@ class GameState extends FlxState
 		updateBridges();
 		updateSmallRocks();
 
-		if ( !isLost )
+		if (!isLost)
 		{
 			checkCoinPickUp();
 			checkWheelieState();
@@ -753,15 +768,14 @@ class GameState extends FlxState
 			checkWin();
 
 			if (AppConfig.IS_DESKTOP_DEVICE && (FlxG.keys.justPressed.ESCAPE || FlxG.keys.justPressed.P))
-			{
-				pauseRequest( null );
-			}
+				pauseRequest(null);
 		}
 
-		if ( playback != null )
-		{
-			playback.showSnapshot( recorder.getElapsedTime() );
-		}
+		if (AppConfig.SHOW_3_STAR_REPLAY && basePlayback != null)
+			basePlayback.showSnapshot(recorder.getElapsedTime());
+
+		if (AppConfig.SHOW_PLAYER_REPLAY && playerPlayback != null)
+			playerPlayback.showSnapshot(recorder.getElapsedTime());
 	}
 
 	function calculateGameTime():Void
@@ -976,6 +990,8 @@ class GameState extends FlxState
 		{
 			levelInfo.replay = recorder.toString();
 		}
+
+		trace(levelInfo.replay);
 
 		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;
 		levelInfo.isCompleted = true;
