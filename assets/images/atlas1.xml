@@ -84,4 +84,6 @@
 	<SubTexture name="task_button" x="1867" y="1813" width="124" height="124" pivotX="0" pivotY="0"/>
 	<SubTexture name="toplist_button" x="1058" y="1796" width="118" height="134" pivotX="0" pivotY="0"/>
 	<SubTexture name="github_button" x="1318" y="1795" width="118" height="134" pivotX="0" pivotY="0"/>
+	<SubTexture name="coin_icon" x="140" y="1585" width="34" height="34" pivotX="0" pivotY="0"/>
+	<SubTexture name="time_icon" x="185" y="1585" width="34" height="33" pivotX="0" pivotY="0"/>
 </TextureAtlas>

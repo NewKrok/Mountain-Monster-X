@@ -18,6 +18,7 @@ import mmx.common.view.LongButton;
 import mmx.game.CoinCounter;
 import mmx.game.TimeCounter;
 import mmx.game.view.LevelInfoFooter;
+import mmx.game.view.LevelStatisticBlock;
 import mmx.util.LevelUtil;
 import mmx.util.SavedDataUtil.LevelInfo;
 
@@ -29,6 +30,7 @@ class EndLevelPanel extends FlxSubState
 {
 	var content:HPPVUIBox;
 	var panelBack:FlxSprite;
+	var levelStatisticBlock:LevelStatisticBlock;
 	var levelInfoFooter:LevelInfoFooter;
 
 	var startButton:HPPButton;
@@ -96,16 +98,15 @@ class EndLevelPanel extends FlxSubState
 
 		content = new HPPVUIBox();
 		container.add(content);
-
-		content.add(new PlaceHolder(0,36));
+		content.add(new PlaceHolder(0, 36));
 		createTitle();
-		content.add(new PlaceHolder(0, 20));
+		content.add(new PlaceHolder(0, 5));
+		content.add(levelStatisticBlock = new LevelStatisticBlock(currentCollectedCoins, currentTime));
 		createEarnedStarView();
 		createScoreView();
-		createResultView();
-		content.add(new PlaceHolder(0,30));
+		content.add(new PlaceHolder(0, 30));
 		content.add(levelInfoFooter = new LevelInfoFooter(levelInfo.isCompleted, levelInfo.score, levelInfo.time));
-		content.add(new PlaceHolder(0,50));
+		content.add(new PlaceHolder(0, 50));
 		createButtons();
 
 		content.x = container.width / 2 - content.width / 2;
@@ -176,16 +177,6 @@ class EndLevelPanel extends FlxSubState
 		content.add(row);
 	}
 
-	function createResultView()
-	{
-		var row:HPPHUIBox = new HPPHUIBox( 60 );
-
-		row.add(coinCounter = new CoinCounter(currentCollectedCoins));
-		row.add(timeCounter = new TimeCounter(currentTime));
-
-		content.add( row );
-	}
-
 	function createButtons()
 	{
 		var buttonContainer:HPPHUIBox = new HPPHUIBox(30);
@@ -252,6 +243,7 @@ class EndLevelPanel extends FlxSubState
 		coinCounter.updateValue(currentCollectedCoins);
 		timeCounter.updateValue(currentTime);
 
+		levelStatisticBlock.updateData(currentCollectedCoins, currentTime);
 		levelInfoFooter.updateData(levelInfo.isCompleted, levelInfo.score, levelInfo.time);
 	}
 
