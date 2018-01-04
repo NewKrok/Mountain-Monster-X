@@ -34,7 +34,7 @@ class StarRequirementView extends HPPHUIBox
 		text.autoSize = true;
 		text.color = FlxColor.WHITE;
 		text.alignment = "left";
-		text.font = Fonts.AACHEN_MEDIUM;
+		text.font = Fonts.AACHEN;
 		textContainer.add(text);
 
 		add(textContainer);

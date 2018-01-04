@@ -11,6 +11,7 @@ class AppConfig
 
 	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 12000;
 	public static inline var COIN_SCORE_MULTIPLIER:Int = 50;
+	public static inline var ALL_COINS_COLLECTED_BONUS:Int = 200;
 
 	public static var IS_ALPHA_ANIMATION_ENABLED:Bool = false;
 	public static var SHOW_FPS:Bool = false;

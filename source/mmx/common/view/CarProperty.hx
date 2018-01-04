@@ -21,7 +21,7 @@ class CarProperty extends HPPHUIBox
 		var label:FlxText = new FlxText(0, 0, 0, labelText, 18);
 		label.color = FlxColor.WHITE;
 		label.alignment = "left";
-		label.font = Fonts.AACHEN_MEDIUM;
+		label.font = Fonts.AACHEN;
 		add(label);
 
 		var maxLineWidth:Float = 170;

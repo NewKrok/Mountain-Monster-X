@@ -32,7 +32,7 @@ class CarInfoBlock extends HPPHUIBox
 		var checkboxLabel:FlxText = new FlxText(0, 0, 0, carName, 21);
 		checkboxLabel.color = FlxColor.YELLOW;
 		checkboxLabel.alignment = "left";
-		checkboxLabel.font = Fonts.AACHEN_MEDIUM;
+		checkboxLabel.font = Fonts.AACHEN;
 		checkboxLabel.wordWrap = true;
 		checkboxLabel.fieldWidth = 110;
 		add(checkboxLabel);

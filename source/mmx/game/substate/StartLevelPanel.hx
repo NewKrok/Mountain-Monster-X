@@ -108,14 +108,14 @@ class StartLevelPanel extends FlxSubState
 		levelText.autoSize = true;
 		levelText.color = FlxColor.WHITE;
 		levelText.alignment = "left";
-		levelText.font = Fonts.AACHEN_MEDIUM;
+		levelText.font = Fonts.AACHEN;
 		subContainer.add(levelText);
 
 		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(levelInfo.worldId).toUpperCase(), 20);
 		worldText.autoSize = true;
 		worldText.color = 0xFFCCCCCC;
 		worldText.alignment = "left";
-		worldText.font = Fonts.AACHEN_MEDIUM;
+		worldText.font = Fonts.AACHEN;
 		worldText.x = panelBack.width - worldText.fieldWidth - 60;
 		subContainer.add(worldText);
 

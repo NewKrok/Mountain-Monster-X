@@ -15,8 +15,8 @@ import hpp.util.NumberUtil;
 import hpp.util.TimeUtil;
 import mmx.assets.Fonts;
 import mmx.common.view.LongButton;
-import mmx.game.CoinCounter;
-import mmx.game.TimeCounter;
+import mmx.datatype.LevelData;
+import mmx.game.view.CollectedCoinsInfoBlock;
 import mmx.game.view.LevelInfoFooter;
 import mmx.game.view.LevelStatisticBlock;
 import mmx.util.LevelUtil;
@@ -31,6 +31,7 @@ class EndLevelPanel extends FlxSubState
 	var content:HPPVUIBox;
 	var panelBack:FlxSprite;
 	var levelStatisticBlock:LevelStatisticBlock;
+	var collectedCoinsInfoBlock:CollectedCoinsInfoBlock;
 	var levelInfoFooter:LevelInfoFooter;
 
 	var startButton:HPPButton;
@@ -47,14 +48,12 @@ class EndLevelPanel extends FlxSubState
 	var earnedStarView:FlxSprite;
 	var earnedStarContainer:FlxSpriteGroup;
 	var newHighScoreText:FlxText;
-	var coinCounter:CoinCounter;
-	var timeCounter:TimeCounter;
 	var highscoreText:FlxText;
 
 	var baseBack:FlxSprite;
 	var container:FlxSpriteGroup;
-	var starRequirements:Array<UInt>;
 	var levelInfo:LevelInfo;
+	var levelData:LevelData;
 
 	var isBuilt:Bool;
 	var currentScore:UInt;
@@ -62,12 +61,12 @@ class EndLevelPanel extends FlxSubState
 	var currentCollectedCoins:UInt;
 	var currentEarnedStarView:UInt;
 
-	function new(levelInfo:LevelInfo, starRequirements:Array<UInt>, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
+	function new(levelInfo:LevelInfo, levelData:LevelData, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
 	{
 		super();
 
 		this.levelInfo = levelInfo;
-		this.starRequirements = starRequirements;
+		this.levelData = levelData;
 		this.restartRequest = restartRequest;
 		this.exitRequest = exitRequest;
 		this.nextLevelRequest = nextLevelRequest;
@@ -101,7 +100,9 @@ class EndLevelPanel extends FlxSubState
 		content.add(new PlaceHolder(0, 36));
 		createTitle();
 		content.add(new PlaceHolder(0, 5));
-		content.add(levelStatisticBlock = new LevelStatisticBlock(currentCollectedCoins, currentTime));
+		content.add(levelStatisticBlock = new LevelStatisticBlock(currentCollectedCoins, levelData.starPoints.length, currentTime));
+		content.add(new PlaceHolder(0, 5));
+		content.add(collectedCoinsInfoBlock = new CollectedCoinsInfoBlock(currentCollectedCoins, levelData.starPoints.length));
 		createEarnedStarView();
 		createScoreView();
 		content.add(new PlaceHolder(0, 30));
@@ -124,14 +125,14 @@ class EndLevelPanel extends FlxSubState
 		levelText.autoSize = true;
 		levelText.color = FlxColor.WHITE;
 		levelText.alignment = "left";
-		levelText.font = Fonts.AACHEN_MEDIUM;
+		levelText.font = Fonts.AACHEN;
 		subContainer.add(levelText);
 
 		var worldText:FlxText = new FlxText(0, 0, 0, LevelUtil.getWorldNameByWorldId(levelInfo.worldId).toUpperCase(), 20);
 		worldText.autoSize = true;
 		worldText.color = 0xFFCCCCCC;
 		worldText.alignment = "left";
-		worldText.font = Fonts.AACHEN_MEDIUM;
+		worldText.font = Fonts.AACHEN;
 		worldText.x = panelBack.width - worldText.fieldWidth - 60;
 		subContainer.add(worldText);
 
@@ -139,7 +140,7 @@ class EndLevelPanel extends FlxSubState
 		completedText.autoSize = true;
 		completedText.color = FlxColor.YELLOW;
 		completedText.alignment = "left";
-		completedText.font = Fonts.AACHEN_MEDIUM;
+		completedText.font = Fonts.AACHEN;
 		completedText.y = 30;
 		subContainer.add(completedText);
 
@@ -147,7 +148,7 @@ class EndLevelPanel extends FlxSubState
 		highscoreText.autoSize = true;
 		highscoreText.color = FlxColor.YELLOW;
 		highscoreText.alignment = "left";
-		highscoreText.font = Fonts.AACHEN_MEDIUM;
+		highscoreText.font = Fonts.AACHEN;
 		highscoreText.x = panelBack.width - highscoreText.fieldWidth - 60;
 		highscoreText.y = completedText.y;
 		subContainer.add(highscoreText);
@@ -171,7 +172,7 @@ class EndLevelPanel extends FlxSubState
 		scoreText.autoSize = true;
 		scoreText.color = FlxColor.YELLOW;
 		scoreText.alignment = "center";
-		scoreText.font = Fonts.AACHEN_MEDIUM;
+		scoreText.font = Fonts.AACHEN;
 
 		row.add(scoreText);
 		content.add(row);
@@ -240,10 +241,8 @@ class EndLevelPanel extends FlxSubState
 		earnedStarView.destroy();
 		earnedStarContainer.add(earnedStarView = HPPAssetManager.getSprite("large_star_" + currentEarnedStarView));
 
-		coinCounter.updateValue(currentCollectedCoins);
-		timeCounter.updateValue(currentTime);
-
-		levelStatisticBlock.updateData(currentCollectedCoins, currentTime);
+		levelStatisticBlock.updateData(currentCollectedCoins, levelData.starPoints.length, currentTime);
+		collectedCoinsInfoBlock.updateData(currentCollectedCoins, levelData.starPoints.length);
 		levelInfoFooter.updateData(levelInfo.isCompleted, levelInfo.score, levelInfo.time);
 	}
 

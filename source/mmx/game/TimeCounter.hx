@@ -10,7 +10,7 @@ import mmx.assets.Fonts;
 /**
  * ...
  * @author Krisztian Somoracz
- */ 
+ */
 class TimeCounter extends FlxSpriteGroup
 {
 	var background:FlxSprite;
@@ -26,14 +26,14 @@ class TimeCounter extends FlxSpriteGroup
 		text.autoSize = false;
 		text.color = 0xFF26FF92;
 		text.alignment = "center";
-		text.font = Fonts.AACHEN_MEDIUM;
+		text.font = Fonts.AACHEN;
 		text.borderStyle = FlxTextBorderStyle.OUTLINE;
 		text.borderSize = 2;
 		text.borderColor = 0xAA006A35;
 		text.y = 14;
-		
+
 		add(text);
-		
+
 		updateValue(defaultValue);
 	}
 
@@ -47,7 +47,7 @@ class TimeCounter extends FlxSpriteGroup
 		{
 			text.color = 0xFF26FF92;
 		}
-		
+
 		text.text = TimeUtil.timeStampToFormattedTime(value, TimeUtil.TIME_FORMAT_MM_SS);
 	}
 }

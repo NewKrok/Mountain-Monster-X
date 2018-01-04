@@ -47,7 +47,7 @@ class ReplayBlock extends FlxSpriteGroup
 		var checkboxLabel:FlxText = new FlxText(0, 0, 0, labelText, 18);
 		checkboxLabel.color = FlxColor.WHITE;
 		checkboxLabel.alignment = "left";
-		checkboxLabel.font = Fonts.AACHEN_MEDIUM;
+		checkboxLabel.font = Fonts.AACHEN;
 		checkboxContainer.add(checkboxLabel);
 
 		container.add(checkboxContainer);

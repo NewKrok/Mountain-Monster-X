@@ -41,7 +41,7 @@ class StarRequirementBlock extends FlxSpriteGroup
 			text.autoSize = true;
 			text.color = FlxColor.WHITE;
 			text.alignment = "left";
-			text.font = Fonts.AACHEN_MEDIUM;
+			text.font = Fonts.AACHEN;
 			container.add(text);
 
 			if (i != 2)

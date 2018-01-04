@@ -22,7 +22,7 @@ class LevelStatisticBlock extends FlxSpriteGroup
 	var coinText:FlxText;
 	var timeText:FlxText;
 
-	public function new(collectedCoins:Float, currentTime:Float)
+	public function new(collectedCoins:UInt, maxCoinCount:UInt, currentTime:Float)
 	{
 		super();
 
@@ -31,10 +31,10 @@ class LevelStatisticBlock extends FlxSpriteGroup
 		container.add(HPPAssetManager.getSprite("coin_icon"));
 		var coinBox:HPPVUIBox = new HPPVUIBox();
 		coinBox.add(new PlaceHolder(1, 4));
-		coinText = new FlxText(0, 0, 0, Std.string(collectedCoins), 28);
+		coinText = new FlxText(0, 0, 0, "W", 28); // "W" is just a placeholder to solve position problems after updateData
 		coinText.color = FlxColor.YELLOW;
 		coinText.alignment = "left";
-		coinText.font = Fonts.AACHEN_MEDIUM;
+		coinText.font = Fonts.AACHEN;
 		coinBox.add(coinText);
 		container.add(coinBox);
 
@@ -43,23 +43,26 @@ class LevelStatisticBlock extends FlxSpriteGroup
 		container.add(HPPAssetManager.getSprite("time_icon"));
 		var timeBox:HPPVUIBox = new HPPVUIBox();
 		timeBox.add(new PlaceHolder(1, 4));
-		timeText = new FlxText(0, 0, 0, TimeUtil.timeStampToFormattedTime(currentTime, TimeUtil.TIME_FORMAT_MM_SS), 28);
+		timeText = new FlxText(0, 0, 0, "W", 28); // "W" is just a placeholder to solve position problems after updateData
 		timeText.color = 0xFF26FF92;
 		timeText.alignment = "left";
-		timeText.font = Fonts.AACHEN_MEDIUM;
+		timeText.font = Fonts.AACHEN;
 		timeBox.add(timeText);
 		container.add(timeBox);
 
-		add(new PlaceHolder(573, 45, 0x44000000));
+		add(new PlaceHolder(573, 55, 0x44000000));
 		add(container);
 
-		container.x = width / 2 - container.width / 2;
-		container.y = height / 2 - container.height / 2;
+		updateData(collectedCoins, maxCoinCount, currentTime);
 	}
 
-	public function updateData(collectedCoins:Float, currentTime:Float)
+	public function updateData(collectedCoins:UInt, maxCoinCount:UInt, currentTime:Float)
 	{
-		coinText.text = Std.string(collectedCoins);
+		coinText.text = collectedCoins + "/" + maxCoinCount;
 		timeText.text = TimeUtil.timeStampToFormattedTime(currentTime, TimeUtil.TIME_FORMAT_MM_SS);
+
+		container.rePosition();
+		container.x = x + width / 2 - container.width / 2;
+		container.y = y + height / 2 - container.height / 2;
 	}
 }

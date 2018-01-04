@@ -30,20 +30,20 @@ class FPSCounter extends FlxSpriteGroup
 		text.autoSize = false;
 		text.color = 0xFF4D90FE;
 		text.alignment = "center";
-		text.font = Fonts.AACHEN_MEDIUM;
+		text.font = Fonts.AACHEN;
 		text.borderStyle = FlxTextBorderStyle.OUTLINE;
 		text.borderSize = 2;
 		text.borderColor = 0xAA013FA5;
 		text.y = 10;
 		defaultTextScale = text.scale.x;
-		
+
 		add( text );
 	}
 
-	override public function update( elapsed:Float ):Void 
+	override public function update( elapsed:Float ):Void
 	{
 		super.update( elapsed );
-	
+
 		text.text = Std.string( Main.fps.currentFPS );
 	}
 }

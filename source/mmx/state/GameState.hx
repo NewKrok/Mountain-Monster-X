@@ -241,7 +241,7 @@ class GameState extends FlxState
 		destroySubStates = false;
 
 		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
-		endLevelPanel = new EndLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
+		endLevelPanel = new EndLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 
 		lastCameraStepOffset = new FlxPoint();
 
@@ -726,7 +726,7 @@ class GameState extends FlxState
 		if ( !isLost && !isWon )
 		{
 			gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
-			gameGui.updateCoinCount( collectedCoin + collectedExtraCoins );
+			gameGui.updateCoinCount( collectedCoin );
 
 			up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
 			down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
@@ -974,8 +974,6 @@ class GameState extends FlxState
 	{
 		recorder.takeSnapshot();
 
-		collectedCoin += collectedExtraCoins;
-
 		var score:UInt = calculateScore();
 
 		var starCount:UInt = coinsToStarCount(score);
@@ -1022,6 +1020,8 @@ class GameState extends FlxState
 
 		result = Math.floor(AppConfig.MAXIMUM_GAME_TIME_BONUS - gameTime / 10);
 		result += collectedCoin * AppConfig.COIN_SCORE_MULTIPLIER;
+		result += collectedExtraCoins;
+		result += levelData.starPoints.length == collectedCoin ? AppConfig.ALL_COINS_COLLECTED_BONUS : 0;
 
 		return result;
 	}

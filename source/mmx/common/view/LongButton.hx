@@ -16,8 +16,8 @@ class LongButton extends HPPButton
 	public function new(title:String = "", callBack:HPPButton->Void = null)
 	{
 		super(title, callBack);
-		
-		label.font = Fonts.AACHEN_MEDIUM;
+
+		label.font = Fonts.AACHEN;
 		label.color = FlxColor.WHITE;
 		labelSize = 25;
 		labelOffsets = [new FlxPoint(0, -7), new FlxPoint(0, -7), new FlxPoint(0, -7)];

@@ -29,14 +29,14 @@ class LevelInfoFooter extends FlxSpriteGroup
 		bestScoreLabelText.autoSize = true;
 		bestScoreLabelText.color = FlxColor.WHITE;
 		bestScoreLabelText.alignment = "left";
-		bestScoreLabelText.font = Fonts.AACHEN_MEDIUM;
+		bestScoreLabelText.font = Fonts.AACHEN;
 		container.add(bestScoreLabelText);
 
 		bestScoreText = new FlxText(0, 0, 0, isCompleted ? NumberUtil.formatNumber(score) : "N/A", 20);
 		bestScoreText.autoSize = true;
 		bestScoreText.color = FlxColor.YELLOW;
 		bestScoreText.alignment = "left";
-		bestScoreText.font = Fonts.AACHEN_MEDIUM;
+		bestScoreText.font = Fonts.AACHEN;
 		container.add(bestScoreText);
 
 		container.add(new PlaceHolder(180,0));
@@ -45,14 +45,14 @@ class LevelInfoFooter extends FlxSpriteGroup
 		bestTimeLabelText.autoSize = true;
 		bestTimeLabelText.color = FlxColor.WHITE;
 		bestTimeLabelText.alignment = "left";
-		bestTimeLabelText.font = Fonts.AACHEN_MEDIUM;
+		bestTimeLabelText.font = Fonts.AACHEN;
 		container.add(bestTimeLabelText);
 
 		bestTimeText = new FlxText(0, 0, 0, isCompleted ? TimeUtil.timeStampToFormattedTime(time, TimeUtil.TIME_FORMAT_MM_SS_MS) : "N/A", 20);
 		bestTimeText.autoSize = true;
 		bestTimeText.color = FlxColor.YELLOW;
 		bestTimeText.alignment = "left";
-		bestTimeText.font = Fonts.AACHEN_MEDIUM;
+		bestTimeText.font = Fonts.AACHEN;
 		container.add(bestTimeText);
 
 		add(new PlaceHolder(573, 35, 0x44000000));

@@ -21,40 +21,40 @@ class LevelButton extends HPPExtendableButton
 	var title:FlxText;
 	var score:FlxText;
 	var levelStarView:LevelStarView;
-	
+
 	var worldId:UInt;
 	var levelId:UInt;
-	
+
 	public function new( worldId:UInt, levelId:UInt, levelInfo:LevelInfo )
 	{
 		super(levelInfo.isEnabled ? loadLevel : null, "level_button_base");
-		
+
 		this.worldId = worldId;
 		this.levelId = levelId;
-		
+
 		if (levelInfo.isEnabled)
 		{
 			overScale = .95;
-			
+
 			var container:HPPVUIBox = new HPPVUIBox( 6 );
-			
+
 			title = new FlxText( 0, 0, cast width, "Level " + ( levelId + 1 ), 25 );
-			title.font = Fonts.AACHEN_MEDIUM;
+			title.font = Fonts.AACHEN;
 			title.color = FlxColor.WHITE;
 			title.alignment = "center";
 			container.add( title );
-			
+
 			container.add( levelStarView = new LevelStarView() );
 			levelStarView.setStarCount( levelInfo.starCount );
-			
+
 			score = new FlxText( 0, 0, title.width, NumberUtil.formatNumber( levelInfo.score ), 25 );
-			score.font = Fonts.AACHEN_MEDIUM;
+			score.font = Fonts.AACHEN;
 			score.color = FlxColor.YELLOW;
 			score.alignment = "center";
 			container.add( score );
-			
+
 			add( container );
-			
+
 			container.y = 9;
 		}
 		else
@@ -62,7 +62,7 @@ class LevelButton extends HPPExtendableButton
 			add(HPPAssetManager.getSprite("level_button_locked"));
 		}
 	}
-	
+
 	function loadLevel( target:HPPButton ):Void
 	{
 		FlxG.switchState( new GameState( worldId, levelId ) );

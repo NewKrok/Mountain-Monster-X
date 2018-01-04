@@ -32,18 +32,18 @@ class CoinCounter extends FlxSpriteGroup
 		text.autoSize = false;
 		text.color = FlxColor.YELLOW;
 		text.alignment = "center";
-		text.font = Fonts.AACHEN_MEDIUM;
+		text.font = Fonts.AACHEN;
 		text.borderStyle = FlxTextBorderStyle.OUTLINE;
 		text.borderSize = 2;
 		text.borderColor = 0xAA6F6F00;
 		text.y = 12;
 		defaultTextScale = text.scale.x;
-		
+
 		add( text );
 	}
 
 	public function updateValue( value:UInt ):Void
-	{	
+	{
 		if( value != count )
 		{
 			count = value;
@@ -51,7 +51,7 @@ class CoinCounter extends FlxSpriteGroup
 			if( count != 0 )
 			{
 				disposeTween();
-				scaleTween = FlxTween.tween( 
+				scaleTween = FlxTween.tween(
 					text.scale,
 					{ x: defaultTextScale + .2, y: defaultTextScale + .2 },
 					.1,
@@ -62,17 +62,17 @@ class CoinCounter extends FlxSpriteGroup
 			text.text = Std.string( value );
 		}
 	}
-	
+
 	function resetScale( tween:FlxTween ):Void
 	{
-		scaleTween = FlxTween.tween( 
+		scaleTween = FlxTween.tween(
 			text.scale,
 			{ x: defaultTextScale, y: defaultTextScale },
 			.1,
 			{ type: FlxTween.ONESHOT, ease: FlxEase.cubeIn, startDelay: .2 }
 		);
 	}
-	
+
 	function disposeTween():Void
 	{
 		if ( scaleTween != null )
