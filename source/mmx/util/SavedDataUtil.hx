@@ -1,6 +1,8 @@
 package mmx.util;
 
 import flixel.util.FlxSave;
+import mmx.datatype.LevelData;
+import openfl.Assets;
 
 /**
  * ...
@@ -35,6 +37,11 @@ class SavedDataUtil
 			gameSave.data.helpInfos = [];
 		}
 
+		if (gameSave.data.lastPlayedWorldId == null)
+		{
+			gameSave.data.lastPlayedWorldId = 0;
+		}
+
 		if (gameSave.data.levelInfos == null)
 		{
 			gameSave.data.levelInfos = [
@@ -42,10 +49,25 @@ class SavedDataUtil
 				{worldId:1, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true, replay:null}
 			];
 		}
-
-		if (gameSave.data.lastPlayedWorldId == null)
+		// Recalculate level stars if the player changed from v1.2.1 or lower to v1.3.0 or higher
+		else if (AppVersionUtil.isLowerThan(gameSave.data.baseInfo.version, "1.3.0"))
 		{
-			gameSave.data.lastPlayedWorldId = 0;
+			for (i in 0...gameSave.data.levelInfos.length)
+			{
+				var levelInfo:LevelInfo = gameSave.data.levelInfos[i];
+				if (levelInfo.levelId > 23) break;
+
+				var levelData:LevelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level/world_" + levelInfo.worldId + "/level_" + levelInfo.worldId + "_" + levelInfo.levelId + ".json" ) );
+				levelInfo.starCount = 0;
+				for( i in 0...levelData.starValues.length)
+				{
+					if(levelInfo.score >= levelData.starValues[i])
+						levelInfo.starCount = i + 1;
+					else
+						break;
+				}
+			}
+			save();
 		}
 
 		// Hotfix for version 1.2.0

@@ -115,8 +115,8 @@ class MenuState extends FlxState
 
 		camera.scroll.set( stage.stageWidth / 2, stage.stageHeight / 2 );
 
-		// TEMP
-		FlxG.switchState( new GameState( 0, 0 ) );
+		// To start immediately the game...
+		//FlxG.switchState( new GameState( 0, 0 ) );
 	}
 
 	function openWelcomePage( target:HPPButton = null ):Void

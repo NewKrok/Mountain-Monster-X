@@ -25,7 +25,7 @@ class LevelButton extends HPPExtendableButton
 	var worldId:UInt;
 	var levelId:UInt;
 
-	public function new( worldId:UInt, levelId:UInt, levelInfo:LevelInfo )
+	public function new(worldId:UInt, levelId:UInt, levelInfo:LevelInfo)
 	{
 		super(levelInfo.isEnabled ? loadLevel : null, "level_button_base");
 
@@ -36,35 +36,32 @@ class LevelButton extends HPPExtendableButton
 		{
 			overScale = .95;
 
-			var container:HPPVUIBox = new HPPVUIBox( 6 );
+			var container:HPPVUIBox = new HPPVUIBox(6);
 
-			title = new FlxText( 0, 0, cast width, "Level " + ( levelId + 1 ), 25 );
+			title = new FlxText(0, 0, cast width, "Level " + (levelId + 1), 25);
 			title.font = Fonts.AACHEN;
 			title.color = FlxColor.WHITE;
 			title.alignment = "center";
-			container.add( title );
+			container.add(title);
 
-			container.add( levelStarView = new LevelStarView() );
-			levelStarView.setStarCount( levelInfo.starCount );
+			container.add(levelStarView = new LevelStarView());
+			levelStarView.setStarCount(levelInfo.starCount);
 
-			score = new FlxText( 0, 0, title.width, NumberUtil.formatNumber( levelInfo.score ), 25 );
+			score = new FlxText(0, 0, title.width, NumberUtil.formatNumber(levelInfo.score), 25);
 			score.font = Fonts.AACHEN;
 			score.color = FlxColor.YELLOW;
 			score.alignment = "center";
-			container.add( score );
+			container.add(score);
 
-			add( container );
+			add(container);
 
 			container.y = 9;
 		}
-		else
-		{
-			add(HPPAssetManager.getSprite("level_button_locked"));
-		}
+		else add(HPPAssetManager.getSprite("level_button_locked"));
 	}
 
-	function loadLevel( target:HPPButton ):Void
+	function loadLevel(target:HPPButton):Void
 	{
-		FlxG.switchState( new GameState( worldId, levelId ) );
+		FlxG.switchState(new GameState(worldId, levelId));
 	}
 }

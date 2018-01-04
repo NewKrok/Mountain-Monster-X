@@ -30,16 +30,17 @@
 
 	<set name="BUILD_DIR" value="export" />
 	<classpath name="source" />
-	<assets path="assets" />
+	<assets path="assets" embed="true" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
 	<haxelib name="nape" />
 	<haxelib name="flixel-ui" />
+	<haxelib name="closure" />
 	<haxelib name="hpp" src="git://github.com/NewKrok/HPP-Package.git" />
 	<haxelib name="replaykit" src="git://github.com/apostx/haxe_replaykit.git" />
-	
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Enable the Flixel core recording system-->

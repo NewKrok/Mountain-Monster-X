@@ -18,6 +18,7 @@ import mmx.common.view.LongButton;
 import mmx.datatype.LevelData;
 import mmx.game.view.CollectedCoinsInfoBlock;
 import mmx.game.view.LevelInfoFooter;
+import mmx.game.view.LevelResultBlock;
 import mmx.game.view.LevelStatisticBlock;
 import mmx.util.LevelUtil;
 import mmx.util.SavedDataUtil.LevelInfo;
@@ -32,6 +33,7 @@ class EndLevelPanel extends FlxSubState
 	var panelBack:FlxSprite;
 	var levelStatisticBlock:LevelStatisticBlock;
 	var collectedCoinsInfoBlock:CollectedCoinsInfoBlock;
+	var levelResultBlock:LevelResultBlock;
 	var levelInfoFooter:LevelInfoFooter;
 
 	var startButton:HPPButton;
@@ -44,11 +46,8 @@ class EndLevelPanel extends FlxSubState
 	var nextLevelRequest:HPPButton->Void;
 	var prevLevelRequest:HPPButton->Void;
 
-	var scoreText:FlxText;
-	var earnedStarView:FlxSprite;
-	var earnedStarContainer:FlxSpriteGroup;
-	var newHighScoreText:FlxText;
 	var highscoreText:FlxText;
+	var newHighScoreText:FlxText;
 
 	var baseBack:FlxSprite;
 	var container:FlxSpriteGroup;
@@ -103,11 +102,11 @@ class EndLevelPanel extends FlxSubState
 		content.add(levelStatisticBlock = new LevelStatisticBlock(currentCollectedCoins, levelData.starPoints.length, currentTime));
 		content.add(new PlaceHolder(0, 5));
 		content.add(collectedCoinsInfoBlock = new CollectedCoinsInfoBlock(currentCollectedCoins, levelData.starPoints.length));
-		createEarnedStarView();
-		createScoreView();
-		content.add(new PlaceHolder(0, 30));
+		content.add(new PlaceHolder(0, 5));
+		content.add(levelResultBlock = new LevelResultBlock(currentScore, levelInfo.starCount));
+		content.add(new PlaceHolder(0, 5));
 		content.add(levelInfoFooter = new LevelInfoFooter(levelInfo.isCompleted, levelInfo.score, levelInfo.time));
-		content.add(new PlaceHolder(0, 50));
+		content.add(new PlaceHolder(0, 55));
 		createButtons();
 
 		content.x = container.width / 2 - content.width / 2;
@@ -154,28 +153,6 @@ class EndLevelPanel extends FlxSubState
 		subContainer.add(highscoreText);
 
 		content.add(subContainer);
-	}
-
-	function createEarnedStarView()
-	{
-		earnedStarContainer = new FlxSpriteGroup();
-		earnedStarContainer.add(earnedStarView = HPPAssetManager.getSprite("large_star_" + currentEarnedStarView));
-
-		content.add(earnedStarContainer);
-	}
-
-	function createScoreView()
-	{
-		var row:HPPHUIBox = new HPPHUIBox(10);
-
-		scoreText = new FlxText(0, 0, 0, "SCORE: " + NumberUtil.formatNumber(currentScore), 35);
-		scoreText.autoSize = true;
-		scoreText.color = FlxColor.YELLOW;
-		scoreText.alignment = "center";
-		scoreText.font = Fonts.AACHEN;
-
-		row.add(scoreText);
-		content.add(row);
 	}
 
 	function createButtons()
@@ -235,14 +212,9 @@ class EndLevelPanel extends FlxSubState
 
 		highscoreText.visible = currentScore >= levelInfo.score;
 
-		scoreText.text = "SCORE: " + NumberUtil.formatNumber(currentScore);
-
-		earnedStarContainer.remove( earnedStarView );
-		earnedStarView.destroy();
-		earnedStarContainer.add(earnedStarView = HPPAssetManager.getSprite("large_star_" + currentEarnedStarView));
-
 		levelStatisticBlock.updateData(currentCollectedCoins, levelData.starPoints.length, currentTime);
 		collectedCoinsInfoBlock.updateData(currentCollectedCoins, levelData.starPoints.length);
+		levelResultBlock.updateData(currentScore, currentEarnedStarView);
 		levelInfoFooter.updateData(levelInfo.isCompleted, levelInfo.score, levelInfo.time);
 	}
 

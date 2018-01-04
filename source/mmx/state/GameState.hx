@@ -961,6 +961,7 @@ class GameState extends FlxState
 	function checkWin():Void
 	{
 		if (!isLost && !isWon && car.carBodyGraphics.x >= levelData.finishPoint.x)
+		//if (!isLost && !isWon && gameTime > 2000) // temporary for instant win
 		{
 			isWon = true;
 
@@ -976,7 +977,7 @@ class GameState extends FlxState
 
 		var score:UInt = calculateScore();
 
-		var starCount:UInt = coinsToStarCount(score);
+		var starCount:UInt = scoreToStarCount(score);
 		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 
 		if ( gameTime < levelInfo.time || levelInfo.time == 0 )
@@ -1026,7 +1027,7 @@ class GameState extends FlxState
 		return result;
 	}
 
-	public function coinsToStarCount(value:UInt):UInt
+	public function scoreToStarCount(value:UInt):UInt
 	{
 		var starCount:UInt = 0;
 

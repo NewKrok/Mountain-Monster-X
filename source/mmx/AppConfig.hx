@@ -7,7 +7,7 @@ package mmx;
 class AppConfig
 {
 	public static inline var GAME_NAME:String = "MountainMonster";
-	public static inline var GAME_VERSION:String = "1.2.1";
+	public static inline var GAME_VERSION:String = "1.3.0";
 
 	public static inline var MAXIMUM_GAME_TIME_BONUS:Int = 12000;
 	public static inline var COIN_SCORE_MULTIPLIER:Int = 50;
