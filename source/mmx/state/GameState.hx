@@ -1000,7 +1000,7 @@ class GameState extends FlxState
 		}
 
 		// Temporary for save base replays
-		trace(recorder.toString());
+		//trace(recorder.toString());
 
 		levelInfo.time = levelInfo.time > gameTime ? gameTime : levelInfo.time;
 		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;

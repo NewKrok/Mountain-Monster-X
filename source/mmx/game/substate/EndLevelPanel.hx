@@ -190,15 +190,7 @@ class EndLevelPanel extends FlxSubState
 
 	function canStartNextLevel():Bool
 	{
-		// TODO remove this hack after the whole world playable
-		if (levelInfo.worldId == 0)
-		{
-			return levelInfo.isCompleted && levelInfo.levelId != 23;
-		}
-		else
-		{
-			return levelInfo.isCompleted && levelInfo.levelId != 11;
-		}
+		return levelInfo.isCompleted && levelInfo.levelId != 23;
 	}
 
 	public function updateView(currentScore:UInt, currentTime:Float, currentCollectedCoins:UInt, currentEarnedStarCounts:UInt):Void

@@ -16,7 +16,7 @@ Needed for 1.3.0
 [RDY] Add base replays to world 0 - 13-34
 [RDY] Save last player replay every time if he can't finish the level
 [RDY] Add base replays to world 1 - 0-12
-Add base replays to world 1 - 13-34
+[RDY] Add base replays to world 1 - 13-34
 
 
 Selected for next release
