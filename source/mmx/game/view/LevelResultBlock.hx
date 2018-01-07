@@ -51,8 +51,9 @@ class LevelResultBlock extends FlxSpriteGroup
 	{
 		currentScoreLabelText.text = "SCORE: " + NumberUtil.formatNumber(currentScore);
 
-		earnedStarContainer.remove( earnedStarView );
+		earnedStarContainer.remove(earnedStarView);
 		earnedStarView.destroy();
+
 		earnedStarContainer.add(earnedStarView = HPPAssetManager.getSprite("large_star_" + starCount));
 
 		container.x = x + width / 2 - container.width / 2;

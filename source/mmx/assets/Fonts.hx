@@ -14,6 +14,6 @@ class Fonts
 
 	public static function init():Void
 	{
-		AACHEN = Assets.getFont("assets/fonts/Aachen Regular.ttf").fontName;
+		AACHEN = Assets.getFont("assets/fonts/Aachen-Regular.ttf").fontName;
 	}
 }

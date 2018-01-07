@@ -11,11 +11,12 @@ Needed for 1.3.0
 [RDY] Recalculate reached stars for old players
 [RDY] Show the actual stars result in the level end not the best
 [RDY] Save car id for player's replays
+[RDY] Add missing font types
 [RDY] Add base replays to world 0 - 0-12
-Add base replays to world 0 - 13-34
+[RDY] Add base replays to world 0 - 13-34
 Add base replays to world 1 - 0-12
 Add base replays to world 1 - 13-34
-Add missing font types
+Save last player replay every time if he can't finish the level
 
 
 Selected for next release
@@ -37,6 +38,7 @@ Redesign bonus texts like backflip, frontflip, etc...
 
 Needed for ??
 =================================================
+To unlock next level needed to reach at least one level in the previous level
 Embed assets to the source
 Car selector for start game panel
 Car selector

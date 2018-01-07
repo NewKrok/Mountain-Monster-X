@@ -54,7 +54,7 @@ class EndLevelPanel extends FlxSubState
 	var levelInfo:LevelInfo;
 	var levelData:LevelData;
 
-	var isBuilt:Bool;
+	var isBuilt:Bool = false;
 	var currentScore:UInt;
 	var currentTime:Float;
 	var currentCollectedCoins:UInt;
@@ -103,7 +103,7 @@ class EndLevelPanel extends FlxSubState
 		content.add(new PlaceHolder(0, 5));
 		content.add(collectedCoinsInfoBlock = new CollectedCoinsInfoBlock(currentCollectedCoins, levelData.starPoints.length));
 		content.add(new PlaceHolder(0, 5));
-		content.add(levelResultBlock = new LevelResultBlock(currentScore, levelInfo.starCount));
+		content.add(levelResultBlock = new LevelResultBlock(currentScore, currentEarnedStarCounts));
 		content.add(new PlaceHolder(0, 5));
 		content.add(levelInfoFooter = new LevelInfoFooter(levelInfo.isCompleted, levelInfo.score, levelInfo.time));
 		content.add(new PlaceHolder(0, 55));

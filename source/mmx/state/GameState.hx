@@ -162,11 +162,11 @@ class GameState extends FlxState
 
 		loadAssets();
 
-		levelData = LevelUtil.LevelDataFromJson( Assets.getText( "assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json" ) );
+		levelData = LevelUtil.LevelDataFromJson(Assets.getText("assets/data/level/world_" + worldId + "/level_" + worldId + "_" + levelId + ".json"));
 		setLevelDataScale();
 
 		try {
-			baseReplayData = Assets.getText( "assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + ".txt" );
+			baseReplayData = Assets.getText("assets/data/replay/world_" + worldId + "/replay_" + worldId + "_" + levelId + ".txt");
 		}
 		catch (e:Dynamic){ trace("Invalid or missing replay data."); }
 
@@ -175,30 +175,30 @@ class GameState extends FlxState
 
 	function loadAssets():Void
 	{
-		CarDatas.loadData( Assets.getText( "assets/data/car_datas.json" ) );
+		CarDatas.loadData(Assets.getText("assets/data/car_datas.json"));
 
-		HPPAssetManager.loadXMLAtlas( "assets/images/atlas1.png", "assets/images/atlas1.xml" );
-		HPPAssetManager.loadXMLAtlas( "assets/images/atlas2.png", "assets/images/atlas2.xml" );
-		HPPAssetManager.loadXMLAtlas( "assets/images/atlas3.png", "assets/images/atlas3.xml" );
+		HPPAssetManager.loadXMLAtlas("assets/images/atlas1.png", "assets/images/atlas1.xml");
+		HPPAssetManager.loadXMLAtlas("assets/images/atlas2.png", "assets/images/atlas2.xml");
+		HPPAssetManager.loadXMLAtlas("assets/images/atlas3.png", "assets/images/atlas3.xml");
 
-		HPPAssetManager.loadJsonAtlas( "assets/images/terrain_textures.png", "assets/images/terrain_textures.json" );
+		HPPAssetManager.loadJsonAtlas("assets/images/terrain_textures.png", "assets/images/terrain_textures.json");
 	}
 
 	function setLevelDataScale():Void
 	{
-		for ( i in 0...levelData.groundPoints.length )
+		for (i in 0...levelData.groundPoints.length)
 		{
-			levelData.groundPoints[i] = new FlxPoint( levelData.groundPoints[i].x * LEVEL_DATA_SCALE, levelData.groundPoints[i].y * LEVEL_DATA_SCALE );
+			levelData.groundPoints[i] = new FlxPoint(levelData.groundPoints[i].x * LEVEL_DATA_SCALE, levelData.groundPoints[i].y * LEVEL_DATA_SCALE);
 		}
 
-		for ( i in 0...levelData.starPoints.length )
+		for (i in 0...levelData.starPoints.length)
 		{
-			levelData.starPoints[i] = new FlxPoint( levelData.starPoints[i].x * LEVEL_DATA_SCALE, levelData.starPoints[i].y * LEVEL_DATA_SCALE );
+			levelData.starPoints[i] = new FlxPoint(levelData.starPoints[i].x * LEVEL_DATA_SCALE, levelData.starPoints[i].y * LEVEL_DATA_SCALE);
 		}
 
-		if ( levelData.bridgePoints != null )
+		if (levelData.bridgePoints != null)
 		{
-			for ( i in 0...levelData.bridgePoints.length )
+			for (i in 0...levelData.bridgePoints.length)
 			{
 				levelData.bridgePoints[i].bridgeAX *= LEVEL_DATA_SCALE;
 				levelData.bridgePoints[i].bridgeAY *= LEVEL_DATA_SCALE;
@@ -207,9 +207,9 @@ class GameState extends FlxState
 			}
 		}
 
-		if ( levelData.gameObjects != null )
+		if (levelData.gameObjects != null)
 		{
-			for ( i in 0...levelData.gameObjects.length )
+			for (i in 0...levelData.gameObjects.length)
 			{
 				levelData.gameObjects[i].x *= LEVEL_DATA_SCALE;
 				levelData.gameObjects[i].y *= LEVEL_DATA_SCALE;
@@ -218,17 +218,17 @@ class GameState extends FlxState
 			}
 		}
 
-		if ( levelData.libraryElements != null )
+		if (levelData.libraryElements != null)
 		{
-			for ( i in 0...levelData.libraryElements.length )
+			for (i in 0...levelData.libraryElements.length)
 			{
 				levelData.libraryElements[i].x *= LEVEL_DATA_SCALE;
 				levelData.libraryElements[i].y *= LEVEL_DATA_SCALE;
 			}
 		}
 
-		levelData.startPoint = new FlxPoint( levelData.startPoint.x * LEVEL_DATA_SCALE, levelData.startPoint.y * LEVEL_DATA_SCALE );
-		levelData.finishPoint = new FlxPoint( levelData.finishPoint.x * LEVEL_DATA_SCALE, levelData.finishPoint.y * LEVEL_DATA_SCALE );
+		levelData.startPoint = new FlxPoint(levelData.startPoint.x * LEVEL_DATA_SCALE, levelData.startPoint.y * LEVEL_DATA_SCALE);
+		levelData.finishPoint = new FlxPoint(levelData.finishPoint.x * LEVEL_DATA_SCALE, levelData.finishPoint.y * LEVEL_DATA_SCALE);
 
 		levelData.cameraBounds = new Rectangle(
 			levelData.cameraBounds.x * LEVEL_DATA_SCALE,
@@ -242,13 +242,13 @@ class GameState extends FlxState
 	{
 		destroySubStates = false;
 
-		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
+		pausePanel = new PausePanel(resumeRequest, restartRequest, exitRequest);
 		endLevelPanel = new EndLevelPanel(levelInfo, levelData, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 
 		lastCameraStepOffset = new FlxPoint();
 
-		add( background = new Background( worldId ) );
-		add( container = new FlxSpriteGroup() );
+		add(background = new Background(worldId));
+		add(container = new FlxSpriteGroup());
 
 		createCamera();
 		createPhysicsWorld();
@@ -262,26 +262,26 @@ class GameState extends FlxState
 		createSmallRocks();
 		createLibraryElements();
 
-		camera.follow( car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate );
+		camera.follow(car.carBodyGraphics, FlxCameraFollowStyle.PLATFORMER, 5 / FlxG.updateFramerate);
 
-		switch ( worldId )
+		switch (worldId)
 		{
 			case 1:
 				snow = new Snow();
-				add( snow );
+				add(snow);
 		}
 
-		add( gameGui = new GameGui( resume, pauseRequest ) );
+		add(gameGui = new GameGui(resume, pauseRequest));
 
-		//cast( camera, HPPCamera ).addZoomResistanceToSprite( gameGui );
-		//cast( camera, HPPCamera ).addZoomResistanceToSprite( background );
+		//cast(camera, HPPCamera).addZoomResistanceToSprite(gameGui);
+		//cast(camera, HPPCamera).addZoomResistanceToSprite(background);
 
 		reset();
 
 		if (levelId == 0 && !SavedDataUtil.getHelpInfo(worldId).isShowed)
 		{
-			helpPanel = new HelpPanel( worldId, openStartLevelPanelRequest );
-			openSubState( helpPanel );
+			helpPanel = new HelpPanel(worldId, openStartLevelPanelRequest);
+			openSubState(helpPanel);
 		}
 	}
 
@@ -294,7 +294,7 @@ class GameState extends FlxState
 		}
 
 		startLevelPanel = new StartLevelPanel(levelInfo, levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
-		openSubState( startLevelPanel );
+		openSubState(startLevelPanel);
 	}
 
 	function reset():Void
@@ -322,25 +322,25 @@ class GameState extends FlxState
 		car.jumpAngle = 0;
 		car.lastAngleOnGround = 0;
 
-		gameGui.updateCoinCount( collectedCoin );
-		gameGui.updateRemainingTime( CGameTimeValue.MAXIMUM_GAME_TIME );
+		gameGui.updateCoinCount(collectedCoin);
+		gameGui.updateRemainingTime(CGameTimeValue.MAXIMUM_GAME_TIME);
 
-		for ( i in 0...coins.length )
+		for (i in 0...coins.length)
 		{
-			coins[ i ].reset( levelData.starPoints[ i ].x, levelData.starPoints[ i ].y );
+			coins[ i ].reset(levelData.starPoints[ i ].x, levelData.starPoints[ i ].y);
 		}
 
-		for ( i in 0...smallRocks.length )
+		for (i in 0...smallRocks.length)
 		{
-			smallRocks[ i ].reset( 0, 0 );
+			smallRocks[ i ].reset(0, 0);
 		}
 
-		car.teleportTo( levelData.startPoint.x, levelData.startPoint.y );
+		car.teleportTo(levelData.startPoint.x, levelData.startPoint.y);
 
-		cast( camera, HPPCamera ).resetPosition();
-		camera.focusOn( car.carBodyGraphics.getPosition() );
-		background.update( 1 );
-		lastCameraStepOffset.set( camera.scroll.x, camera.scroll.y );
+		cast(camera, HPPCamera).resetPosition();
+		camera.focusOn(car.carBodyGraphics.getPosition());
+		background.update(1);
+		lastCameraStepOffset.set(camera.scroll.x, camera.scroll.y);
 
 		resetCrates();
 		updateBridges();
@@ -393,7 +393,7 @@ class GameState extends FlxState
 
 	function resetCrates():Void
 	{
-		for( i in 0...crates.length )
+		for(i in 0...crates.length)
 		{
 			crates[ i ].resetToDefault();
 		}
@@ -411,11 +411,11 @@ class GameState extends FlxState
 		persistentUpdate = true;
 	}
 
-	function resumeRequest( target:HPPButton = null ):Void
+	function resumeRequest(target:HPPButton = null):Void
 	{
 		closeSubState();
 
-		if ( !isGamePaused ) pause();
+		if (!isGamePaused) pause();
 
 		gameGui.resumeGameRequest();
 	}
@@ -424,7 +424,7 @@ class GameState extends FlxState
 	{
 		if (subState == null)
 		{
-			openSubState( pausePanel );
+			openSubState(pausePanel);
 			pause();
 		}
 	}
@@ -439,7 +439,7 @@ class GameState extends FlxState
 		baseGhostCar.visible = AppConfig.SHOW_3_STAR_REPLAY;
 		playerGhostCar.visible = AppConfig.SHOW_PLAYER_REPLAY;
 
-		if ( recorder != null )
+		if (recorder != null)
 		{
 			recorder.resume();
 		}
@@ -453,7 +453,7 @@ class GameState extends FlxState
 		gameGui.pause();
 		pauseStartTime = now;
 
-		if ( recorder != null )
+		if (recorder != null)
 		{
 			recorder.pause();
 		}
@@ -462,43 +462,43 @@ class GameState extends FlxState
 	function createCamera():Void
 	{
 		camera = new HPPCamera();
-		/*cast( camera, HPPCamera ).speedZoomEnabled = true;
-		cast( camera, HPPCamera ).maxSpeedZoom = 2;
-		cast( camera, HPPCamera ).speedZoomRatio = 100;*/
+		/*cast(camera, HPPCamera).speedZoomEnabled = true;
+		cast(camera, HPPCamera).maxSpeedZoom = 2;
+		cast(camera, HPPCamera).speedZoomRatio = 100;*/
 		camera.bgColor = FlxColor.BLACK;
-		camera.targetOffset.set( 200, -50 );
-		camera.setScrollBoundsRect( levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height );
+		camera.targetOffset.set(200, -50);
+		camera.setScrollBoundsRect(levelData.cameraBounds.x, levelData.cameraBounds.y, levelData.cameraBounds.width, levelData.cameraBounds.height);
 
-		FlxG.cameras.remove( FlxG.cameras.list[0], false );
+		FlxG.cameras.remove(FlxG.cameras.list[0], false);
 		FlxG.camera = camera;
-		FlxG.cameras.add( camera );
+		FlxG.cameras.add(camera);
 		FlxCamera.defaultCameras = [ camera ];
 	}
 
 	function createPhysicsWorld():Void
 	{
-		space = new Space( new Vec2( 0, CPhysicsValue.GRAVITY ) );
+		space = new Space(new Vec2(0, CPhysicsValue.GRAVITY));
 
-		var walls:Body = new Body( BodyType.STATIC );
-		walls.shapes.add( new Polygon( Polygon.rect( 0, 0, 1, levelData.cameraBounds.height ) ) );
-		walls.shapes.add( new Polygon( Polygon.rect( levelData.cameraBounds.width, 0, 1, levelData.cameraBounds.height ) ) );
+		var walls:Body = new Body(BodyType.STATIC);
+		walls.shapes.add(new Polygon(Polygon.rect(0, 0, 1, levelData.cameraBounds.height)));
+		walls.shapes.add(new Polygon(Polygon.rect(levelData.cameraBounds.width, 0, 1, levelData.cameraBounds.height)));
 		walls.space = space;
 	}
 
 	function createGroundGraphics():Void
 	{
-		container.add( terrainContainer = new FlxSpriteGroup() );
+		container.add(terrainContainer = new FlxSpriteGroup());
 
 		var generatedTerrain:BrushTerrain = new BrushTerrain(
 			levelData.cameraBounds,
 			levelData.groundPoints,
-			HPPAssetManager.getGraphic( "terrain_ground_texture_" + worldId + "0000" ),
-			HPPAssetManager.getGraphic( "terrain_fill_texture_" + worldId + "0000" ),
+			HPPAssetManager.getGraphic("terrain_ground_texture_" + worldId + "0000"),
+			HPPAssetManager.getGraphic("terrain_fill_texture_" + worldId + "0000"),
 			64,
 			24
 		);
 
-		terrainContainer.add( generatedTerrain );
+		terrainContainer.add(generatedTerrain);
 	}
 
 	function createGroundPhysics():Void
@@ -509,26 +509,26 @@ class GameState extends FlxState
 		filter.collisionGroup = CPhysicsValue.GROUND_FILTER_CATEGORY;
 		filter.collisionMask = CPhysicsValue.GROUND_FILTER_MASK;
 
-		for ( i in 0...levelData.groundPoints.length - 1 )
+		for (i in 0...levelData.groundPoints.length - 1)
 		{
-			var angle:Float = Math.atan2( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y, levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x );
+			var angle:Float = Math.atan2(levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y, levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x);
 			var distance:Float = Math.sqrt(
-				Math.pow( Math.abs( levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x ), 2 ) +
-				Math.pow( Math.abs( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y ), 2 )
+				Math.pow(Math.abs(levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x), 2) +
+				Math.pow(Math.abs(levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y), 2)
 			);
 
-			var body:Body = new Body( BodyType.STATIC );
+			var body:Body = new Body(BodyType.STATIC);
 
-			body.shapes.add( new Polygon( Polygon.box( distance, 1 ) ) );
-			body.setShapeMaterials( worldId == 1 ? CPhysicsValue.MATERIAL_SNOWY_GROUND : CPhysicsValue.MATERIAL_NORMAL_GROUND );
-			body.setShapeFilters( filter );
-			body.position.x = levelData.groundPoints[ i ].x + ( levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x ) / 2;
-			body.position.y = levelData.groundPoints[ i ].y + ( levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y ) / 2;
+			body.shapes.add(new Polygon(Polygon.box(distance, 1)));
+			body.setShapeMaterials(worldId == 1 ? CPhysicsValue.MATERIAL_SNOWY_GROUND : CPhysicsValue.MATERIAL_NORMAL_GROUND);
+			body.setShapeFilters(filter);
+			body.position.x = levelData.groundPoints[ i ].x + (levelData.groundPoints[ i + 1 ].x - levelData.groundPoints[ i ].x) / 2;
+			body.position.y = levelData.groundPoints[ i ].y + (levelData.groundPoints[ i + 1 ].y - levelData.groundPoints[ i ].y) / 2;
 			body.rotation = angle;
 
 			body.space = space;
 
-			groundBodies.push( body );
+			groundBodies.push(body);
 		}
 	}
 
@@ -538,64 +538,64 @@ class GameState extends FlxState
 		bridgeBlocks = [];
 
 		var index:UInt = 0;
-		for ( i in 0...levelData.bridgePoints.length )
+		for (i in 0...levelData.bridgePoints.length)
 		{
 			createBridge(
-				new FlxPoint( levelData.bridgePoints[i].bridgeAX, levelData.bridgePoints[i].bridgeAY ),
-				new FlxPoint( levelData.bridgePoints[i].bridgeBX, levelData.bridgePoints[i].bridgeBY )
+				new FlxPoint(levelData.bridgePoints[i].bridgeAX, levelData.bridgePoints[i].bridgeAY),
+				new FlxPoint(levelData.bridgePoints[i].bridgeBX, levelData.bridgePoints[i].bridgeBY)
 			);
 		}
 	}
 
-	function createBridge( pointA:FlxPoint, pointB:FlxPoint ):Void
+	function createBridge(pointA:FlxPoint, pointB:FlxPoint):Void
 	{
 		var filter:InteractionFilter = new InteractionFilter();
 		filter.collisionGroup = CPhysicsValue.BRIDGE_FILTER_CATEGORY;
 		filter.collisionMask = CPhysicsValue.BRIDGE_FILTER_MASK;
 
-		var bridgeAngle:Float = Math.atan2( pointB.y - pointA.y, pointB.x - pointA.x );
+		var bridgeAngle:Float = Math.atan2(pointB.y - pointA.y, pointB.x - pointA.x);
 		var bridgeElementWidth:UInt = 60;
 		var bridgeElementHeight:UInt = 30;
-		var bridgeDistance:Float = pointA.distanceTo( pointB );
-		var pieces:UInt = Math.floor( bridgeDistance / bridgeElementWidth ) + 1;
+		var bridgeDistance:Float = pointA.distanceTo(pointB);
+		var pieces:UInt = Math.floor(bridgeDistance / bridgeElementWidth) + 1;
 
-		if ( bridgeDistance % bridgeElementWidth == 0 )
+		if (bridgeDistance % bridgeElementWidth == 0)
 		{
 			pieces++;
 		}
 
-		bridgeBlocks.push( [] );
-		bridgeBodies.push( [] );
+		bridgeBlocks.push([]);
+		bridgeBodies.push([]);
 
-		for ( i in 0...pieces )
+		for (i in 0...pieces)
 		{
 			var isLockedBridgeElement:Bool = false;
-			if ( i == 0 || i == cast( pieces - 1 ) )
+			if (i == 0 || i == cast(pieces - 1))
 			{
 				isLockedBridgeElement = true;
 			}
 
-			var body:Body = new Body( isLockedBridgeElement ? BodyType.STATIC : BodyType.DYNAMIC );
-			body.shapes.add( new Polygon( Polygon.box( bridgeElementWidth, bridgeElementHeight ) ) );
-			body.setShapeMaterials( CPhysicsValue.MATERIAL_BRIDGE );
-			body.setShapeFilters( filter );
+			var body:Body = new Body(isLockedBridgeElement ? BodyType.STATIC : BodyType.DYNAMIC);
+			body.shapes.add(new Polygon(Polygon.box(bridgeElementWidth, bridgeElementHeight)));
+			body.setShapeMaterials(CPhysicsValue.MATERIAL_BRIDGE);
+			body.setShapeFilters(filter);
 			body.allowRotation = !isLockedBridgeElement;
-			body.position.x = pointA.x + i * bridgeElementWidth * Math.cos( bridgeAngle );
-			body.position.y = pointA.y + i * bridgeElementWidth * Math.sin( bridgeAngle );
+			body.position.x = pointA.x + i * bridgeElementWidth * Math.cos(bridgeAngle);
+			body.position.y = pointA.y + i * bridgeElementWidth * Math.sin(bridgeAngle);
 			body.rotation = bridgeAngle;
 			body.space = space;
-			bridgeBodies[bridgeBodies.length - 1].push( body );
+			bridgeBodies[bridgeBodies.length - 1].push(body);
 
-			var bridgeBlock:FlxSprite = HPPAssetManager.getSprite( "bridge" );
-			container.add( bridgeBlock );
-			bridgeBlocks[bridgeBlocks.length - 1].push( bridgeBlock );
+			var bridgeBlock:FlxSprite = HPPAssetManager.getSprite("bridge");
+			container.add(bridgeBlock);
+			bridgeBlocks[bridgeBlocks.length - 1].push(bridgeBlock);
 
-			if ( i > 0 )
+			if (i > 0)
 			{
-				var anchorA:Vec2 = new Vec2( bridgeElementWidth / 2, 0 );
-				var anchorB:Vec2 = new Vec2( -bridgeElementWidth / 2, 0 );
+				var anchorA:Vec2 = new Vec2(bridgeElementWidth / 2, 0);
+				var anchorB:Vec2 = new Vec2(-bridgeElementWidth / 2, 0);
 
-				var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint( bridgeBodies[bridgeBodies.length - 1][i - 1], bridgeBodies[bridgeBodies.length - 1][i], anchorA, anchorB );
+				var pivotJointLeftLeftWheel:PivotJoint = new PivotJoint(bridgeBodies[bridgeBodies.length - 1][i - 1], bridgeBodies[bridgeBodies.length - 1][i], anchorA, anchorB);
 				pivotJointLeftLeftWheel.damping = 1;
 				pivotJointLeftLeftWheel.frequency = 20;
 				pivotJointLeftLeftWheel.space = space;
@@ -625,19 +625,19 @@ class GameState extends FlxState
 	{
 		gameObjects = [];
 
-		if ( levelData.gameObjects != null )
+		if (levelData.gameObjects != null)
 		{
-			for ( i in 0...levelData.gameObjects.length )
+			for (i in 0...levelData.gameObjects.length)
 			{
-				var selectedObject:FlxSprite = HPPAssetManager.getSprite( levelData.gameObjects[ i ].texture );
+				var selectedObject:FlxSprite = HPPAssetManager.getSprite(levelData.gameObjects[ i ].texture);
 
-				selectedObject.setPosition( levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y );
-				selectedObject.origin.set( levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY );
-				selectedObject.scale.set( levelData.gameObjects[ i ].scaleX, levelData.gameObjects[ i ].scaleY );
+				selectedObject.setPosition(levelData.gameObjects[ i ].x, levelData.gameObjects[ i ].y);
+				selectedObject.origin.set(levelData.gameObjects[ i ].pivotX, levelData.gameObjects[ i ].pivotY);
+				selectedObject.scale.set(levelData.gameObjects[ i ].scaleX, levelData.gameObjects[ i ].scaleY);
 				selectedObject.angle = levelData.gameObjects[ i ].rotation;
 
-				container.add( selectedObject );
-				gameObjects.push( selectedObject );
+				container.add(selectedObject);
+				gameObjects.push(selectedObject);
 			}
 		}
 	}
@@ -646,11 +646,11 @@ class GameState extends FlxState
 	{
 		coins = [];
 
-		container.add( coinContainer = new FlxSpriteGroup() );
+		container.add(coinContainer = new FlxSpriteGroup());
 
-		for ( i in 0...levelData.starPoints.length )
+		for (i in 0...levelData.starPoints.length)
 		{
-			coins.push( cast coinContainer.add( new Coin( levelData.starPoints[ i ].x, levelData.starPoints[ i ].y ) ) );
+			coins.push(cast coinContainer.add(new Coin(levelData.starPoints[ i ].x, levelData.starPoints[ i ].y)));
 		}
 	}
 
@@ -659,108 +659,108 @@ class GameState extends FlxState
 		smallRocks = [];
 		usedSmallRocks = [];
 
-		for ( i in 0...30 )
+		for (i in 0...30)
 		{
-			var smallRock:SmallRock = new SmallRock( "small_rock_" + worldId + "_" + Math.floor( Math.random() * 3 + 1 ), releaseSmallRock );
-			container.add( smallRock );
-			smallRocks.push( smallRock );
+			var smallRock:SmallRock = new SmallRock("small_rock_" + worldId + "_" + Math.floor(Math.random() * 3 + 1), releaseSmallRock);
+			container.add(smallRock);
+			smallRocks.push(smallRock);
 		}
 	}
 
 	function createLibraryElements():Void
 	{
-		if ( levelData.libraryElements != null )
+		if (levelData.libraryElements != null)
 		{
-			container.add( libraryElementContainer = new FlxSpriteGroup() );
+			container.add(libraryElementContainer = new FlxSpriteGroup());
 
-			for( i in 0...levelData.libraryElements.length )
+			for(i in 0...levelData.libraryElements.length)
 			{
 				var libraryElement:LibraryElement = levelData.libraryElements[ i ];
 				var crate:AbstractCrate;
 
-				switch( libraryElement.className )
+				switch(libraryElement.className)
 				{
 					case CLibraryElement.CRATE_0:
-						crate = new SmallCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
-						libraryElementContainer.add( crate );
-						crates.push( crate );
+						crate = new SmallCrate(space, libraryElement.x, libraryElement.y, libraryElement.scale);
+						libraryElementContainer.add(crate);
+						crates.push(crate);
 
 					case CLibraryElement.CRATE_1:
-						crate = new Crate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
-						libraryElementContainer.add( crate );
-						crates.push( crate );
+						crate = new Crate(space, libraryElement.x, libraryElement.y, libraryElement.scale);
+						libraryElementContainer.add(crate);
+						crates.push(crate);
 
 					case CLibraryElement.CRATE_2:
-						crate = new LongCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
-						libraryElementContainer.add( crate );
-						crates.push( crate );
+						crate = new LongCrate(space, libraryElement.x, libraryElement.y, libraryElement.scale);
+						libraryElementContainer.add(crate);
+						crates.push(crate);
 
 					case CLibraryElement.CRATE_3:
-						crate = new SmallLongCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
-						libraryElementContainer.add( crate );
-						crates.push( crate );
+						crate = new SmallLongCrate(space, libraryElement.x, libraryElement.y, libraryElement.scale);
+						libraryElementContainer.add(crate);
+						crates.push(crate);
 
 					case CLibraryElement.CRATE_4:
-						crate = new RampCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
-						libraryElementContainer.add( crate );
-						crates.push( crate );
+						crate = new RampCrate(space, libraryElement.x, libraryElement.y, libraryElement.scale);
+						libraryElementContainer.add(crate);
+						crates.push(crate);
 
 					case CLibraryElement.CRATE_5:
-						crate = new SmallRampCrate( space, libraryElement.x, libraryElement.y, libraryElement.scale );
-						libraryElementContainer.add( crate );
-						crates.push( crate );
+						crate = new SmallRampCrate(space, libraryElement.x, libraryElement.y, libraryElement.scale);
+						libraryElementContainer.add(crate);
+						crates.push(crate);
 				}
 			}
 		}
 	}
 
-	override public function update( elapsed:Float ):Void
+	override public function update(elapsed:Float):Void
 	{
 		now = Date.now().getTime();
 
-		super.update( elapsed );
+		super.update(elapsed);
 
-		if ( isPhysicsEnabled )
+		if (isPhysicsEnabled)
 		{
-			space.step( CPhysicsValue.STEP );
+			space.step(CPhysicsValue.STEP);
 		}
 
-		if ( isGamePaused )
+		if (isGamePaused)
 		{
 			return;
 		}
 
 		calculateGameTime();
 
-		if ( !isLost && !isWon )
+		if (!isLost && !isWon)
 		{
-			gameGui.updateRemainingTime( Math.max( 0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime ) );
-			gameGui.updateCoinCount( collectedCoin );
+			gameGui.updateRemainingTime(Math.max(0, CGameTimeValue.MAXIMUM_GAME_TIME - gameTime));
+			gameGui.updateCoinCount(collectedCoin);
 
-			up = FlxG.keys.anyPressed( [UP, W] ) || gameGui.controlUpState;
-			down = FlxG.keys.anyPressed( [DOWN, S] ) || gameGui.controlDownState;
-			right = FlxG.keys.anyPressed( [RIGHT, D] ) || gameGui.controlRightState;
-			left = FlxG.keys.anyPressed( [LEFT, A] ) || gameGui.controlLeftState;
+			up = FlxG.keys.anyPressed([UP, W]) || gameGui.controlUpState;
+			down = FlxG.keys.anyPressed([DOWN, S]) || gameGui.controlDownState;
+			right = FlxG.keys.anyPressed([RIGHT, D]) || gameGui.controlRightState;
+			left = FlxG.keys.anyPressed([LEFT, A]) || gameGui.controlLeftState;
 		}
 		else
 		{
 			up = down = right = left = false;
 		}
 
-		if ( up )
+		if (up)
 		{
 			car.accelerateToRight();
 		}
-		else if ( down )
+		else if (down)
 		{
 			car.accelerateToLeft();
 		}
 
-		if ( right )
+		if (right)
 		{
 			car.rotateRight();
 		}
-		else if ( left )
+		else if (left)
 		{
 			car.rotateLeft();
 		}
@@ -789,7 +789,7 @@ class GameState extends FlxState
 
 	function calculateGameTime():Void
 	{
-		if ( isGameStarted )
+		if (isGameStarted)
 		{
 			gameTime = now - gameStartTime - totalPausedTime;
 		}
@@ -801,9 +801,9 @@ class GameState extends FlxState
 
 	function updateBridges():Void
 	{
-		for ( i in 0...bridgeBlocks.length )
+		for (i in 0...bridgeBlocks.length)
 		{
-			for ( j in 0...bridgeBlocks[i].length )
+			for (j in 0...bridgeBlocks[i].length)
 			{
 				var block:FlxSprite = bridgeBlocks[i][j];
 				var body:Body = bridgeBodies[i][j];
@@ -817,13 +817,13 @@ class GameState extends FlxState
 
 	function updateSmallRocks():Void
 	{
-		var leftAngularVelocity:Float = Math.abs( car.wheelLeftPhysics.angularVel );
-		var rightAngularVelocity:Float = Math.abs( car.wheelRightPhysics.angularVel );
+		var leftAngularVelocity:Float = Math.abs(car.wheelLeftPhysics.angularVel);
+		var rightAngularVelocity:Float = Math.abs(car.wheelRightPhysics.angularVel);
 		var carDirection:Int = car.wheelLeftPhysics.velocity.x >= 0 ? 1 : -1;
 
-		if ( !car.leftWheelOnAir && ( up || down ) && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8 )
+		if (!car.leftWheelOnAir && (up || down) && smallRocks.length > 0 && leftAngularVelocity > 5 && Math.random() > .8)
 		{
-			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
+			usedSmallRocks.push(smallRocks[ smallRocks.length - 1 ]);
 			smallRocks.pop();
 
 			var selectedSmallRock:SmallRock = usedSmallRocks[ usedSmallRocks.length - 1 ];
@@ -831,12 +831,12 @@ class GameState extends FlxState
 			selectedSmallRock.alpha = 1;
 			selectedSmallRock.x = car.wheelLeftGraphics.x + car.wheelLeftGraphics.width / 2 + -carDirection * car.wheelLeftGraphics.width / 4;
 			selectedSmallRock.y = car.wheelLeftGraphics.y + car.wheelLeftGraphics.height - selectedSmallRock.height;
-			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
+			selectedSmallRock.startAnim(-carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD);
 		}
 
-		if ( !car.rightWheelOnAir && ( up || down ) && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .8 )
+		if (!car.rightWheelOnAir && (up || down) && smallRocks.length > 0 && rightAngularVelocity > 5 && Math.random() > .8)
 		{
-			usedSmallRocks.push( smallRocks[ smallRocks.length - 1 ] );
+			usedSmallRocks.push(smallRocks[ smallRocks.length - 1 ]);
 			smallRocks.pop();
 
 			var selectedSmallRock:SmallRock = usedSmallRocks[ usedSmallRocks.length - 1 ];
@@ -844,23 +844,23 @@ class GameState extends FlxState
 			selectedSmallRock.alpha = 1;
 			selectedSmallRock.x = car.wheelRightGraphics.x + car.wheelRightGraphics.width / 2 + -carDirection * car.wheelRightGraphics.width / 4;
 			selectedSmallRock.y = car.wheelRightGraphics.y + car.wheelRightGraphics.height - selectedSmallRock.height;
-			selectedSmallRock.startAnim( -carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD );
+			selectedSmallRock.startAnim(-carDirection, car.carBodyGraphics.angle * FlxAngle.TO_RAD);
 		}
 	}
 
-	function releaseSmallRock( target:SmallRock ):Void
+	function releaseSmallRock(target:SmallRock):Void
 	{
-		smallRocks.push( target );
-		usedSmallRocks.remove( target );
+		smallRocks.push(target);
+		usedSmallRocks.remove(target);
 	}
 
 	function checkCoinPickUp():Void
 	{
-		for ( i in 0...coins.length )
+		for (i in 0...coins.length)
 		{
 			var coin:Coin = coins[ i ];
 
-			if ( !coin.isCollected && coin.overlaps( car.carBodyGraphics ) )
+			if (!coin.isCollected && coin.overlaps(car.carBodyGraphics))
 			{
 				coin.collect();
 				collectedCoin++;
@@ -925,7 +925,7 @@ class GameState extends FlxState
 		}
 		else if(car.isOnAir)
 		{
-			var angleInDeg:Float = car.jumpAngle * ( 180 / Math.PI );
+			var angleInDeg:Float = car.jumpAngle * (180 / Math.PI);
 
 			car.isOnAir = false;
 			car.jumpAngle = 0;
@@ -955,7 +955,7 @@ class GameState extends FlxState
 
 			if (car.isCarCrashed)
 			{
-				camera.shake( .02, .2 );
+				camera.shake(.02, .2);
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_CRUSHED);
 			}
 			else
@@ -988,13 +988,13 @@ class GameState extends FlxState
 
 		var starCount:UInt = scoreToStarCount(score);
 
-		if ( gameTime < levelInfo.time || levelInfo.time == 0 )
+		if (gameTime < levelInfo.time || levelInfo.time == 0)
 		{
 			levelInfo.time = gameTime;
 			levelInfo.replay = recorder.toString();
 			levelInfo.replayCarId = PlayerInfo.selectedCarId;
 		}
-		else if ( levelInfo.replay == null )
+		else if (levelInfo.replay == null)
 		{
 			levelInfo.replay = recorder.toString();
 			levelInfo.replayCarId = PlayerInfo.selectedCarId;
@@ -1023,7 +1023,7 @@ class GameState extends FlxState
 		SavedDataUtil.save();
 
 		persistentUpdate = false;
-		openSubState( endLevelPanel );
+		openSubState(endLevelPanel);
 		endLevelPanel.updateView(score, gameTime, collectedCoin, starCount);
 	}
 
@@ -1043,7 +1043,7 @@ class GameState extends FlxState
 	{
 		var starCount:UInt = 0;
 
-		for( i in 0...levelData.starValues.length)
+		for(i in 0...levelData.starValues.length)
 		{
 			if(value >= levelData.starValues[i])
 			{
@@ -1183,17 +1183,17 @@ class GameState extends FlxState
 
 	function nextLevelRequest(target:HPPButton = null):Void
 	{
-		FlxG.switchState( new GameState(worldId, levelId + 1));
+		FlxG.switchState(new GameState(worldId, levelId + 1));
 	}
 
 	function prevLevelRequest(target:HPPButton = null):Void
 	{
-		FlxG.switchState( new GameState(worldId, levelId - 1));
+		FlxG.switchState(new GameState(worldId, levelId - 1));
 	}
 
 	override public function onFocusLost():Void
 	{
-		if ( isGameStarted )
+		if (isGameStarted)
 		{
 			pauseRequest();
 		}
@@ -1210,7 +1210,7 @@ class GameState extends FlxState
 }
 
 @:enum
-abstract GameEffect( String )
+abstract GameEffect(String)
 {
 	var TYPE_LEVEL_COMPLETED = "effect_level_completed";
 	var TYPE_CRUSHED = "effect_crushed";
