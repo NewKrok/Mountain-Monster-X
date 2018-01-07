@@ -1,47 +1,30 @@
-Needed for 1.3.0
+Needed for 1.4.0
 =================================================
-[RDY] Check world 1 13-24 levels
-[RDY] Fix news page scroll container
-[RDY] Redesign start level panel
-[RDY] Add ghost cars
-[RDY] Fix highscore not visible problem
-[RDY] Add pick up all coin in a level bonus
-[RDY] Redesign Level completed panel
-[RDY] Minify code (7 140 848 KB  --> 3 757 204 KB)
-[RDY] Recalculate reached stars for old players
-[RDY] Show the actual stars result in the level end not the best
-[RDY] Save car id for player's replays
-[RDY] Add missing font types
-[RDY] Add base replays to world 0 - 0-12
-[RDY] Add base replays to world 0 - 13-34
-[RDY] Save last player replay every time if he can't finish the level
-[RDY] Add base replays to world 1 - 0-12
-[RDY] Add base replays to world 1 - 13-34
+Embed assets to the source
+Add End photo
+Redesign bonus texts like backflip, frontflip, etc...
+Improve coin pick up effect
+To unlock next level needed to reach at least one level in the previous level
+Car selector
+Show stars by world in level selector
+Show all earned star in world selector
+Lock world 1 before the user reach X star
 
 
 Selected for next release
 =================================================
-Show stars by world in level selector
-Show all earned star in world selector
-Add End photo
-Improve coin pick up effect
 Check world 2 1-12 levels
 Enable World 2
 World 2 tutorial
 Add base replays to world 2 - 0-12
 Update world 2 tutorial images
-Lock world 1 before the user reach X star
-Lock world 2 before the user reach X star
 Enable Car for world 2
-Redesign bonus texts like backflip, frontflip, etc...
+Lock world 2 before the user reach X star
 
 
 Needed for ??
 =================================================
-To unlock next level needed to reach at least one level in the previous level
-Embed assets to the source
 Car selector for start game panel
-Car selector
 Add just watch replay
 Fix ground problem on ios
 Fix font positions in safari
@@ -52,6 +35,7 @@ Switchable control - up/W to accerelate or right/D (only in desktop)
 Extra car if the player play on our site
 Add Task system
 Show tasks in the start level panel
+Redesign level end panel to be more clear the score system
 Add Language system
 Check world 2 13-24 levels
 Check praticle system possibilities
