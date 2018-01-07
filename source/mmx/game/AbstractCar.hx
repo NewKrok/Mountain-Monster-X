@@ -14,6 +14,8 @@ class AbstractCar extends FlxSpriteGroup
 	public var wheelRightGraphics:FlxSprite;
 	public var wheelLeftGraphics:FlxSprite;
 
+	public var id(get, null):UInt;
+
 	public function new(carData:CarData, scale:Float = 1)
 	{
 		super();
@@ -38,4 +40,6 @@ class AbstractCar extends FlxSpriteGroup
 		add(wheelLeftGraphics = HPPAssetManager.getSprite("wheel_" + carData.graphicId));
 		wheelLeftGraphics.antialiasing = true;
 	}
+
+	function get_id():UInt { return carData.id; }
 }

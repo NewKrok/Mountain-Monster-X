@@ -149,7 +149,6 @@ class GameState extends FlxState
 		levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		SavedDataUtil.resetLastPlayedInfo();
 		levelInfo.isLastPlayed = true;
-		//levelInfo.replay = null;
 		SavedDataUtil.setLastPlayedWorldId(worldId);
 		SavedDataUtil.save();
 
@@ -347,7 +346,7 @@ class GameState extends FlxState
 
 		start();
 
-		if (levelInfo.replayCarId != PlayerInfo.selectedCarId && playerGhostCar != null)
+		if (levelInfo.replayCarId != playerGhostCar.id)
 		{
 			var childIndex:UInt = container.group.members.indexOf(playerGhostCar);
 			container.remove(playerGhostCar);
@@ -603,12 +602,6 @@ class GameState extends FlxState
 		}
 	}
 
-	function createCar():Void
-	{
-		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
-		container.add(car);
-	}
-
 	function createGhostCar():Void
 	{
 		baseGhostCar = new GhostCar(CarDatas.getData(worldId == 0 ? 0 : 1), 1);
@@ -619,6 +612,12 @@ class GameState extends FlxState
 		playerGhostCar = new GhostCar(CarDatas.getData(levelInfo.replayCarId), 1);
 		playerGhostCar.alpha = .3;
 		container.add(playerGhostCar);
+	}
+
+	function createCar():Void
+	{
+		car = new Car(space, levelData.startPoint.x, levelData.startPoint.y, CarDatas.getData(PlayerInfo.selectedCarId), 1, CPhysicsValue.CAR_FILTER_CATEGORY, CPhysicsValue.CAR_FILTER_MASK);
+		container.add(car);
 	}
 
 	function createGameObjects():Void
@@ -963,6 +962,12 @@ class GameState extends FlxState
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_TIME_OUT);
 			}
 
+			if (!levelInfo.isCompleted || levelInfo.replay == null)
+			{
+				levelInfo.replay = recorder.toString();
+				levelInfo.replayCarId = PlayerInfo.selectedCarId;
+			}
+
 			Timer.delay(restartRutin, 1500);
 		}
 	}
@@ -988,13 +993,7 @@ class GameState extends FlxState
 
 		var starCount:UInt = scoreToStarCount(score);
 
-		if (gameTime < levelInfo.time || levelInfo.time == 0)
-		{
-			levelInfo.time = gameTime;
-			levelInfo.replay = recorder.toString();
-			levelInfo.replayCarId = PlayerInfo.selectedCarId;
-		}
-		else if (levelInfo.replay == null)
+		if (score <= levelInfo.score || levelInfo.replay == null)
 		{
 			levelInfo.replay = recorder.toString();
 			levelInfo.replayCarId = PlayerInfo.selectedCarId;
@@ -1003,6 +1002,7 @@ class GameState extends FlxState
 		// Temporary for save base replays
 		trace(recorder.toString());
 
+		levelInfo.time = levelInfo.time > gameTime ? gameTime : levelInfo.time;
 		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;
 		levelInfo.isCompleted = true;
 		levelInfo.starCount = levelInfo.starCount < starCount ? starCount : levelInfo.starCount;
