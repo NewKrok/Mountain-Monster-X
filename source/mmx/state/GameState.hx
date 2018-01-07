@@ -962,7 +962,7 @@ class GameState extends FlxState
 				addEffect(car.carBodyGraphics.x - 30, car.carBodyGraphics.y - 20, GameEffect.TYPE_TIME_OUT);
 			}
 
-			if (!levelInfo.isCompleted || levelInfo.replay == null)
+			if (!levelInfo.isCompleted || levelInfo.replay == null || !levelInfo.isFullReplay)
 			{
 				levelInfo.replay = recorder.toString();
 				levelInfo.replayCarId = PlayerInfo.selectedCarId;
@@ -993,16 +993,17 @@ class GameState extends FlxState
 
 		var starCount:UInt = scoreToStarCount(score);
 
-		if (score <= levelInfo.score || levelInfo.replay == null)
+		if (score >= levelInfo.score || levelInfo.replay == null || !levelInfo.isCompleted || !levelInfo.isFullReplay)
 		{
 			levelInfo.replay = recorder.toString();
 			levelInfo.replayCarId = PlayerInfo.selectedCarId;
+			levelInfo.isFullReplay = true;
 		}
 
 		// Temporary for save base replays
 		//trace(recorder.toString());
 
-		levelInfo.time = levelInfo.time > gameTime ? gameTime : levelInfo.time;
+		levelInfo.time = (levelInfo.time > gameTime || levelInfo.time == 0) ? gameTime : levelInfo.time;
 		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;
 		levelInfo.isCompleted = true;
 		levelInfo.starCount = levelInfo.starCount < starCount ? starCount : levelInfo.starCount;

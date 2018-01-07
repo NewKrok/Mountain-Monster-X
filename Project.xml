@@ -30,14 +30,14 @@
 
 	<set name="BUILD_DIR" value="export" />
 	<classpath name="source" />
-	<assets path="assets" embed="true" />
+	<assets path="assets"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
 	<haxelib name="nape" />
 	<haxelib name="flixel-ui" />
-	<haxelib name="closure" />
+	<haxelib name="closure" /> <!--Remove it for faster build-->
 	<haxelib name="hpp" src="git://github.com/NewKrok/HPP-Package.git" />
 	<haxelib name="replaykit" src="git://github.com/apostx/haxe_replaykit.git" />
 

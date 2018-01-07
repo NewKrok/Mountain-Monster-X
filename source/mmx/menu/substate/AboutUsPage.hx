@@ -57,7 +57,7 @@ class AboutUsPage extends FlxSubState
 		developerInfoText.font = Fonts.AACHEN;
 		developerInfoText.borderStyle = FlxTextBorderStyle.SHADOW;
 		developerInfoText.fieldWidth = 800;
-		developerInfoText.text = "Mountain Monster game created by Krisztian Somoracz (NewKrok)";
+		developerInfoText.text = "Mountain Monster game created by Krisztian Somoracz (NewKrok) and Richard Sallai (ApostX)";
 		container.add(developerInfoText);
 
 		var poweredByContainer:HPPHUIBox = new HPPHUIBox(20);

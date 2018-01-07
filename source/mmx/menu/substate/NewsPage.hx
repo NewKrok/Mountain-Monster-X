@@ -53,8 +53,8 @@ class NewsPage extends FlxSubState
 		scrollContainerConfig.direction = HPPScrollDirection.VERTICAL;
 		var scrollContainer:HPPTouchScrollContainer = new HPPTouchScrollContainer(1136, 410, scrollContainerConfig);
 
-		container.add(createEntry("Version 1.3.0", "Ice world level pack extended with 12 level. Some minor bugfixes."));
-		container.add(createEntry("Version 1.2.0", "Ice world level pack added with 12 level. Backflip, frontflip, wheelie and nice air detection added. Full screen possibility added to the settings page. Some minor bugfixes."));
+		container.add(createEntry("Version 1.3.0", "Ice world level pack extended with 12 levels. Level replays added, now you can enable the 3 Stars and your best replays. From now you can reach more score if you collect all coins in a level and it means the scores of the levels are changed. Some minor bugfixes."));
+		container.add(createEntry("Version 1.2.0", "Ice world level pack added with 12 levels. Backflip, frontflip, wheelie and nice air detection added. Full screen possibility added to the settings page. Some minor bugfixes."));
 		container.add(createEntry("Version 1.1.0", "Car physics improvement, New hotkeys added, Hotkey texts removed from the mobile view, Some minor bugfix"));
 		container.add(createEntry("Version 1.0", "Hi, finally here is the first offical release of the HTML5 version of Mountain Monster. In the future I will try to add all missing features what already exists in the mobile version.\nDon't forget to give feedback about this version!"));
 
