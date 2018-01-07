@@ -45,8 +45,8 @@ class SavedDataUtil
 		if (gameSave.data.levelInfos == null)
 		{
 			gameSave.data.levelInfos = [
-				{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true, replay:null},
-				{worldId:1, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true, replay:null}
+				{worldId:0, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true, replay:null, replayCarId:0},
+				{worldId:1, levelId:0, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:true, isCompleted:false, isLastPlayed:true, replay:null, replayCarId:0}
 			];
 		}
 		// Recalculate level stars if the player changed from v1.2.1 or lower to v1.3.0 or higher
@@ -98,11 +98,14 @@ class SavedDataUtil
 
 			if (levelInfo.worldId == worldId && levelInfo.levelId == levelId)
 			{
+				// Hotfix for some debug version
+				if (Math.isNaN(levelInfo.replayCarId)) levelInfo.replayCarId = 0;
+
 				return levelInfo;
 			}
 		}
 
-		var newEntry:LevelInfo = {worldId:worldId, levelId:levelId, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:false, isCompleted:false, isLastPlayed:false, replay:null};
+		var newEntry:LevelInfo = {worldId:worldId, levelId:levelId, score:0, starCount:0, collectedCoins:0, time:0, isEnabled:false, isCompleted:false, isLastPlayed:false, replay:null, replayCarId:0};
 		gameSave.data.levelInfos.push(newEntry);
 
 		return newEntry;
@@ -195,4 +198,5 @@ typedef LevelInfo = {
 	var isCompleted:Bool;
 	var isLastPlayed:Bool;
 	var replay:String;
+	var replayCarId:UInt;
 }

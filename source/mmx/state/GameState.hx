@@ -136,6 +136,8 @@ class GameState extends FlxState
 
 	var now:Float;
 
+	var levelInfo:LevelInfo;
+
 	public function new(worldId:UInt, levelId:UInt):Void
 	{
 		this.worldId = worldId;
@@ -144,7 +146,7 @@ class GameState extends FlxState
 		// TODO remove this hack after car selector added
 		PlayerInfo.selectedCarId = worldId == 0 ? 0 : 1;
 
-		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
+		levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		SavedDataUtil.resetLastPlayedInfo();
 		levelInfo.isLastPlayed = true;
 		//levelInfo.replay = null;
@@ -241,7 +243,7 @@ class GameState extends FlxState
 		destroySubStates = false;
 
 		pausePanel = new PausePanel( resumeRequest, restartRequest, exitRequest );
-		endLevelPanel = new EndLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
+		endLevelPanel = new EndLevelPanel(levelInfo, levelData, restartRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 
 		lastCameraStepOffset = new FlxPoint();
 
@@ -291,7 +293,7 @@ class GameState extends FlxState
 			startLevelPanel = null;
 		}
 
-		startLevelPanel = new StartLevelPanel(SavedDataUtil.getLevelInfo(worldId, levelId), levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
+		startLevelPanel = new StartLevelPanel(levelInfo, levelData.starValues, resumeRequest, exitRequest, nextLevelRequest, prevLevelRequest);
 		openSubState( startLevelPanel );
 	}
 
@@ -345,6 +347,16 @@ class GameState extends FlxState
 
 		start();
 
+		if (levelInfo.replayCarId != PlayerInfo.selectedCarId && playerGhostCar != null)
+		{
+			var childIndex:UInt = container.group.members.indexOf(playerGhostCar);
+			container.remove(playerGhostCar);
+
+			playerGhostCar = new GhostCar(CarDatas.getData(levelInfo.replayCarId), 1);
+			playerGhostCar.alpha = .3;
+			container.insert(childIndex, playerGhostCar);
+		}
+
 		resetReplayKit();
 
 		openStartLevelPanelRequest();
@@ -361,7 +373,6 @@ class GameState extends FlxState
 		if (basePlayback != null) basePlayback.dispose();
 		if (playerPlayback != null) playerPlayback.dispose();
 
-		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 		var replayData:String = levelInfo.replay == null ? levelData.replay : levelInfo.replay;
 
 		if (baseReplayData != null)
@@ -375,6 +386,9 @@ class GameState extends FlxState
 			playerPlayback = new Playback(playerGhostCar, levelInfo.replay);
 			playerPlayback.showSnapshot(0);
 		}
+
+		baseGhostCar.visible = false;
+		playerGhostCar.visible = false;
 	}
 
 	function resetCrates():Void
@@ -401,15 +415,7 @@ class GameState extends FlxState
 	{
 		closeSubState();
 
-		if ( !isGamePaused )
-		{
-			pause();
-		}
-		else
-		{
-			baseGhostCar.visible = AppConfig.SHOW_3_STAR_REPLAY;
-			playerGhostCar.visible = AppConfig.SHOW_PLAYER_REPLAY;
-		}
+		if ( !isGamePaused ) pause();
 
 		gameGui.resumeGameRequest();
 	}
@@ -429,6 +435,9 @@ class GameState extends FlxState
 		isPhysicsEnabled = true;
 
 		totalPausedTime += now - pauseStartTime;
+
+		baseGhostCar.visible = AppConfig.SHOW_3_STAR_REPLAY;
+		playerGhostCar.visible = AppConfig.SHOW_PLAYER_REPLAY;
 
 		if ( recorder != null )
 		{
@@ -607,7 +616,7 @@ class GameState extends FlxState
 		baseGhostCar.alpha = .3;
 		container.add(baseGhostCar);
 
-		playerGhostCar = new GhostCar(CarDatas.getData(worldId == 0 ? 0 : 1), 1);
+		playerGhostCar = new GhostCar(CarDatas.getData(levelInfo.replayCarId), 1);
 		playerGhostCar.alpha = .3;
 		container.add(playerGhostCar);
 	}
@@ -978,34 +987,37 @@ class GameState extends FlxState
 		var score:UInt = calculateScore();
 
 		var starCount:UInt = scoreToStarCount(score);
-		var levelInfo:LevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId);
 
 		if ( gameTime < levelInfo.time || levelInfo.time == 0 )
 		{
 			levelInfo.time = gameTime;
 			levelInfo.replay = recorder.toString();
+			levelInfo.replayCarId = PlayerInfo.selectedCarId;
 		}
 		else if ( levelInfo.replay == null )
 		{
 			levelInfo.replay = recorder.toString();
+			levelInfo.replayCarId = PlayerInfo.selectedCarId;
 		}
 
-		trace(levelInfo.replay);
+		// Temporary for save base replays
+		trace(recorder.toString());
 
 		levelInfo.score = levelInfo.score < score ? score : levelInfo.score;
 		levelInfo.isCompleted = true;
 		levelInfo.starCount = levelInfo.starCount < starCount ? starCount : levelInfo.starCount;
 		levelInfo.collectedCoins = levelInfo.collectedCoins < collectedCoin ? collectedCoin : levelInfo.collectedCoins;
 
+		var nextLevelInfo:LevelInfo;
 		if (levelId < 23)
 		{
-			levelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
-			levelInfo.isEnabled = true;
+			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId, levelId + 1);
+			nextLevelInfo.isEnabled = true;
 		}
 		if (levelId == 23)
 		{
-			levelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
-			levelInfo.isEnabled = true;
+			nextLevelInfo = SavedDataUtil.getLevelInfo(worldId + 1, 0);
+			nextLevelInfo.isEnabled = true;
 		}
 
 		SavedDataUtil.save();

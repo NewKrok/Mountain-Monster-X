@@ -58,7 +58,7 @@ class EndLevelPanel extends FlxSubState
 	var currentScore:UInt;
 	var currentTime:Float;
 	var currentCollectedCoins:UInt;
-	var currentEarnedStarView:UInt;
+	var currentEarnedStarCounts:UInt;
 
 	function new(levelInfo:LevelInfo, levelData:LevelData, restartRequest:HPPButton->Void, exitRequest:HPPButton->Void, nextLevelRequest:HPPButton->Void, prevLevelRequest:HPPButton->Void):Void
 	{
@@ -201,12 +201,12 @@ class EndLevelPanel extends FlxSubState
 		}
 	}
 
-	public function updateView(currentScore:UInt, currentTime:Float, currentCollectedCoins:UInt, currentEarnedStarView:UInt):Void
+	public function updateView(currentScore:UInt, currentTime:Float, currentCollectedCoins:UInt, currentEarnedStarCounts:UInt):Void
 	{
 		this.currentTime = currentTime;
 		this.currentScore = currentScore;
 		this.currentCollectedCoins = currentCollectedCoins;
-		this.currentEarnedStarView = currentEarnedStarView;
+		this.currentEarnedStarCounts = currentEarnedStarCounts;
 
 		if (!isBuilt) return;
 
@@ -214,7 +214,7 @@ class EndLevelPanel extends FlxSubState
 
 		levelStatisticBlock.updateData(currentCollectedCoins, levelData.starPoints.length, currentTime);
 		collectedCoinsInfoBlock.updateData(currentCollectedCoins, levelData.starPoints.length);
-		levelResultBlock.updateData(currentScore, currentEarnedStarView);
+		levelResultBlock.updateData(currentScore, currentEarnedStarCounts);
 		levelInfoFooter.updateData(levelInfo.isCompleted, levelInfo.score, levelInfo.time);
 	}
 

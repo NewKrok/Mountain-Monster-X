@@ -9,13 +9,13 @@ Needed for 1.3.0
 [RDY] Redesign Level completed panel
 [RDY] Minify code (7 140 848 KB  --> 3 757 204 KB)
 [RDY] Recalculate reached stars for old players
-Save car id for replay
-Add base replays to world 0 - 0-12
+[RDY] Show the actual stars result in the level end not the best
+[RDY] Save car id for player's replays
+[RDY] Add base replays to world 0 - 0-12
 Add base replays to world 0 - 13-34
 Add base replays to world 1 - 0-12
 Add base replays to world 1 - 13-34
 Add missing font types
-
 
 
 Selected for next release
